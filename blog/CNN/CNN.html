@@ -668,268 +668,6 @@
             </html>
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-            
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
             <h3>b) Non-linear Activation Functions</h3>
             <p>After the convolution operation, a non-linear activation function is applied to introduce non-linearity into the model. The most common activation function is <strong>ReLU (Rectified Linear Unit)</strong>
             Non Linearities create non linear decision boundaries, this ensure the output cannot be written as a linear combination of the inputs. If non linear activation was absent, deep CNN architectures would be equivalent to a single conv layer, which would not perform as well. I have also learned when i was reading AlexNet paper that ReLU is also faster than other non-linearities.
@@ -942,15 +680,20 @@
 
             
             <h3>c) Pooling Layers</h3>
-            <p>Pooling layers reduce the spatial dimensions of the feature maps, making the network more computationally efficient and invariant to small translations.</p>
+            <p>Pooling layers reduce the spatial dimensions of the feature maps, making the network more computationally efficient and invariant to small translations. They operate on small regions of the feature map (e.g., 2x2 or 3x3 windows) and apply a pooling operation to summarize the information in that region. </p>
             <p><strong>Types of Pooling:</strong></p>
             <ul>
                 <li><strong>Max Pooling:</strong> Takes the maximum value in each pooling region.</li>
                 <li><strong>Average Pooling:</strong> Takes the average value in each pooling region.</li>
             </ul>
+
+            For example: <br>
+            <img src="assets/Pooling.png" alt="ReLU" />
+
+            <p>Here the pooling region is 2x2 we apply the operation each time with a stride of 2. For the Max Pooling we take the maximum of the pooling region, for average we take the average.</p>
             
             <h3>d) Fully Connected Layers</h3>
-            <p>After several convolutional and pooling layers, the output is flattened and passed through one or more fully connected layers. These layers combine the extracted features to produce the final output (e.g., class probabilities).</p>
+            <p>After several convolutional and pooling layers, the output is flattened and passed through one or more fully connected layers. These layers combine the extracted features to produce the final output (e.g., class probabilities, continuous value).</p>
         </section>
 
         <!-- Exercise: AlexNet -->
@@ -996,16 +739,14 @@
         <!-- Forward Pass -->
         <section id="forward-pass">
             <h2>5. Training a CNN: Forward Pass</h2>
-            <p>The forward pass involves passing the input through the network to compute the output. Here’s how it works step-by-step:</p>
+            <p>Now let's train a small CNN by hand to make sure we understand everything properly</p>
             <ol>
-                <li><strong>Input:</strong> An image (e.g., 227x227x3).</li>
-                <li><strong>Convolution:</strong> Apply filters to extract features.</li>
-                <li><strong>Activation:</strong> Apply ReLU to introduce non-linearity.</li>
-                <li><strong>Pooling:</strong> Reduce spatial dimensions.</li>
-                <li><strong>Repeat:</strong> Apply multiple convolutional and pooling layers.</li>
-                <li><strong>Flatten:</strong> Convert the 3D output to a 1D vector.</li>
-                <li><strong>Fully Connected Layers:</strong> Combine features for classification.</li>
-                <li><strong>Output:</strong> Use softmax to produce class probabilities.</li>
+                <li><strong>Input:</strong> A 4x4 grayscale image</li>
+                <li><strong>Convolution:</strong> 1 filter of size  2x2, Stride  = 1, no padding.</li>
+                <li><strong>Activation:</strong> ReLU</li>
+                <li><strong>Pooling:</strong> Pool size  2x2, Stride  = 2</li>
+                <li><strong>Fully Connected Layers:</strong> 02 neurons, activation function will be Softmax,  we will do a simple binary classification</li>
+                <li><strong>Loss Function</strong> Cross Entropy Loss</li>
             </ol>
         </section>
 
