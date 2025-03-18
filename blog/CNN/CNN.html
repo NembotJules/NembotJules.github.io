@@ -4,6 +4,10 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>CNN from Scratch</title>
+    <script type="text/javascript" async
+  src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js">
+    </script>
+
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600&display=swap');
         
@@ -748,17 +752,207 @@
                 <li><strong>Fully Connected Layers:</strong> 02 neurons, activation function will be Softmax,  we will do a simple binary classification</li>
                 <li><strong>Loss Function</strong> Cross Entropy Loss</li>
             </ol>
+
+            Ok now let's do the forward pass! 
+            
+            Let's say the input image \( X \) is:
+            
+            \[
+            X = 
+            \begin{bmatrix}
+            1 & 2 & 1 & 0 \\
+            0 & 1 & 2 & 1 \\
+            1 & 0 & 1 & 2 \\
+            2 & 1 & 0 & 1
+            \end{bmatrix}
+            \]
+            
+           And the filter in the conv layer is: 
+            
+            - Filter \( W \):
+            
+            \[
+            W = 
+            \begin{bmatrix}
+            1 & 0 \\
+            0 & -1
+            \end{bmatrix}
+            \]
+            
+            - Bias \( b: b = 0 \).
+            
+            We slide the filter over the input image with stride = 1:
+            
+            First position:
+            
+            \[
+            \begin{bmatrix}
+            1 & 2 \\
+            0 & 1
+            \end{bmatrix}
+            \]
+            
+            Output: \((1 \cdot 1) + (2 \cdot 0) + (0 \cdot 0) + (1 \cdot -1) = 0\).
+            
+          Second position:
+            
+            \[
+            \begin{bmatrix}
+            2 & 1 \\
+            1 & 2
+            \end{bmatrix}
+            \]
+            
+            Output: \((2 \cdot 1) + (1 \cdot 0) + (1 \cdot 0) + (2 \cdot -1) = 0\).
+            
+            Third position:
+            
+            \[
+            \begin{bmatrix}
+            1 & 0 \\
+            2 & 1
+            \end{bmatrix}
+            \]
+            
+            Output: \((1 \cdot 1) + (0 \cdot 0) + (2 \cdot 0) + (1 \cdot -1) = 0\).
+            
+            4 Fourth position:
+            
+            \[
+            \begin{bmatrix}
+            0 & 1 \\
+            1 & 0
+            \end{bmatrix}
+            \]
+            
+            Output: \((0 \cdot 1) + (1 \cdot 0) + (1 \cdot 0) + (0 \cdot -1) = 0\).
+            
+            After applying ReLU (\(\max(0, x)\)), the activation map \(A\) is:
+            
+            \[
+            A = 
+            \begin{bmatrix}
+            0 & 0 \\
+            0 & 0
+            \end{bmatrix}
+            \]
+            
+          <strong>Max Pooling Layer</strong> 
+            
+            - Pool size = 2x2, stride = 2.<br>
+            - The activation map \(A\) is already 2x2, so max pooling doesn’t change it:
+            
+            \[
+            P = \begin{bmatrix} 0 & 0 \\ 0 & 0 \end{bmatrix}
+            \]
+            
+           <strong>Fully Connected Layer </strong><br>
+            
+            - Flatten \( P \) into a vector: \([0, 0, 0, 0]\).
+            
+            - Let’s say the weights \( W_{fc} \) and biases \( b_{fc} \) are:
+            
+            \[
+            W_{fc} = \begin{bmatrix} 0.1 & 0.2 \\ 0.3 & 0.4 \\ 0.5 & 0.6 \\ 0.7 & 0.8 \end{bmatrix}, \quad b_{fc} = \begin{bmatrix} 0.1 \\ 0.2 \end{bmatrix}
+            \]
+            
+            - Compute the output:
+            
+            \[
+            Z = W_{fc}^T \cdot P + b_{fc} = \begin{bmatrix} 0.1 \\ 0.2 \end{bmatrix}
+            \]
+            
+            - Apply softmax to get probabilities:
+            
+            \[
+            \text{Softmax}(Z) = \begin{bmatrix} 0.475 \\ 0.525 \end{bmatrix}
+            \]
+            
+          Loss Calculation <br>
+            
+            - True label: \( y = [1, 0] \) so it' class 0).
+            - Cross-entropy loss:
+            
+            \[
+            \begin{align*}
+            L=-\sum y_i\log(p_i)=-\log(0.475)\approx 0.744
+            \end{align*}
         </section>
 
         <!-- Backward Pass -->
         <section id="backward-pass">
-            <h2>6. Training a CNN: Backward Pass (Backpropagation)</h2>
-            <p>The backward pass computes gradients of the loss with respect to the network’s parameters using the chain rule. Key steps:</p>
-            <ol>
-                <li><strong>Compute Loss:</strong> Compare predictions with ground truth.</li>
-                <li><strong>Backpropagate:</strong> Compute gradients layer by layer.</li>
-                <li><strong>Update Weights:</strong> Use an optimizer (e.g., SGD, Adam) to update parameters.</li>
-            </ol>
+            <h2>6. Training a CNN: Backward Pass</h2>
+          Now let's compute the backward pass and update the weights. It can seems tricky but it's not: <br>
+
+         
+
+ <br>a) <strong>Gradient of the Loss w.r.t. Fully Connected Layer</strong>
+
+- Softmax derivative:
+  \[
+  \frac{\partial L}{\partial Z} = \text{Softmax}(Z) - y = 
+  \begin{bmatrix}
+  0.475 & -1 \\
+  0.525 & 0
+  \end{bmatrix}
+  =
+  \begin{bmatrix}
+  -0.525 \\
+  0.525
+  \end{bmatrix}
+  \]
+
+- Gradient of \( W_{fc} \):
+  \[
+  \frac{\partial L}{\partial W_{fc}} = P \cdot \frac{\partial L}{\partial Z} = 
+  \begin{bmatrix}
+  0 & 0 \\
+  0 & 0
+  \end{bmatrix}
+  \cdot 
+  \begin{bmatrix}
+  -0.525 \\
+  0.525
+  \end{bmatrix}
+  =
+  \begin{bmatrix}
+  0 & 0 \\
+  0 & 0
+  \end{bmatrix}
+  \]
+
+- Gradient of \( b_{fc} \):
+  \[
+  \frac{\partial L}{\partial b_{fc}} = \frac{\partial L}{\partial Z} = 
+  \begin{bmatrix}
+  -0.525 \\
+  0.525
+  \end{bmatrix}
+  \]
+
+b)<strong>Gradient of the Loss w.r.t. Convolutional Layer</strong> 
+--we propagate gradients through max pooling (no change since pooling gradients are passed to the max value locations). After that through the ReLU(gradient is 0 for non-positive inputs)
+- Gradient of \( W \):
+
+\[
+\frac{\partial L}{\partial W} = \sum_{\text{positions}} \frac{\partial L}{\partial A} \cdot X_{\text{patch}}
+\]
+
+Since \(\frac{\partial L}{\partial A} = 0\) (all activations are 0), the gradient of \( W \) is also 0.<br> 
+
+<br> c) <strong>Weight Updates</strong>
+
+- Update \( W_{fc} \) and \( b_{fc} \) using the gradients and a learning rate of \(\eta = 0.1\):
+
+\[
+W_{fc} = W_{fc} - \eta \cdot \frac{\partial L}{\partial W_{fc}} = W_{fc} - 0.1 \cdot \begin{bmatrix} 0 & 0 \\ 0 & 0 \end{bmatrix} = W_{fc}
+\]
+
+\[
+b_{fc} = b_{fc} - \eta \cdot \frac{\partial L}{\partial b_{fc}} = \begin{bmatrix} 0.1 \\ 0.2 \end{bmatrix} - 0.1 \cdot \begin{bmatrix} -0.525 \\ 0.525 \end{bmatrix} = \begin{bmatrix} 0.1525 \\ 0.1475 \end{bmatrix}
+\]
+       
+That's it!
         </section>
 
         <!-- PyTorch Example -->
