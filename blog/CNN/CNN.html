@@ -1,0 +1,1083 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CNN from Scratch</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600&display=swap');
+        
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #000000;
+            color: #ffffff;
+            margin: 0;
+            padding: 0;
+            line-height: 1.6;
+        }
+        
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 40px 20px;
+        }
+        
+        header {
+            text-align: center;
+            padding: 60px 0;
+            border-bottom: 1px solid #333;
+        }
+        
+        h1 {
+            font-size: 2.8rem;
+            margin-bottom: 20px;
+            background: linear-gradient(90deg, #00ffcc, #33ccff);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+        }
+        
+        h2 {
+            font-size: 2rem;
+            margin-top: 50px;
+            margin-bottom: 20px;
+            color: #00ffcc;
+        }
+        
+        h3 {
+            font-size: 1.5rem;
+            margin-top: 30px;
+            color: #33ccff;
+        }
+        
+        p {
+            margin-bottom: 20px;
+            text-align: justify;
+        }
+        
+        a {
+            color: #00ffcc;
+            text-decoration: none;
+            transition: all 0.3s ease;
+        }
+        
+        a:hover {
+            text-decoration: underline;
+            color: #33ccff;
+        }
+        
+        .highlight {
+            background-color: #113344;
+            padding: 20px;
+            border-radius: 8px;
+            margin: 20px 0;
+        }
+        
+        .code {
+            font-family: 'Courier New', monospace;
+            background-color: #112233;
+            padding: 15px;
+            border-radius: 5px;
+            overflow-x: auto;
+            margin: 20px 0;
+            text-align: left;
+        }
+        
+        .image-container {
+            margin: 30px 0;
+            text-align: center;
+        }
+        
+        img {
+            max-width: 100%;
+            border-radius: 8px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.5);
+        }
+        
+        .caption {
+            margin-top: 10px;
+            font-size: 0.9rem;
+            color: #aaaaaa;
+        }
+        
+        .formula {
+            background-color: #113344;
+            padding: 15px;
+            border-radius: 5px;
+            margin: 20px 0;
+            text-align: center;
+            font-style: italic;
+        }
+        
+        .table-of-contents {
+            background-color: #112233;
+            padding: 20px;
+            border-radius: 8px;
+            margin: 30px 0;
+        }
+        
+        .table-of-contents ul {
+            list-style-type: none;
+            padding-left: 15px;
+        }
+        
+        .table-of-contents a {
+            display: block;
+            padding: 5px 0;
+        }
+        
+        footer {
+            text-align: center;
+            padding: 30px 0;
+            margin-top: 60px;
+            border-top: 1px solid #333;
+            color: #888888;
+        }
+        
+        /* Responsive adjustments */
+        @media (max-width: 768px) {
+            .container {
+                padding: 20px 15px;
+            }
+            
+            h1 {
+                font-size: 2.2rem;
+            }
+            
+            h2 {
+                font-size: 1.8rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>Understanding Convolutional Neural Networks From Scratch</h1>
+            <p>A comprehensive guide to CNNs: architecture, forward pass, backpropagation, and practical implementations</p>
+        </header>
+
+        <!-- Table of Contents -->
+        <div class="table-of-contents">
+            <h2>Table of Contents</h2>
+            <ul>
+                <li><a href="#introduction">1. Introduction</a></li>
+                <li><a href="#what-are-cnns">2. What Are Convolutional Neural Networks?</a></li>
+                <li><a href="#key-components">3. Key Components of a CNN</a></li>
+                <li><a href="#exercise-alexnet">4. Exercise: Calculating Output Dimensions in AlexNet</a></li>
+                <li><a href="#forward-pass">5. Training a CNN: Forward Pass</a></li>
+                <li><a href="#backward-pass">6. Training a CNN: Backward Pass</a></li>
+                <li><a href="#pytorch-example">7. Building a CNN in PyTorch</a></li>
+            </ul>
+        </div>
+
+        <!-- Introduction -->
+        <section id="introduction">
+            <h2>1. Introduction</h2>
+            <p>Convolutional Neural Networks (CNNs) represent a revolutionary approach in deep learning that has transformed computer vision and image processing. Inspired by the organization of the animal visual cortex, CNNs have become the cornerstone of many modern applications including image recognition, object detection, facial recognition, and medical image analysis.</p>
+            
+            <p>The power of CNNs lies in their ability to automatically learn hierarchical patterns in data, starting from simple features like edges and textures to more complex structures like shapes and objects. Unlike traditional neural networks, CNNs maintain spatial relationships in data, making them particularly effective for processing grid-like structures such as images.</p>
+            
+            <div class="image-container">
+                <img src="assets/CNN.png" alt="CNN Applications in Computer Vision" />
+                <div class="caption">Figure 1: A Convolutional Neural Network</div>
+            </div>
+        </section>
+
+        <!-- What Are CNNs -->
+        <section id="what-are-cnns">
+            <h2>2. What Are Convolutional Neural Networks?</h2>
+            <p>Convolutional Neural Networks (CNNs) are a class of deep learning models specifically designed for processing grid-like data, such as images. At their core, CNNs are <strong>stacks of convolutional operations interspersed with non-linear activation functions and pooling layers</strong>. These layers work together to extract hierarchical features from the input data, enabling the network to learn spatial patterns efficiently.</p>
+            <p>Before we explain the key components of a CNN, I believe it's really important that we understand some core concepts of CNNs which are often overlooked in courses, and other blogs.</p>
+            
+            <div class="highlight">
+                <p><strong>Key Concepts</strong></p>
+                <ul>
+                    <li><strong>Parameter Sharing:</strong>
+                        Before CNNs, fully connected neural networks(MLPs) were used for image processing, but they had two major problems: 
+                      
+                        
+                        <ul>
+                            <br>
+                            <li><strong> 
+                                Too many parameters</strong>:
+                            Fully connected layers treats each pixel independently, meaning that a simple 32×32×3 image would have 3072 input neurons. If the first hidden layer has 1000 neurons, that results in about <strong>3 million parameters !</strong>
+                            </li>
+                            <br>
+                            <li><strong> Loss of Spatial Structure</strong>:
+                                MLPs do not capture the spatial relationships between nearby pixels, treating a pixel at (2, 3) as completely independent from one at (2, 4). But human vision does not process each pixel uniquely. We are naturally able to perceive <strong>spatial relationships</strong> between pixels, our brain groups nearby pixels to recognize edges, shapes, and textures. We don't process each pixel separately;instead, we recognize <strong>patterns</strong> that emerge from neighboring pixels.
+
+                            </li>
+                        </ul>
+                    </li>
+                   
+                </ul>
+
+                <p>Instead of learning a unique weight for each input pixel(as in an MLP), <strong>CNNs reuse the same set of weights (a kernel or filter) across the entire image.</strong> This means that a small kernel slides over the image and applies the <strong>same weights</strong> at each position.</p>
+                <p>The same feature detector(kernel) is applied everywhere, meaning the same set of parameters detects the same feature across the image.</p>
+                <p>We will have a better understanding of these operations in the next section when we will talk about  <strong>Convolutions</strong></p>
+                <img src="assets/parameter-sharing.jpg" alt="Parameter Sharing in CNNs" />
+            </div>
+        </section>
+
+        <!-- Key Components -->
+        <section id="key-components">
+            <h2>3. Key Components of a CNN</h2>
+            
+            <h3>a) Convolutional Layers</h3>
+            <p>The <strong>convolution operation</strong> is the backbone of CNNs. It involves sliding a small filter (kernel) over the input image and computing the dot product between the filter and the input region.</p>
+            <p>Let's see how this works with an example!</p>
+            <img src="assets/conv.webp" alt="Convolution  Operation" />
+            <p>The output matrix is obtained by sliding the kernel over the input one pixel at a time (stride = 1) and computing the dot product between the filter and the input region corresponding. Let's see how this is done.</p>
+
+            In the first step the input region is [[1, 6], [5, 3]] and the kernel is [[1, 2], [-1, 0]], the result when we compute the dot product is: 
+
+            <strong>1 * 1 + 6 * 2 + 5 * (-1) + 3 * 0 = 8 </strong>. This process repeats itself for each region of the input image.
+
+            <p><strong>Key Parameters:</strong></p>
+            <ul>
+                <li><strong>Kernel Size:</strong> The size of the filter (e.g., 3x3, 5x5).</li>
+                <li><strong>Stride:</strong> The step size by which the filter moves across the input (e.g., stride=1 moves the filter one pixel at a time).</li><br>
+                <li><strong>Padding:</strong> When an image passes through convolutional layers, its spatial dimensions typically shrink. As an illustration, you can look at our previous example. So after each conv layer, the size of our image usually decrease. However, shrinking the image too quickly can cause problem like loss of information. The network might also suffer to learn features at the edge effectively.
+                To address these issues, we use padding. Padding involves adding extra pixels(usually zeros) around the border of the input image before applying the convolution operation. It helps us capture edge information, preserve spatial dimensions, and thus enable deeper networks.
+                
+                </li>
+            </ul>
+        
+            <!DOCTYPE html>
+            <html lang="en">
+            <head>
+                <meta charset="UTF-8">
+                <meta name="viewport" content="width=device-width, initial-scale=1.0">
+                <title>Convolution Visualization</title>
+                <style>
+
+                    h2 {
+                        text-align: center;
+                    }
+                   
+                    .convolution-container {
+                        max-width: 900px;
+                        margin: 0 auto;
+                        background-color:  #113344;
+                        border-radius: 8px;
+                        padding: 20px;
+                        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+                    }
+                    .controls {
+                        display: grid;
+                        grid-template-columns: repeat(4, 1fr);
+                        gap: 15px;
+                        margin-bottom: 25px;
+                    }
+                    .control-group {
+                        display: flex;
+                        flex-direction: column;
+                    }
+                    .control-group label {
+                        margin-bottom: 5px;
+                        font-weight: bold;
+                    }
+                    .slider-container {
+                        display: flex;
+                        align-items: center;
+                        gap: 10px;
+                    }
+                    .slider-container input[type="range"] {
+                        flex-grow: 1;
+                    }
+                    input[type="number"] {
+                        width: 60px;
+                        padding: 5px;
+                        border: 1px solid #ccc;
+                        border-radius: 4px;
+                    }
+                    input[type="range"] {
+                        width: 100%;
+                        margin: 10px 0;
+                    }
+                    .visualization {
+                        display: flex;
+                        justify-content: space-around;
+                        gap: 20px;
+                        margin-top: 20px;
+                    }
+                    .matrix-container {
+                        display: flex;
+                        flex-direction: column;
+                        align-items: center;
+                    }
+                    .matrix-title {
+                        margin-bottom: 10px;
+                        font-weight: bold;
+                        text-align: center;
+                    }
+                    .matrix {
+                        display: grid;
+                        gap: 1px;
+                    }
+                    .cell {
+                        width: 30px;
+                        height: 30px;
+                        background-color: #e0e0e0;
+                        border: 1px solid #ccc;
+                        display: flex;
+                        align-items: center;
+                        justify-content: center;
+                        font-size: 12px;
+                    }
+                    .highlighted {
+                        background-color: #ffb6b6;
+                    }
+                    .result-highlight {
+                        background-color: #b6d7ff;
+                    }
+                    .active-kernel {
+                        background-color: #ffb6b6;
+                        border: 2px solid #ff7b7b;
+                    }
+                    .hint {
+                        text-align: center;
+                        margin-top: 15px;
+                        font-style: italic;
+                        color: #666;
+                    }
+                    .play-button {
+                        display: block;
+                        margin: 20px auto;
+                        padding: 8px 16px;
+                        background-color: #4CAF50;
+                        color: white;
+                        border: none;
+                        border-radius: 4px;
+                        cursor: pointer;
+                        font-size: 16px;
+                    }
+                    .play-button:hover {
+                        background-color: #45a049;
+                    }
+                </style>
+            </head>
+            <body>
+                <div class="convolution-container">
+                    <h2>Convolution Visualization</h2>
+                    
+                    <div class="controls">
+                        <div class="control-group">
+                            <label for="input-size">Input Size:</label>
+                            <div class="slider-container">
+                                <input type="number" id="input-size" min="3" max="10" value="7">
+                            </div>
+                            <input type="range" id="input-size-slider" min="3" max="10" value="7">
+                        </div>
+                        
+                        <div class="control-group">
+                            <label for="padding">Padding:</label>
+                            <div class="slider-container">
+                                <input type="number" id="padding" min="0" max="3" value="0">
+                            </div>
+                            <input type="range" id="padding-slider" min="0" max="3" value="0">
+                        </div>
+                        
+                        <div class="control-group">
+                            <label for="kernel-size">Kernel Size:</label>
+                            <div class="slider-container">
+                                <input type="number" id="kernel-size" min="2" max="5" value="2">
+                            </div>
+                            <input type="range" id="kernel-size-slider" min="2" max="5" value="2">
+                        </div>
+                        
+                        <div class="control-group">
+                            <label for="stride">Stride:</label>
+                            <div class="slider-container">
+                                <input type="number" id="stride" min="1" max="3" value="1">
+                            </div>
+                            <input type="range" id="stride-slider" min="1" max="3" value="1">
+                        </div>
+                    </div>
+                    
+                    <button id="play-button" class="play-button">▶ Animate Convolution</button>
+                    
+                    <div class="visualization">
+                        <div class="matrix-container">
+                            <div class="matrix-title">
+                                Input (<span id="input-size-display">7</span>, <span id="input-size-display2">7</span>)
+                                <div>After-padding (<span id="padded-size-display">7</span>, <span id="padded-size-display2">7</span>)</div>
+                            </div>
+                            <div id="input-matrix" class="matrix"></div>
+                        </div>
+                        
+                        <div class="matrix-container">
+                            <div class="matrix-title">
+                                Output (<span id="output-size-display">6</span>, <span id="output-size-display2">6</span>)
+                            </div>
+                            <div id="output-matrix" class="matrix"></div>
+                        </div>
+                    </div>
+                    
+                    <div class="hint">Hover over the input matrix to change kernel position</div>
+                </div>
+            
+                <script>
+                    // Elements
+                    const inputSizeInput = document.getElementById('input-size');
+                    const inputSizeSlider = document.getElementById('input-size-slider');
+                    const paddingInput = document.getElementById('padding');
+                    const paddingSlider = document.getElementById('padding-slider');
+                    const kernelSizeInput = document.getElementById('kernel-size');
+                    const kernelSizeSlider = document.getElementById('kernel-size-slider');
+                    const strideInput = document.getElementById('stride');
+                    const strideSlider = document.getElementById('stride-slider');
+                    const inputMatrix = document.getElementById('input-matrix');
+                    const outputMatrix = document.getElementById('output-matrix');
+                    const playButton = document.getElementById('play-button');
+            
+                    // Display elements
+                    const inputSizeDisplay = document.getElementById('input-size-display');
+                    const inputSizeDisplay2 = document.getElementById('input-size-display2');
+                    const paddedSizeDisplay = document.getElementById('padded-size-display');
+                    const paddedSizeDisplay2 = document.getElementById('padded-size-display2');
+                    const outputSizeDisplay = document.getElementById('output-size-display');
+                    const outputSizeDisplay2 = document.getElementById('output-size-display2');
+            
+                    // State
+                    let currentKernelPosition = { row: 0, col: 0 };
+                    let isAnimating = false;
+                    let animationTimeout = null;
+            
+                    // Sync number inputs with sliders
+                    function syncInputWithSlider(input, slider) {
+                        input.addEventListener('input', () => {
+                            slider.value = input.value;
+                            updateVisualizations();
+                        });
+                        
+                        slider.addEventListener('input', () => {
+                            input.value = slider.value;
+                            updateVisualizations();
+                        });
+                    }
+            
+                    syncInputWithSlider(inputSizeInput, inputSizeSlider);
+                    syncInputWithSlider(paddingInput, paddingSlider);
+                    syncInputWithSlider(kernelSizeInput, kernelSizeSlider);
+                    syncInputWithSlider(strideInput, strideSlider);
+            
+                    // Calculate output size based on input parameters
+                    function calculateOutputSize(inputSize, kernelSize, padding, stride) {
+                        return Math.floor((inputSize + 2 * padding - kernelSize) / stride + 1);
+                    }
+            
+                    // Create matrices based on parameters
+                    function createMatrix(rows, cols, elementId, isPadded = false) {
+                        const matrix = document.getElementById(elementId);
+                        matrix.innerHTML = '';
+                        matrix.style.gridTemplateColumns = `repeat(${cols}, 30px)`;
+                        
+                        for (let i = 0; i < rows; i++) {
+                            for (let j = 0; j < cols; j++) {
+                                const cell = document.createElement('div');
+                                cell.classList.add('cell');
+                                
+                                // Add padding class if the cell is in the padding area
+                                if (isPadded) {
+                                    const padding = parseInt(paddingInput.value);
+                                    const originalSize = parseInt(inputSizeInput.value);
+                                    if (i < padding || i >= padding + originalSize || 
+                                        j < padding || j >= padding + originalSize) {
+                                        cell.style.backgroundColor = "#f0f0f0";
+                                    }
+                                }
+                                
+                                // Add data attributes for position
+                                cell.dataset.row = i;
+                                cell.dataset.col = j;
+                                
+                                matrix.appendChild(cell);
+                            }
+                        }
+                    }
+            
+                    // Update kernel visualization at specific position
+                    function updateKernelVisualization(row, col) {
+                        currentKernelPosition = { row, col };
+                        
+                        // Get parameters
+                        const inputSize = parseInt(inputSizeInput.value);
+                        const padding = parseInt(paddingInput.value);
+                        const kernelSize = parseInt(kernelSizeInput.value);
+                        const stride = parseInt(strideInput.value);
+                        const paddedSize = inputSize + 2 * padding;
+                        
+                        // Clear previous highlights
+                        const cells = inputMatrix.querySelectorAll('.cell');
+                        cells.forEach(cell => cell.classList.remove('highlighted', 'active-kernel'));
+                        
+                        // Highlight kernel area
+                        for (let i = 0; i < kernelSize; i++) {
+                            for (let j = 0; j < kernelSize; j++) {
+                                const r = row + i;
+                                const c = col + j;
+                                if (r < paddedSize && c < paddedSize) {
+                                    const cellIndex = r * paddedSize + c;
+                                    if (cells[cellIndex]) {
+                                        cells[cellIndex].classList.add('highlighted');
+                                    }
+                                }
+                            }
+                        }
+                        
+                        // Calculate output position
+                        const outputRow = Math.floor(row / stride);
+                        const outputCol = Math.floor(col / stride);
+                        
+                        // Highlight corresponding output cell if valid
+                        const outputSize = calculateOutputSize(inputSize, kernelSize, padding, stride);
+                        if (outputRow < outputSize && outputCol < outputSize && 
+                            row % stride === 0 && col % stride === 0) {
+                            const outputCells = outputMatrix.querySelectorAll('.cell');
+                            const outputCellIndex = outputRow * outputSize + outputCol;
+                            if (outputCells[outputCellIndex]) {
+                                outputCells[outputCellIndex].classList.add('result-highlight');
+                            }
+                        }
+                    }
+            
+                    // Add hover effect for kernel visualization
+                    function addMatrixInteractivity() {
+                        const cells = inputMatrix.querySelectorAll('.cell');
+                        cells.forEach(cell => {
+                            cell.addEventListener('mouseenter', () => {
+                                const row = parseInt(cell.dataset.row);
+                                const col = parseInt(cell.dataset.col);
+                                
+                                // Get parameters
+                                const kernelSize = parseInt(kernelSizeInput.value);
+                                const stride = parseInt(strideInput.value);
+                                const paddedSize = parseInt(inputSizeInput.value) + 2 * parseInt(paddingInput.value);
+                                
+                                // Only allow kernel positions that fit within the matrix and align with stride
+                                const outputCells = outputMatrix.querySelectorAll('.cell');
+                                outputCells.forEach(cell => cell.classList.remove('result-highlight'));
+                                
+                                updateKernelVisualization(row, col);
+                            });
+                        });
+                    }
+            
+                    // Animate the convolution process
+                    function animateConvolution() {
+                        if (isAnimating) {
+                            stopAnimation();
+                            return;
+                        }
+                        
+                        isAnimating = true;
+                        playButton.textContent = "■ Stop Animation";
+                        
+                        const inputSize = parseInt(inputSizeInput.value);
+                        const padding = parseInt(paddingInput.value);
+                        const kernelSize = parseInt(kernelSizeInput.value);
+                        const stride = parseInt(strideInput.value);
+                        const paddedSize = inputSize + 2 * padding;
+                        const outputSize = calculateOutputSize(inputSize, kernelSize, padding, stride);
+                        
+                        let animRow = 0;
+                        let animCol = 0;
+                        
+                        function animationStep() {
+                            // Clear previous highlights
+                            const outputCells = outputMatrix.querySelectorAll('.cell');
+                            outputCells.forEach(cell => cell.classList.remove('result-highlight'));
+                            
+                            updateKernelVisualization(animRow, animCol);
+                            
+                            // Move to next position based on stride
+                            animCol += stride;
+                            if (animCol > paddedSize - kernelSize) {
+                                animCol = 0;
+                                animRow += stride;
+                            }
+                            
+                            // Reset animation if we've reached the end
+                            if (animRow > paddedSize - kernelSize) {
+                                animRow = 0;
+                                animCol = 0;
+                            }
+                            
+                            // Continue animation
+                            if (isAnimating) {
+                                animationTimeout = setTimeout(animationStep, 500);
+                            }
+                        }
+                        
+                        animationStep();
+                    }
+            
+                    // Stop the animation
+                    function stopAnimation() {
+                        isAnimating = false;
+                        if (animationTimeout) {
+                            clearTimeout(animationTimeout);
+                            animationTimeout = null;
+                        }
+                        playButton.textContent = "▶ Animate Convolution";
+                    }
+            
+                    // Main function to update visualizations based on parameters
+                    function updateVisualizations() {
+                        // Stop any ongoing animation
+                        stopAnimation();
+                        
+                        // Get parameters
+                        const inputSize = parseInt(inputSizeInput.value);
+                        const padding = parseInt(paddingInput.value);
+                        const kernelSize = parseInt(kernelSizeInput.value);
+                        const stride = parseInt(strideInput.value);
+                        
+                        // Calculate sizes
+                        const paddedSize = inputSize + 2 * padding;
+                        const outputSize = calculateOutputSize(inputSize, kernelSize, padding, stride);
+                        
+                        // Update display elements
+                        inputSizeDisplay.textContent = inputSize;
+                        inputSizeDisplay2.textContent = inputSize;
+                        paddedSizeDisplay.textContent = paddedSize;
+                        paddedSizeDisplay2.textContent = paddedSize;
+                        outputSizeDisplay.textContent = outputSize;
+                        outputSizeDisplay2.textContent = outputSize;
+                        
+                        // Create matrices
+                        createMatrix(paddedSize, paddedSize, 'input-matrix', true);
+                        createMatrix(outputSize, outputSize, 'output-matrix');
+                        
+                        // Add interactivity
+                        addMatrixInteractivity();
+                        
+                        // Initialize kernel visualization
+                        updateKernelVisualization(0, 0);
+                    }
+            
+                    // Initial setup
+                    updateVisualizations();
+            
+                    // Animation controls
+                    playButton.addEventListener('click', animateConvolution);
+                </script>
+            </body>
+            </html>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+            
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+            <h3>b) Non-linear Activation Functions</h3>
+            <p>After the convolution operation, a non-linear activation function is applied to introduce non-linearity into the model. The most common activation function is <strong>ReLU (Rectified Linear Unit)</strong>
+            Non Linearities create non linear decision boundaries, this ensure the output cannot be written as a linear combination of the inputs. If non linear activation was absent, deep CNN architectures would be equivalent to a single conv layer, which would not perform as well. I have also learned when i was reading AlexNet paper that ReLU is also faster than other non-linearities.
+            </p>
+            <div class="formula">
+                ReLU(x) = max(0, x)
+            </div>
+            <img src="assets/ReLU.png" alt="ReLU" />
+
+
+            
+            <h3>c) Pooling Layers</h3>
+            <p>Pooling layers reduce the spatial dimensions of the feature maps, making the network more computationally efficient and invariant to small translations.</p>
+            <p><strong>Types of Pooling:</strong></p>
+            <ul>
+                <li><strong>Max Pooling:</strong> Takes the maximum value in each pooling region.</li>
+                <li><strong>Average Pooling:</strong> Takes the average value in each pooling region.</li>
+            </ul>
+            
+            <h3>d) Fully Connected Layers</h3>
+            <p>After several convolutional and pooling layers, the output is flattened and passed through one or more fully connected layers. These layers combine the extracted features to produce the final output (e.g., class probabilities).</p>
+        </section>
+
+        <!-- Exercise: AlexNet -->
+        <section id="exercise-alexnet">
+            <h2>4. Exercise: Calculating Output Dimensions in AlexNet</h2>
+            <p>Let’s walk through an example to understand how the dimensions of an input image change as it passes through a CNN. Consider <strong>AlexNet</strong>, a classic CNN architecture:</p>
+            
+            <div class="highlight">
+                <p><strong>AlexNet Architecture:</strong></p>
+                <ul>
+                    <li><strong>Input:</strong> 227x227x3 (height x width x channels)</li>
+                    <li><strong>Conv1:</strong> 96 filters of size 11x11, stride=4, padding=0</li>
+                    <li><strong>MaxPool1:</strong> 3x3, stride=2</li>
+                    <li><strong>Conv2:</strong> 256 filters of size 5x5, stride=1, padding=2</li>
+                    <li><strong>MaxPool2:</strong> 3x3, stride=2</li>
+                    <li><strong>Conv3:</strong> 384 filters of size 3x3, stride=1, padding=1</li>
+                    <li><strong>Conv4:</strong> 384 filters of size 3x3, stride=1, padding=1</li>
+                    <li><strong>Conv5:</strong> 256 filters of size 3x3, stride=1, padding=1</li>
+                    <li><strong>MaxPool3:</strong> 3x3, stride=2</li>
+                    <li><strong>Fully Connected Layers:</strong> 4096, 4096, 1000 (output classes)</li>
+                </ul>
+            </div>
+            
+            <h3>Formula to Calculate Output Dimensions:</h3>
+            <div class="formula">
+                Output Size = floor((Input Size - Kernel Size + 2 × Padding) / Stride) + 1
+            </div>
+            
+            <h3>Step-by-Step Calculation:</h3>
+            <ol>
+                <li><strong>Conv1:</strong> (227 - 11) / 4 + 1 = 55 → Output: 55x55x96</li>
+                <li><strong>MaxPool1:</strong> (55 - 3) / 2 + 1 = 27 → Output: 27x27x96</li>
+                <li><strong>Conv2:</strong> (27 - 5 + 2×2) / 1 + 1 = 27 → Output: 27x27x256</li>
+                <li><strong>MaxPool2:</strong> (27 - 3) / 2 + 1 = 13 → Output: 13x13x256</li>
+                <li><strong>Conv3:</strong> (13 - 3 + 2×1) / 1 + 1 = 13 → Output: 13x13x384</li>
+                <li><strong>Conv4:</strong> (13 - 3 + 2×1) / 1 + 1 = 13 → Output: 13x13x384</li>
+                <li><strong>Conv5:</strong> (13 - 3 + 2×1) / 1 + 1 = 13 → Output: 13x13x256</li>
+                <li><strong>MaxPool3:</strong> (13 - 3) / 2 + 1 = 6 → Output: 6x6x256</li>
+                <li><strong>Fully Connected Layers:</strong> Flatten the output (6x6x256 = 9216) and pass it through the fully connected layers.</li>
+            </ol>
+        </section>
+
+        <!-- Forward Pass -->
+        <section id="forward-pass">
+            <h2>5. Training a CNN: Forward Pass</h2>
+            <p>The forward pass involves passing the input through the network to compute the output. Here’s how it works step-by-step:</p>
+            <ol>
+                <li><strong>Input:</strong> An image (e.g., 227x227x3).</li>
+                <li><strong>Convolution:</strong> Apply filters to extract features.</li>
+                <li><strong>Activation:</strong> Apply ReLU to introduce non-linearity.</li>
+                <li><strong>Pooling:</strong> Reduce spatial dimensions.</li>
+                <li><strong>Repeat:</strong> Apply multiple convolutional and pooling layers.</li>
+                <li><strong>Flatten:</strong> Convert the 3D output to a 1D vector.</li>
+                <li><strong>Fully Connected Layers:</strong> Combine features for classification.</li>
+                <li><strong>Output:</strong> Use softmax to produce class probabilities.</li>
+            </ol>
+        </section>
+
+        <!-- Backward Pass -->
+        <section id="backward-pass">
+            <h2>6. Training a CNN: Backward Pass (Backpropagation)</h2>
+            <p>The backward pass computes gradients of the loss with respect to the network’s parameters using the chain rule. Key steps:</p>
+            <ol>
+                <li><strong>Compute Loss:</strong> Compare predictions with ground truth.</li>
+                <li><strong>Backpropagate:</strong> Compute gradients layer by layer.</li>
+                <li><strong>Update Weights:</strong> Use an optimizer (e.g., SGD, Adam) to update parameters.</li>
+            </ol>
+        </section>
+
+        <!-- PyTorch Example -->
+        <section id="pytorch-example">
+            <h2>7. Building a CNN in PyTorch</h2>
+            <p>Here’s how to implement a CNN in PyTorch:</p>
+            
+            <div class="code">
+import torch
+import torch.nn as nn
+import torch.optim as optim
+import torchvision
+import torchvision.transforms as transforms
+
+# Define the CNN
+class SimpleCNN(nn.Module):
+    def __init__(self):
+        super(SimpleCNN, self).__init__()
+        self.conv1 = nn.Conv2d(1, 32, kernel_size=3, padding=1)
+        self.relu1 = nn.ReLU()
+        self.pool1 = nn.MaxPool2d(kernel_size=2, stride=2)
+        self.conv2 = nn.Conv2d(32, 64, kernel_size=3, padding=1)
+        self.relu2 = nn.ReLU()
+        self.pool2 = nn.MaxPool2d(kernel_size=2, stride=2)
+        self.fc1 = nn.Linear(64 * 7 * 7, 128)
+        self.relu3 = nn.ReLU()
+        self.fc2 = nn.Linear(128, 10)
+
+    def forward(self, x):
+        x = self.pool1(self.relu1(self.conv1(x)))
+        x = self.pool2(self.relu2(self.conv2(x)))
+        x = x.view(-1, 64 * 7 * 7)
+        x = self.relu3(self.fc1(x))
+        x = self.fc2(x)
+        return x
+
+# Load MNIST dataset
+transform = transforms.Compose([transforms.ToTensor(), transforms.Normalize((0.1307,), (0.3081,))])
+train_dataset = torchvision.datasets.MNIST(root='./data', train=True, download=True, transform=transform)
+train_loader = torch.utils.data.DataLoader(train_dataset, batch_size=64, shuffle=True)
+
+# Initialize model, loss, and optimizer
+model = SimpleCNN()
+criterion = nn.CrossEntropyLoss()
+optimizer = optim.Adam(model.parameters(), lr=0.001)
+
+# Training loop
+for epoch in range(5):
+    for images, labels in train_loader:
+        outputs = model(images)
+        loss = criterion(outputs, labels)
+        optimizer.zero_grad()
+        loss.backward()
+        optimizer.step()
+            </div>
+        </section>
+
+        <footer>
+            <p>© 2025 CNN from Scratch. By Nembot Jules.</p>
+        </footer>
+    </div>
+</body>
+</html>
