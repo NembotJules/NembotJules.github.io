@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Timelapses — Nembot Jules</title>
+    <meta name="description" content="Coding timelapses and work sessions by Nembot Jules.">
+    <meta property="og:title" content="Timelapses — Nembot Jules">
+    <meta property="og:description" content="Coding timelapses and work sessions by Nembot Jules.">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "SF Mono", Monaco, "Cascadia Code", "Roboto Mono", Consolas, "Courier New", monospace;
+            background-color: #ffffff;
+            color: #000000;
+            line-height: 1.6;
+            padding: 40px 20px;
+            max-width: 680px;
+            margin: 0 auto;
+        }
+        
+        a {
+            color: #000000;
+            text-decoration: none;
+            border-bottom: 1px solid #000000;
+            transition: opacity 0.2s ease;
+        }
+        
+        a:hover {
+            opacity: 0.6;
+        }
+        
+        nav {
+            margin-bottom: 60px;
+            font-size: 14px;
+        }
+        
+        nav a {
+            margin-right: 20px;
+            border-bottom: none;
+        }
+        
+        nav a:hover {
+            border-bottom: 1px solid #000000;
+        }
+        
+        h1 {
+            font-size: 28px;
+            font-weight: 400;
+            margin-bottom: 10px;
+            letter-spacing: -0.5px;
+        }
+        
+        .subtitle {
+            font-size: 15px;
+            color: #666;
+            margin-bottom: 40px;
+        }
+        
+        .timelapse-list {
+            list-style: none;
+        }
+        
+        .timelapse-item {
+            margin-bottom: 30px;
+            padding-bottom: 30px;
+            border-bottom: 1px solid #e5e5e5;
+        }
+        
+        .timelapse-item:last-child {
+            border-bottom: none;
+        }
+        
+        .timelapse-header {
+            display: flex;
+            align-items: baseline;
+            gap: 12px;
+            margin-bottom: 8px;
+        }
+        
+        .timelapse-number {
+            font-size: 18px;
+            font-weight: 600;
+        }
+        
+        .timelapse-date {
+            font-size: 13px;
+            color: #666;
+        }
+        
+        .timelapse-title {
+            font-size: 15px;
+            margin-bottom: 8px;
+        }
+        
+        .timelapse-description {
+            font-size: 14px;
+            color: #333;
+            line-height: 1.5;
+        }
+        
+        .platform-badge {
+            display: inline-block;
+            font-size: 11px;
+            padding: 2px 6px;
+            background: #000;
+            color: #fff;
+            border-radius: 3px;
+            margin-left: 8px;
+        }
+        
+        .profile-link {
+            font-size: 15px;
+            margin-top: 40px;
+            padding-top: 20px;
+            border-top: 1px solid #e5e5e5;
+        }
+        
+        @media (max-width: 480px) {
+            body {
+                padding: 30px 15px;
+            }
+            
+            h1 {
+                font-size: 24px;
+            }
+            
+            nav a {
+                margin-right: 15px;
+            }
+            
+            .timelapse-header {
+                flex-direction: column;
+                gap: 4px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <nav>
+        <a href="/">Home</a>
+        <a href="/blog">Blog</a>
+        <a href="/timelapses">Timelapses</a>
+    </nav>
+    
+    <h1>Timelapses</h1>
+    <p class="subtitle">Coding sessions and builds on <a href="https://www.tiktok.com/@jules_clinton">TikTok</a> and <a href="https://x.com/Clinton_ai">X</a></p>
+    
+    <ul class="timelapse-list" id="timelapses">
+        <!-- Timelapses will be loaded here -->
+    </ul>
+    
+    <div class="profile-link">
+        <p>Watch all timelapses on <a href="https://www.tiktok.com/@jules_clinton">TikTok (@jules_clinton)</a> and <a href="https://x.com/Clinton_ai">X (@Clinton_ai)</a></p>
+    </div>
+    
+    <script>
+        // Load timelapses from JSON
+        fetch('/timelapses.json')
+            .then(response => response.json())
+            .then(timelapses => {
+                const container = document.getElementById('timelapses');
+                
+                if (timelapses.length === 0) {
+                    container.innerHTML = '<li>No timelapses yet. Check back soon!</li>';
+                    return;
+                }
+                
+                // Sort by ID descending (newest first)
+                timelapses.sort((a, b) => b.id - a.id);
+                
+                timelapses.forEach(timelapse => {
+                    const li = document.createElement('li');
+                    li.className = 'timelapse-item';
+                    
+                    const platformBadge = timelapse.platform ? 
+                        `<span class="platform-badge">${timelapse.platform.toUpperCase()}</span>` : '';
+                    
+                    const placeholderNote = timelapse.isPlaceholder ? 
+                        '<em style="color: #999; font-size: 13px;"> (Placeholder - update timelapses.json)</em>' : '';
+                    
+                    li.innerHTML = `
+                        <div class="timelapse-header">
+                            <span class="timelapse-number">#${timelapse.id}</span>
+                            <span class="timelapse-date">${new Date(timelapse.date).toLocaleDateString('en-US', { 
+                                year: 'numeric', 
+                                month: 'short', 
+                                day: 'numeric' 
+                            })}</span>
+                        </div>
+                        <div class="timelapse-title">
+                            <a href="${timelapse.url}">${timelapse.title}</a>${platformBadge}${placeholderNote}
+                        </div>
+                        ${timelapse.description ? `<div class="timelapse-description">${timelapse.description}</div>` : ''}
+                    `;
+                    
+                    container.appendChild(li);
+                });
+            })
+            .catch(error => {
+                console.error('Error loading timelapses:', error);
+                document.getElementById('timelapses').innerHTML = 
+                    '<li>Error loading timelapses. Please try again later.</li>';
+            });
+    </script>
+</body>
+</html>

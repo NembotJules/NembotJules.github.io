@@ -1,0 +1,29 @@
+[
+  {
+    "id": 1,
+    "title": "PLACEHOLDER - Add your timelapse title",
+    "date": "2026-10-01",
+    "description": "Short description of what you worked on in this timelapse",
+    "url": "https://www.tiktok.com/@jules_clinton/video/YOUR_VIDEO_ID",
+    "platform": "tiktok",
+    "isPlaceholder": true
+  },
+  {
+    "id": 2,
+    "title": "PLACEHOLDER - Add your timelapse title",
+    "date": "2026-10-08",
+    "description": "Short description of what you worked on in this timelapse",
+    "url": "https://www.tiktok.com/@jules_clinton/video/YOUR_VIDEO_ID",
+    "platform": "tiktok",
+    "isPlaceholder": true
+  },
+  {
+    "id": 3,
+    "title": "PLACEHOLDER - Add your timelapse title",
+    "date": "2026-10-15",
+    "description": "Short description of what you worked on in this timelapse",
+    "url": "https://x.com/Clinton_ai/status/YOUR_TWEET_ID",
+    "platform": "x",
+    "isPlaceholder": true
+  }
+]

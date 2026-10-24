@@ -3,129 +3,156 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Nembot Jules</title>
+    <title>Nembot Jules — Machine Learning Engineer</title>
+    <meta name="description" content="Machine Learning Engineer building ML systems, data pipelines, and competing in Zindi competitions.">
+    <meta property="og:title" content="Nembot Jules — Machine Learning Engineer">
+    <meta property="og:description" content="Machine Learning Engineer building ML systems, data pipelines, and competing in Zindi competitions.">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://nembotjules.github.io">
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600&display=swap');
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
         
         body {
-            font-family: 'Inter', sans-serif;
-            background-color: #000000;
-            color: #ffffff;
-            margin: 0;
-            padding: 40px;
-            text-align: center;
+            font-family: -apple-system, BlinkMacSystemFont, "SF Mono", Monaco, "Cascadia Code", "Roboto Mono", Consolas, "Courier New", monospace;
+            background-color: #ffffff;
+            color: #000000;
+            line-height: 1.6;
+            padding: 40px 20px;
+            max-width: 680px;
+            margin: 0 auto;
         }
-        h1 {
-            font-size: 2.5em;
-            font-weight: 600;
-            margin-bottom: 10px;
-        }
-        h2 {
-            font-size: 1.2em;
-            font-weight: 300;
-            margin-bottom: 40px;
-            opacity: 0.7;
-        }
+        
         a {
-            color: #ffffff;
+            color: #000000;
             text-decoration: none;
-            transition: all 0.3s ease;
+            border-bottom: 1px solid #000000;
+            transition: opacity 0.2s ease;
         }
+        
         a:hover {
-            text-decoration: underline;
-            color: #00ffcc;
+            opacity: 0.6;
         }
-        .nav {
-            display: flex;
-            justify-content: center;
-            gap: 20px;
+        
+        nav {
+            margin-bottom: 60px;
+            font-size: 14px;
+        }
+        
+        nav a {
+            margin-right: 20px;
+            border-bottom: none;
+        }
+        
+        nav a:hover {
+            border-bottom: 1px solid #000000;
+        }
+        
+        h1 {
+            font-size: 28px;
+            font-weight: 400;
             margin-bottom: 40px;
+            letter-spacing: -0.5px;
         }
-        .blog-list {
-            margin-top: 30px;
-            text-align: left;
-            max-width: 700px;
-            margin-left: auto;
-            margin-right: auto;
-        }
-        .blog-item {
+        
+        h2 {
+            font-size: 18px;
+            font-weight: 400;
+            margin-top: 40px;
             margin-bottom: 20px;
-            padding: 15px;
-            background: rgba(255, 255, 255, 0.1);
-            border-radius: 10px;
-            transition: transform 0.3s ease;
         }
-        .blog-item:hover {
-            transform: scale(1.02);
-            background: rgba(255, 255, 255, 0.2);
+        
+        p {
+            margin-bottom: 20px;
+            font-size: 15px;
         }
-        .date {
-            font-size: 0.9em;
-            color: #aaaaaa;
-            margin-bottom: 5px;
+        
+        ul {
+            list-style: none;
+            margin-bottom: 30px;
         }
-        .social-links {
-            margin-top: 50px;
-            display: flex;
-            justify-content: center;
-            gap: 15px;
+        
+        ul li {
+            margin-bottom: 12px;
+            font-size: 15px;
         }
-        .social-links a {
-            padding: 10px;
-            border: none;
+        
+        ul li a {
             display: inline-block;
         }
-        .social-links img {
-            width: 30px;
-            height: 30px;
-            transition: transform 0.3s ease;
-            filter: invert(1);
+        
+        .bio {
+            margin-bottom: 40px;
         }
-        .social-links img:hover {
-            transform: scale(1.1);
+        
+        .links {
+            margin-top: 40px;
+            font-size: 14px;
+        }
+        
+        .links a {
+            margin-right: 15px;
+        }
+        
+        @media (max-width: 480px) {
+            body {
+                padding: 30px 15px;
+            }
+            
+            h1 {
+                font-size: 24px;
+            }
+            
+            nav a {
+                margin-right: 15px;
+            }
         }
     </style>
 </head>
 <body>
-    <h1>Nembot Jules</h1>
-    <h2>Welcome to my brain dump</h2>
-    
-    <nav class="nav">
-        <a href="#blog">Blog</a>
-        <a href="about.html">About</a>
-        <a href="projects.html">Projects</a>
-       
+    <nav>
+        <a href="/">Home</a>
+        <a href="/blog">Blog</a>
+        <a href="/timelapses">Timelapses</a>
+        <a href="#projects">Projects</a>
     </nav>
     
-    <div id="blog" class="blog-list">
-        <div class="blog-item">
-            <div class="date">Aug 30, 2024</div>
-            <a href="https://medium.com/@juniorbertrand761/a-comprehensive-guide-to-ml-monitoring-in-production-e202fe1da3d0">A Comprehensive Guide to ML Monitoring in Production</a>
-        </div>
-        <div class="blog-item">
-            <div class="date">Sep 27, 2024</div>
-            <a href="https://medium.com/@juniorbertrand761/decision-trees-demystified-a-step-by-step-guide-d7ac08d6f6a1">Decision Trees Demystified: A Step-by-Step Guide</a>
-        </div>
-        <div class="blog-item">
-            <div class="date">Oct 12, 2024</div>
-            <a href="https://medium.com/@juniorbertrand761/how-to-setup-mlflow-server-on-aws-a-step-by-step-guide-10aa38a9ca5d">How to Setup Mlflow Server on AWS: A Step-by-Step Guide</a>
-        </div>
-
-        <div class="blog-item">
-            <div class="date">Jan 19, 2025</div>
-            <a href="https://nembotjules.bearblog.dev/understanding-tensors-dimensions-shapes-sizes-and-axes-in-pytorch/">Understanding Tensors Dimensions, Shapes, Sizes and Axes in Pytorch</a>
-        </div>
-
-        <div class="blog-item">
-            <div class="date">Mar 18, 2025</div>
-            <a href="blog/CNN/CNN.html">Understanding Convolutional Neural Networks From Scratch</a>
-        </div>
+    <h1>Nembot Jules</h1>
+    
+    <div class="bio">
+        <p>I'm a Machine Learning Engineer passionate about building ML systems that work in production.</p>
+        
+        <p>I work on everything from data pipelines to MLOps to paper implementations all the way to GPU kernels. I compete in Zindi competitions and enjoy the challenge of turning research into reliable systems.</p>
+        
+        <p>Currently building tools for better ML workflows and exploring what makes machine learning systems maintainable at scale.</p>
     </div>
     
-    <div class="social-links">
-        <a href="https://github.com/NembotJules" target="_blank"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/github/github-original.svg" alt="GitHub"></a>
-        <a href="https://www.linkedin.com/in/nembotjules/" target="_blank"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/linkedin/linkedin-plain.svg" style="filter: brightness(0) invert(1);" alt="LinkedIn"></a>
-        <a href="https://x.com/Clinton_ai" target="_blank"><img src="https://cdn.jsdelivr.net/npm/simple-icons@v9/icons/x.svg" style="filter: brightness(0) invert(1);" alt="X"></a>
-      </div>
+    <h2 id="projects">Projects</h2>
+    <ul>
+        <li><a href="https://github.com/NembotJules/Cameroon-Air-Quality-Prediction">Cameroon Air Quality Prediction</a> — End-to-end MLOps system with automated data pipeline, model retraining, and deployment</li>
+        <li><a href="https://github.com/NembotJules/Deep-Learning-papers">Deep Learning Papers</a> — Implementations of various deep learning papers and algorithms in PyTorch, TensorFlow, and JAX</li>
+        <li><a href="#">Minigrad</a> — A small autograd engine for understanding backpropagation</li>
+        <li><a href="https://github.com/NembotJules/Graph-Algorithm-Visualizer">Graph Algorithm Visualizer</a> — Interactive visualizations of graph algorithms like Dijkstra and Kruskal</li>
+        <li><a href="https://github.com/NembotJules/Sorting-Visualizer">Sorting Algorithm Visualizer</a> — Visual demonstrations of sorting algorithms</li>
+    </ul>
+    
+    <h2>Writing</h2>
+    <ul>
+        <li><a href="/blog/data-engineering-team-and-sap-ds">How to build a top data engineering team</a> — Team building and SAP Data Services design patterns</li>
+        <li><a href="https://medium.com/@juniorbertrand761/a-comprehensive-guide-to-ml-monitoring-in-production-e202fe1da3d0">A Comprehensive Guide to ML Monitoring in Production</a></li>
+        <li><a href="https://medium.com/@juniorbertrand761/decision-trees-demystified-a-step-by-step-guide-d7ac08d6f6a1">Decision Trees Demystified: A Step-by-Step Guide</a></li>
+        <li><a href="https://medium.com/@juniorbertrand761/how-to-setup-mlflow-server-on-aws-a-step-by-step-guide-10aa38a9ca5d">How to Setup Mlflow Server on AWS: A Step-by-Step Guide</a></li>
+        <li><a href="https://nembotjules.bearblog.dev/understanding-tensors-dimensions-shapes-sizes-and-axes-in-pytorch/">Understanding Tensors in PyTorch</a></li>
+    </ul>
+    
+    <div class="links">
+        <a href="https://github.com/NembotJules">GitHub</a>
+        <a href="https://www.linkedin.com/in/nembotjules/">LinkedIn</a>
+        <a href="https://x.com/Clinton_ai">X</a>
+        <a href="mailto:juniorbertrand761@gmail.com">Email</a>
+    </div>
 </body>
 </html>
