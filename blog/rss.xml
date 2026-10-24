@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Nembot Jules Blog</title>
+    <link>https://nembotjules.github.io/blog</link>
+    <description>Writings on machine learning, data engineering, and building production systems by Nembot Jules</description>
+    <language>en-us</language>
+    <atom:link href="https://nembotjules.github.io/blog/rss.xml" rel="self" type="application/rss+xml"/>
+    
+    <item>
+      <title>How to build a top data engineering team</title>
+      <link>https://nembotjules.github.io/blog/data-engineering-team-and-sap-ds.html</link>
+      <guid>https://nembotjules.github.io/blog/data-engineering-team-and-sap-ds.html</guid>
+      <pubDate>Thu, 24 Oct 2026 00:00:00 GMT</pubDate>
+      <description>Building a data engineering team that the business trusts requires more than technical skills. Here's what I've learned about team structure, hiring bar, ownership models, and the design patterns that make data pipelines reliable—including a deep dive into SAP Data Services architecture and automation.</description>
+    </item>
+  </channel>
+</rss>
