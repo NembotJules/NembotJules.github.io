@@ -1,29 +1,101 @@
 [
   {
-    "id": 1,
-    "title": "PLACEHOLDER - Add your timelapse title",
-    "date": "2026-10-01",
-    "description": "Short description of what you worked on in this timelapse",
-    "url": "https://www.tiktok.com/@jules_clinton/video/YOUR_VIDEO_ID",
+    "id": 11,
+    "title": "Mindset",
+    "date": "2026-10-19",
+    "description": "",
+    "url": "https://www.tiktok.com/@jules_clinton/video/7698233414234770708",
     "platform": "tiktok",
-    "isPlaceholder": true
+    "isPlaceholder": false
   },
   {
-    "id": 2,
-    "title": "PLACEHOLDER - Add your timelapse title",
-    "date": "2026-10-08",
-    "description": "Short description of what you worked on in this timelapse",
-    "url": "https://www.tiktok.com/@jules_clinton/video/YOUR_VIDEO_ID",
+    "id": 10,
+    "title": "High frequency",
+    "date": "2026-10-05",
+    "description": "",
+    "url": "https://www.tiktok.com/@jules_clinton/video/7692958792534871316",
     "platform": "tiktok",
-    "isPlaceholder": true
+    "isPlaceholder": false
+  },
+  {
+    "id": 9,
+    "title": "Let's start this journey",
+    "date": "2026-10-03",
+    "description": "",
+    "url": "https://www.tiktok.com/@jules_clinton/video/7692418587826523412",
+    "platform": "tiktok",
+    "isPlaceholder": false
+  },
+  {
+    "id": 8,
+    "title": "Let's keep working",
+    "date": "2026-09-28",
+    "description": "",
+    "url": "https://www.tiktok.com/@jules_clinton/video/7690459961532419349",
+    "platform": "tiktok",
+    "isPlaceholder": false
+  },
+  {
+    "id": 7,
+    "title": "Dreams come true",
+    "date": "2026-09-22",
+    "description": "",
+    "url": "https://www.tiktok.com/@jules_clinton/video/7688253843137711380",
+    "platform": "tiktok",
+    "isPlaceholder": false
+  },
+  {
+    "id": 6,
+    "title": "Still working",
+    "date": "2026-09-14",
+    "description": "",
+    "url": "https://www.tiktok.com/@jules_clinton/video/7685245656033807636",
+    "platform": "tiktok",
+    "isPlaceholder": false
+  },
+  {
+    "id": 5,
+    "title": "Work is my element",
+    "date": "2026-09-11",
+    "description": "",
+    "url": "https://www.tiktok.com/@jules_clinton/video/7684137509365812501",
+    "platform": "tiktok",
+    "isPlaceholder": false
+  },
+  {
+    "id": 4,
+    "title": "Timelapse #3",
+    "date": "2026-09-07",
+    "description": "Data warehouse project and personal work",
+    "url": "https://www.tiktok.com/@jules_clinton/video/7682668628264701205",
+    "platform": "tiktok",
+    "isPlaceholder": false
   },
   {
     "id": 3,
-    "title": "PLACEHOLDER - Add your timelapse title",
-    "date": "2026-10-15",
-    "description": "Short description of what you worked on in this timelapse",
-    "url": "https://x.com/Clinton_ai/status/YOUR_TWEET_ID",
-    "platform": "x",
-    "isPlaceholder": true
+    "title": "Timelapse #2 (36 hrs)",
+    "date": "2026-09-01",
+    "description": "",
+    "url": "https://www.tiktok.com/@jules_clinton/video/7680339847755664661",
+    "platform": "tiktok",
+    "isPlaceholder": false
+  },
+  {
+    "id": 2,
+    "title": "Just do it",
+    "date": "2026-08-24",
+    "description": "",
+    "url": "https://www.tiktok.com/@jules_clinton/video/7677462128554544405",
+    "platform": "tiktok",
+    "isPlaceholder": false
+  },
+  {
+    "id": 1,
+    "title": "Timelapse #1 (8 hrs)",
+    "date": "2026-08-16",
+    "description": "Presentation on data pipeline design patterns",
+    "url": "https://www.tiktok.com/@jules_clinton/video/7674535280203910420",
+    "platform": "tiktok",
+    "isPlaceholder": false
   }
 ]

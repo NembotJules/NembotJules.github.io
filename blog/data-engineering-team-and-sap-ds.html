@@ -278,13 +278,13 @@
         
         <p>SAP Data Services is a suite of ETL tools built around a metadata-driven architecture. Here's the high-level breakdown:</p>
         
-        <p><strong>Repository</strong> — This is where all your metadata lives: job definitions, data flows, transformations, connections, table definitions. It's a relational database (usually Oracle or SQL Server) that stores everything about your ETL environment. The repository is version-controlled internally, so you can track changes, but it's not Git—more like a proprietary versioning system.</p>
+        <p><strong>Repository</strong> — This is where all your metadata lives: job definitions, data flows, transformations, connections, table definitions. It's a relational database (usually Oracle or SQL Server) that stores everything about your ETL environment. A local repository holds your working objects; for team development and versioning you can add a central repository with check-in and check-out, but it is not Git, so many teams also export their objects (ATL files) into Git for real change history.</p>
         
         <p><strong>Designer</strong> — This is the IDE where you build data flows, work flows, and jobs. It's a thick client that connects to the repository. Think of it as Eclipse for ETL. You drag and drop transformations, configure them, and the Designer generates metadata that gets stored in the repository.</p>
         
-        <p><strong>Job Server</strong> — This is the runtime engine that executes jobs. When you run a job, the Job Server reads the metadata from the repository, generates an execution plan, and runs it. The Job Server is where your transformations actually execute, where data gets read from sources, transformed, and loaded into targets.</p>
+        <p><strong>Job Server</strong> — This is the runtime engine that executes jobs. When you run a job, the Job Server starts a job engine process that reads the job's metadata from the repository, optimizes it into an execution plan, and runs it. The engine is where data gets read from sources, transformed, and loaded into targets.</p>
         
-        <p><strong>Access Server</strong> — This is the adapter layer that connects to data sources and targets. The Access Server handles database-specific quirks, optimization, and pushdown. If your transformation can be pushed down to the database (e.g., a SQL filter), the Access Server does that. If it can't, the data gets pulled into the Job Server's memory and processed there.</p>
+        <p><strong>Access Server</strong> — This is the server for real-time jobs. It receives requests (for example through web services), routes them to real-time services, and returns the response. It is not used for ordinary batch jobs. Pushdown and other optimization are done by the job engine at run time, covered below.</p>
         
         <h3>Data flows, work flows, and jobs</h3>
         
@@ -358,7 +358,7 @@ WHEN NOT MATCHED THEN
         
         <h3>Error handling and audit tables</h3>
         
-        <p>Every data flow should have error handling. In SAP DS, you do this by connecting the error output of a transform to an error target (usually a table).</p>
+        <p>Every data flow should have error handling. In SAP DS, you can do this with the Validation transform, which splits rows into pass and fail outputs so you can route failures to an error table, together with try/catch blocks at the work flow level for job-level failures.</p>
         
         <p>Don't just log errors—capture the row that failed, the error message, and enough context to debug it. A good error table schema:</p>
         
@@ -426,43 +426,29 @@ WHEN NOT MATCHED THEN
         
         <h2>Part 4: Automation via API</h2>
         
-        <p>SAP DS has a REST-style API (and older SOAP-based web services) for job scheduling and monitoring. You can trigger jobs, check status, and fetch logs programmatically.</p>
-        
-        <p>Here's a Python snippet for triggering a job (placeholder credentials):</p>
-        
-        <pre><code>import requests
-from requests.auth import HTTPBasicAuth
+        <p>There are a few supported ways to drive SAP DS from outside its own scheduler. You can export an execution command for a job from the Management Console Administrator, which generates a launcher script you call from any scheduler. You can also use the web services exposed by the Management Console and Access Server (SOAP, described by a WSDL on your own server). The exact operations and endpoints depend on your version, so read the WSDL on your server rather than trusting a blog post, including this one.</p>
 
-# Configuration
-base_url = "https://your-ds-server/DataServices/servlet/webservices"
-username = "your_username"
-password = "your_password"
-job_name = "JOB_SALES_DWH_DAILY"
+        <p>Here is a generic Python wrapper around the exported launcher script. Paths, job name and arguments are placeholders:</p>
 
-# Trigger job
-response = requests.post(
-    f"{base_url}/run",
-    auth=HTTPBasicAuth(username, password),
-    json={"jobName": job_name, "wait": False}
-)
+        <pre><code>import subprocess
 
-if response.status_code == 200:
-    job_id = response.json()["jobId"]
-    print(f"Job triggered: {job_id}")
-else:
-    print(f"Failed to trigger job: {response.text}")
+LAUNCHER = "/path/to/exported/JOB_SALES_DWH_DAILY.sh"  # exported from the Management Console
+GLOBAL_VARS = {"$G_LOAD_DATE": "2026-10-24"}              # global variables passed at runtime
 
-# Check status
-status_response = requests.get(
-    f"{base_url}/status/{job_id}",
-    auth=HTTPBasicAuth(username, password)
-)
+def run_job(launcher: str, global_vars: dict[str, str]) -> int:
+    cmd = [launcher]
+    for name, value in global_vars.items():
+        cmd += ["-G", f'"{name}={value}"']  # flag syntax depends on your export, check it
+    result = subprocess.run(cmd, capture_output=True, text=True)
+    print(result.stdout[-2000:])
+    return result.returncode
 
-print(f"Job status: {status_response.json()['status']}")</code></pre>
-        
-        <p>The Management Console also has a SOAP API. It's more verbose but offers more control (e.g., you can modify global variables at runtime, fetch detailed execution logs).</p>
-        
-        <p>Use the API to build your own orchestration layer on top of SAP DS. Trigger jobs from Airflow, monitor them from Datadog, send alerts to Slack. Don't rely on the built-in scheduler—it's not flexible enough for modern workflows.</p>
+if __name__ == "__main__":
+    raise SystemExit(run_job(LAUNCHER, GLOBAL_VARS))</code></pre>
+
+        <p>For the SOAP route, point a client such as zeep at the WSDL of your own server and call the batch job operations it lists. Keep credentials in a secret store, never in the script.</p>
+
+        <p>Use the API to build your own orchestration layer on top of SAP DS. Trigger jobs from Airflow, monitor them from Datadog, send alerts to Slack. The built-in scheduler works, but an external orchestrator gives you dependencies across systems, retries and one place for alerting.</p>
         
         <div class="checklist">
             <h4>Reusable Templates Checklist</h4>
@@ -470,7 +456,7 @@ print(f"Job status: {status_response.json()['status']}")</code></pre>
                 <li>Custom functions for common transformations (date parsing, string cleaning, etc.)</li>
                 <li>Parameterized data flows for similar entities (e.g., one template for loading all dimension tables)</li>
                 <li>Global variables for environment-specific config (DB connections, file paths)</li>
-                <li>Error handling patterns (error outputs connected to error tables)</li>
+                <li>Error handling patterns (Validation transform fail output routed to error tables, try/catch in work flows)</li>
                 <li>Audit logging patterns (job start/end, row counts)</li>
                 <li>Standard naming conventions documented and enforced</li>
                 <li>Reusable SQL scripts for common operations (delta merge, SCD Type 2 updates)</li>
