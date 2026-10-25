@@ -3,10 +3,10 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Intentional · Every hour, on purpose</title>
-    <meta name="description" content="Intentional is a focus and goal-tracking app: every hour you spend traces back to something you care about. Join the waitlist.">
-    <meta property="og:title" content="Intentional · Every hour, on purpose">
-    <meta property="og:description" content="A focus and goal-tracking app: every hour you spend traces back to something you care about. Join the waitlist.">
+    <title>Intentional · Give every hour a job</title>
+    <meta name="description" content="Nobody wastes their life. They let it drift. Intentional is the ledger of your life: every hour traced back to the few things you decided matter. Join the waitlist.">
+    <meta property="og:title" content="Intentional · Give every hour a job">
+    <meta property="og:description" content="Nobody wastes their life. They let it drift. Intentional is the ledger of your life: every hour traced back to the few things you decided matter.">
     <meta property="og:type" content="website">
     <meta property="og:url" content="https://nembotjules.github.io/intentional/">
     <meta property="og:image" content="https://nembotjules.github.io/intentional/img/week.webp">
@@ -29,6 +29,8 @@
             --orange-ink: #9A4210;
             --blue: #3E6BFF;
             --green: #22A35A;
+            --gold: #FFD23F;
+            --night: #2B2826;
             color-scheme: light;
         }
         * { margin: 0; padding: 0; box-sizing: border-box; }
@@ -45,7 +47,8 @@
         img { display: block; max-width: 100%; }
         main { overflow-x: clip; }
         .wrap { max-width: 1120px; margin: 0 auto; padding: 0 16px; }
-        @media (min-width: 640px) { .wrap { padding: 0 24px; } }
+        .narrow { max-width: 760px; margin: 0 auto; padding: 0 16px; }
+        @media (min-width: 640px) { .wrap, .narrow { padding: 0 24px; } }
 
         /* Header */
         header.top {
@@ -69,8 +72,14 @@
         .btn:active { transform: scale(0.97); }
         .btn .chev { transition: transform 0.2s ease; }
         .btn:hover .chev { transform: translateX(2px); }
-        .btn.light { background: var(--surface); color: var(--ink); box-shadow: inset 0 0 0 1px var(--rule); }
-        .btn.light:hover { background: var(--raised); }
+
+        .eyebrow { font-size: 13px; font-weight: 800; letter-spacing: 0.14em; text-transform: uppercase; color: var(--orange-ink); }
+        h2 { font-size: 36px; line-height: 1.06; font-weight: 800; letter-spacing: -0.03em; margin-top: 12px; }
+        @media (min-width: 640px) { h2 { font-size: 56px; } }
+        .hl {
+            display: inline-block; background: var(--orange); color: #fff;
+            border-radius: 0.16em; padding: 0 0.18em 0.06em; line-height: 1.05;
+        }
 
         /* Hero */
         .hero { position: relative; isolation: isolate; text-align: center; }
@@ -107,16 +116,12 @@
         @media (min-width: 640px) { .badge { margin-top: 88px; } }
 
         h1 {
-            max-width: 900px; margin: 28px auto 0;
-            font-size: 44px; line-height: 1.02; font-weight: 800; letter-spacing: -0.035em;
+            max-width: 920px; margin: 28px auto 0;
+            font-size: 46px; line-height: 1.02; font-weight: 800; letter-spacing: -0.035em;
         }
-        @media (min-width: 640px) { h1 { font-size: 72px; } }
-        @media (min-width: 1024px) { h1 { font-size: 88px; } }
-        .hl {
-            display: inline-block; background: var(--orange); color: #fff;
-            border-radius: 0.16em; padding: 0 0.18em 0.06em; line-height: 1.05;
-        }
-        .lede { max-width: 580px; margin: 24px auto 0; font-size: 19px; line-height: 1.55; color: var(--soft); }
+        @media (min-width: 640px) { h1 { font-size: 76px; } }
+        @media (min-width: 1024px) { h1 { font-size: 92px; } }
+        .lede { max-width: 600px; margin: 24px auto 0; font-size: 19px; line-height: 1.55; color: var(--soft); }
         @media (min-width: 640px) { .lede { font-size: 21px; } }
 
         /* Waitlist form */
@@ -142,8 +147,7 @@
 
         /* Phones */
         .phone {
-            position: relative; border-radius: 44px;
-            padding: 10px; background: #1D1A17;
+            position: relative; border-radius: 44px; padding: 10px; background: #1D1A17;
             box-shadow: inset 0 0 0 2px #3A3530, 0 40px 80px -30px rgba(40, 20, 0, 0.45);
         }
         .phone img { width: 100%; height: auto; aspect-ratio: 390 / 844; border-radius: 35px; background: var(--canvas); }
@@ -157,22 +161,59 @@
         @media (min-width: 640px) { .stage { height: 680px; overflow: hidden; } .stage .center { width: 310px; } }
         @media (min-width: 860px) { .stage .left, .stage .right { display: block; } }
 
-        /* Chain */
-        .chain-sec { padding: 72px 0 24px; text-align: center; }
-        .eyebrow { font-size: 13px; font-weight: 800; letter-spacing: 0.14em; text-transform: uppercase; color: var(--orange-ink); }
-        h2 { font-size: 34px; line-height: 1.08; font-weight: 800; letter-spacing: -0.03em; margin-top: 12px; }
-        @media (min-width: 640px) { h2 { font-size: 52px; } }
-        .chain { display: flex; flex-wrap: wrap; justify-content: center; align-items: center; gap: 10px; margin: 36px auto 0; max-width: 760px; }
+        /* Drift */
+        .drift-sec { padding: 24px 0 0; }
+        .drift {
+            position: relative; isolation: isolate; overflow: hidden; border-radius: 40px; color: #fff;
+            background: linear-gradient(180deg, #5E5862 0%, #6E6870 45%, #8A7B78 100%);
+            padding: 72px 20px 56px; text-align: center;
+        }
+        .drift .eyebrow { color: rgba(255, 255, 255, 0.7); }
+        .drift h2 { color: #fff; }
+        .drift .lead { max-width: 560px; margin: 20px auto 0; font-size: 19px; line-height: 1.55; color: rgba(255, 255, 255, 0.82); }
+        .calc { max-width: 520px; margin: 44px auto 0; }
+        .calc label { display: block; font-size: 16px; font-weight: 600; color: rgba(255, 255, 255, 0.9); }
+        .calc label output { font-weight: 800; color: #fff; }
+        .calc input[type=range] { width: 100%; margin: 18px 0 4px; accent-color: var(--orange); height: 28px; cursor: pointer; }
+        .calc .ticks { display: flex; justify-content: space-between; font-size: 13px; color: rgba(255, 255, 255, 0.55); }
+        .years { margin-top: 36px; font-size: 88px; line-height: 1; font-weight: 800; letter-spacing: -0.04em; font-variant-numeric: tabular-nums; }
+        @media (min-width: 640px) { .years { font-size: 120px; } }
+        .years-sub { margin-top: 10px; font-size: 19px; color: rgba(255, 255, 255, 0.9); }
+        .drift-flick { width: 120px; height: 120px; margin: 28px auto 0; transition: filter 0.35s ease, opacity 0.35s ease, transform 0.35s ease; transform-origin: 50% 100%; }
+        .drift .fine { margin-top: 18px; font-size: 13px; color: rgba(255, 255, 255, 0.6); }
+        @media (min-width: 640px) { .drift { padding: 96px 64px 64px; } }
+
+        /* Live on purpose */
+        .believe-sec { padding: 24px 0 0; }
+        .believe {
+            position: relative; isolation: isolate; overflow: hidden; border-radius: 40px; background: var(--blue); color: #fff;
+            padding: 80px 20px; text-align: center;
+        }
+        .believe .rings { position: absolute; inset: 0; z-index: -1; pointer-events: none; }
+        .believe .rings i { position: absolute; left: 50%; top: 50%; border: 1px solid rgba(255, 255, 255, 0.12); border-radius: 50%; transform: translate(-50%, -50%); }
+        .believe .small { font-size: 20px; color: rgba(255, 255, 255, 0.75); }
+        .believe .big { margin-top: 10px; font-size: 40px; line-height: 1.06; font-weight: 800; letter-spacing: -0.03em; }
+        @media (min-width: 640px) { .believe .big { font-size: 64px; } .believe { padding: 112px 64px; } }
+        .contrast { max-width: 760px; margin: 48px auto 0; display: grid; gap: 10px; text-align: left; }
+        @media (min-width: 760px) { .contrast { grid-template-columns: repeat(3, 1fr); } }
+        .contrast div { background: rgba(255, 255, 255, 0.1); border-radius: 18px; padding: 16px 18px; font-size: 16px; color: rgba(255, 255, 255, 0.85); }
+        .contrast b { display: block; color: #fff; font-size: 17px; }
+        .believe .answer { max-width: 560px; margin: 28px auto 0; font-size: 20px; line-height: 1.5; }
+        .believe .answer strong { color: var(--gold); }
+
+        /* How it works */
+        .how-head { padding: 104px 0 8px; text-align: center; }
+        .how-head p { max-width: 560px; margin: 18px auto 0; color: var(--soft); font-size: 18px; }
+        .chain { display: flex; flex-wrap: wrap; justify-content: center; align-items: center; gap: 10px; margin: 32px auto 0; max-width: 760px; }
         .chip { display: inline-flex; align-items: center; gap: 8px; padding: 10px 18px; border-radius: 999px; background: var(--surface); box-shadow: 0 0 0 1px var(--rule); font-weight: 700; font-size: 17px; }
         .chip i { width: 10px; height: 10px; border-radius: 50%; display: inline-block; }
         .arrow { color: var(--faint); font-weight: 700; font-size: 18px; }
-        .chain-sec p.sub { max-width: 560px; margin: 24px auto 0; color: var(--soft); font-size: 18px; }
 
-        /* Features */
         .feature { display: grid; gap: 32px; align-items: center; padding: 72px 0; border-top: 1px solid var(--rule); }
         .feature:first-of-type { border-top: none; }
         .feature .copy { max-width: 470px; }
-        .feature h3 { font-size: 32px; line-height: 1.1; font-weight: 800; letter-spacing: -0.025em; margin-top: 10px; }
+        .feature .num { display: inline-flex; width: 34px; height: 34px; border-radius: 50%; align-items: center; justify-content: center; background: var(--ink); color: #fff; font-weight: 800; font-size: 15px; }
+        .feature h3 { font-size: 32px; line-height: 1.1; font-weight: 800; letter-spacing: -0.025em; margin-top: 14px; }
         @media (min-width: 640px) { .feature h3 { font-size: 40px; } }
         .feature p { margin-top: 16px; font-size: 18px; line-height: 1.6; color: var(--soft); }
         .feature ul { list-style: none; margin-top: 20px; display: grid; gap: 10px; }
@@ -188,33 +229,67 @@
             .card-shot { width: 330px; }
         }
 
-        /* Principles */
-        .principles { display: grid; gap: 14px; padding: 24px 0 96px; }
-        @media (min-width: 860px) { .principles { grid-template-columns: repeat(3, 1fr); } }
-        .principle { background: var(--surface); border-radius: 24px; padding: 28px; box-shadow: 0 0 0 1px var(--rule); }
-        .principle .ico { width: 44px; height: 44px; border-radius: 14px; display: flex; align-items: center; justify-content: center; background: var(--orange-soft); color: var(--orange-ink); }
-        .principle h4 { margin-top: 18px; font-size: 21px; font-weight: 800; letter-spacing: -0.01em; }
-        .principle p { margin-top: 8px; color: var(--soft); font-size: 16.5px; line-height: 1.55; }
+        /* Refusals */
+        .refuse-head { padding: 40px 0 0; text-align: center; }
+        .refusals { display: grid; gap: 14px; padding: 40px 0 0; }
+        @media (min-width: 720px) { .refusals { grid-template-columns: repeat(2, 1fr); } }
+        @media (min-width: 1024px) { .refusals { grid-template-columns: repeat(4, 1fr); } }
+        .refusal { background: var(--surface); border-radius: 24px; padding: 26px; box-shadow: 0 0 0 1px var(--rule); }
+        .refusal .no { font-size: 15px; font-weight: 700; color: var(--faint); text-decoration: line-through; text-decoration-color: var(--orange); text-decoration-thickness: 2px; }
+        .refusal h4 { margin-top: 10px; font-size: 21px; line-height: 1.2; font-weight: 800; letter-spacing: -0.01em; }
+        .refusal p { margin-top: 8px; color: var(--soft); font-size: 16px; line-height: 1.55; }
 
-        /* Final CTA */
-        .cta-sec { padding: 0 0 96px; }
-        .cta {
-            position: relative; isolation: isolate; overflow: hidden;
-            border-radius: 40px; background: #1F1C1A; color: #fff; text-align: center;
-            padding: 80px 20px;
+        /* Founder */
+        .founder { padding: 104px 0; }
+        .founder blockquote { font-size: 26px; line-height: 1.35; font-weight: 700; letter-spacing: -0.015em; }
+        @media (min-width: 640px) { .founder blockquote { font-size: 34px; } }
+        .founder blockquote span { color: var(--faint); }
+        .founder .by { display: flex; align-items: center; gap: 12px; margin-top: 28px; font-size: 16px; color: var(--soft); }
+        .founder .by b { color: var(--ink); }
+        .founder .by img { width: 44px; height: 44px; border-radius: 50%; background: var(--orange-soft); padding: 4px; }
+        .founder .by a { text-decoration-color: rgba(23, 20, 17, 0.25); text-underline-offset: 0.25em; }
+
+        /* Pledge */
+        .pledge-sec { padding: 0 0 96px; }
+        .pledge {
+            position: relative; isolation: isolate; overflow: hidden; border-radius: 40px; background: var(--night); color: #fff;
+            padding: 72px 22px 64px;
         }
-        .cta::before { content: ""; position: absolute; z-index: -1; top: -240px; left: 50%; width: 640px; height: 640px; transform: translateX(-50%); border-radius: 50%; background: rgba(242, 123, 46, 0.28); filter: blur(120px); }
-        .cta img.flick { width: 96px; height: 96px; margin: 0 auto 8px; }
-        .cta h2 { color: #fff; }
-        .cta p { max-width: 520px; margin: 18px auto 0; color: rgba(255, 255, 255, 0.7); font-size: 18px; }
-        .cta .waitlist form { background: rgba(255, 255, 255, 0.08); box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.14); }
-        .cta .waitlist input[type=email] { color: #fff; }
-        .cta .waitlist input::placeholder { color: rgba(255, 255, 255, 0.45); }
-        .cta .waitlist .btn { background: var(--orange); }
-        .cta .waitlist .note { color: rgba(255, 255, 255, 0.45); }
-        .cta .waitlist .done { background: rgba(255, 255, 255, 0.08); box-shadow: none; color: #fff; }
-        .cta .waitlist .err { color: #FFB38A; }
-        @media (min-width: 640px) { .cta { padding: 96px 64px; } }
+        .pledge .rings { position: absolute; inset: 0; z-index: -1; pointer-events: none; }
+        .pledge .rings i { position: absolute; left: 50%; bottom: -60px; border: 1px solid rgba(255, 255, 255, 0.07); border-radius: 50%; transform: translate(-50%, 50%); }
+        .pledge-inner { max-width: 560px; margin: 0 auto; }
+        .pledge .eyebrow { color: var(--gold); }
+        .pledge h2 { color: #fff; }
+        .pledge ol { list-style: none; margin-top: 28px; display: grid; gap: 14px; }
+        .pledge li { font-size: 20px; line-height: 1.45; font-weight: 600; }
+        .pledge li:last-child { color: var(--gold); }
+        .sign { margin-top: 40px; display: flex; flex-direction: column; align-items: center; text-align: center; }
+        .hold {
+            position: relative; width: 132px; height: 132px; border-radius: 50%; border: none; cursor: pointer;
+            background: rgba(255, 255, 255, 0.06); color: #fff; font: inherit; font-weight: 800; font-size: 16px;
+            touch-action: none; user-select: none; -webkit-user-select: none; -webkit-touch-callout: none;
+        }
+        .hold svg { position: absolute; inset: 0; transform: rotate(-90deg); }
+        .hold .track { stroke: rgba(255, 255, 255, 0.12); }
+        .hold .fill { stroke: var(--gold); stroke-dasharray: 389.6; stroke-dashoffset: 389.6; }
+        .hold img { width: 64px; height: 64px; margin: 0 auto; transition: filter 0.3s ease, opacity 0.3s ease; filter: grayscale(1); opacity: 0.45; }
+        .hold.lit img { filter: none; opacity: 1; }
+        .sign .hint { margin-top: 14px; font-size: 15px; color: rgba(255, 255, 255, 0.6); }
+        .signed { display: none; margin-top: 4px; }
+        .pledge.is-signed .signed { display: block; }
+        .pledge.is-signed .hint { display: none; }
+        .signed p.big { font-size: 26px; font-weight: 800; letter-spacing: -0.02em; margin-top: 18px; }
+        .signed p.sub { color: rgba(255, 255, 255, 0.7); font-size: 17px; margin-top: 6px; }
+        .pledge .waitlist form { background: rgba(255, 255, 255, 0.08); box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.14); }
+        .pledge .waitlist input[type=email] { color: #fff; }
+        .pledge .waitlist input::placeholder { color: rgba(255, 255, 255, 0.45); }
+        .pledge .waitlist .btn { background: var(--orange); }
+        .pledge .waitlist .note { color: rgba(255, 255, 255, 0.45); }
+        .pledge .waitlist .done { background: rgba(255, 255, 255, 0.08); box-shadow: none; color: #fff; }
+        .pledge .waitlist .err { color: #FFB38A; }
+        .skip { margin-top: 18px; font-size: 14px; color: rgba(255, 255, 255, 0.55); background: none; border: none; font: inherit; cursor: pointer; text-decoration: underline; text-underline-offset: 0.25em; }
+        .pledge.is-signed .skip { display: none; }
+        @media (min-width: 640px) { .pledge { padding: 96px 64px 80px; } }
 
         footer.foot { padding: 0 0 40px; }
         footer.foot .wrap { display: flex; flex-wrap: wrap; gap: 8px 20px; justify-content: center; font-size: 14px; color: var(--faint); }
@@ -223,7 +298,7 @@
 
         @keyframes rise { from { opacity: 0; transform: translateY(24px); } to { opacity: 1; transform: none; } }
         .rise { animation: rise 0.8s cubic-bezier(0.22, 1, 0.36, 1) both; }
-        @media (prefers-reduced-motion: reduce) { .rise { animation: none; } html { scroll-behavior: auto; } }
+        @media (prefers-reduced-motion: reduce) { .rise { animation: none; } html { scroll-behavior: auto; } .drift-flick { transition: none; } }
     </style>
 </head>
 <body>
@@ -235,6 +310,7 @@
     </header>
 
     <main>
+        <!-- 1. The promise -->
         <section class="hero">
             <div class="hero-bg" aria-hidden="true">
                 <div class="hero-glow"></div>
@@ -244,9 +320,9 @@
                 </div>
             </div>
             <div class="wrap">
-                <a class="badge rise" href="#waitlist" style="animation-delay:0ms"><span>Coming to iPhone &amp; Android</span><b>Join →</b></a>
-                <h1 class="rise" style="animation-delay:80ms">Every hour, <span class="hl">on purpose.</span></h1>
-                <p class="lede rise" style="animation-delay:160ms">Intentional is a focus and goal-tracking app. Every hour you spend traces back to something you care about: your body, your mind, your money, your craft.</p>
+                <a class="badge rise" href="#waitlist"><span>Coming to iPhone &amp; Android</span><b>Join →</b></a>
+                <h1 class="rise" style="animation-delay:80ms">Give every hour <span class="hl">a job.</span></h1>
+                <p class="lede rise" style="animation-delay:160ms">Intentional is the ledger of your life. Choose the few things that truly matter, give your hours to them, and see, honestly, how much of your life went where you meant it to.</p>
                 <div class="waitlist rise" id="waitlist" style="animation-delay:240ms">
                     <form data-waitlist>
                         <label class="hp">Leave this empty <input type="text" name="_honey" tabindex="-1" autocomplete="off"></label>
@@ -266,28 +342,62 @@
             </div>
         </section>
 
-        <section class="chain-sec wrap">
-            <p class="eyebrow">How it works</p>
-            <h2>Nothing you do is loose.</h2>
-            <div class="chain" aria-label="Session, then habit or task, then goal, then pillar">
-                <span class="chip">⏱ Session</span><span class="arrow">→</span>
-                <span class="chip">Habit or task</span><span class="arrow">→</span>
-                <span class="chip"><i style="background:var(--blue)"></i>Goal</span><span class="arrow">→</span>
-                <span class="chip"><i style="background:var(--orange)"></i>Pillar</span>
+        <!-- 2. The secret: drift -->
+        <section class="wrap drift-sec">
+            <div class="drift">
+                <p class="eyebrow">The thing nobody says out loud</p>
+                <h2>Nobody wastes their life.<br>They let it drift.</h2>
+                <p class="lead">An hour on the phone. Two in front of the TV. A whole evening that went nowhere. None of it chosen, none of it remembered. Each hour feels like nothing. Add them up.</p>
+                <div class="calc">
+                    <label for="drift-hours">Hours a day that go to nothing you chose: <output id="drift-out" for="drift-hours">3 hours</output></label>
+                    <input id="drift-hours" type="range" min="0.5" max="6" step="0.5" value="3">
+                    <div class="ticks" aria-hidden="true"><span>30 min</span><span>6 hours</span></div>
+                    <div class="years" id="drift-years" aria-live="polite">7.5 years</div>
+                    <p class="years-sub" id="drift-sub">of your waking life, over the next 40 years.</p>
+                    <img class="drift-flick" id="drift-flick" src="/intentional/img/flick.svg" alt="Flick, the flame, dimming as more hours drift">
+                    <p class="fine">Based on 16 waking hours a day and 40 more years. It’s simple arithmetic, and that’s the point.</p>
+                </div>
             </div>
-            <p class="sub">Every focus session lands on a habit or a task, which moves a goal, which serves a pillar of your life. At the end of the week you can see exactly where your life went.</p>
         </section>
 
+        <!-- 3. The different question -->
+        <section class="wrap believe-sec">
+            <div class="believe">
+                <div class="rings" aria-hidden="true"><i style="width:420px;height:420px"></i><i style="width:680px;height:680px"></i><i style="width:940px;height:940px"></i><i style="width:1200px;height:1200px"></i></div>
+                <p class="small">Most apps help you do more.</p>
+                <p class="big">Intentional helps you live on purpose.</p>
+                <div class="contrast">
+                    <div><b>A to-do list</b>counts tasks.</div>
+                    <div><b>A habit tracker</b>counts streaks.</div>
+                    <div><b>A timer</b>counts minutes.</div>
+                </div>
+                <p class="answer">None of them asks the only question that matters: <strong>what was this hour for?</strong></p>
+            </div>
+        </section>
+
+        <!-- 4. How -->
         <section class="wrap">
+            <div class="how-head">
+                <p class="eyebrow">How it works</p>
+                <h2>Nothing you do is loose.</h2>
+                <div class="chain" aria-label="Session, then habit or task, then goal, then pillar">
+                    <span class="chip">⏱ Session</span><span class="arrow">→</span>
+                    <span class="chip">Habit or task</span><span class="arrow">→</span>
+                    <span class="chip"><i style="background:var(--blue)"></i>Goal</span><span class="arrow">→</span>
+                    <span class="chip"><i style="background:var(--orange)"></i>Pillar</span>
+                </div>
+                <p>Every hour lands on a habit or a task, which moves a goal, which builds a pillar of your life. Nothing floats.</p>
+            </div>
+
             <div class="feature">
                 <div class="copy">
-                    <p class="eyebrow">Pillars &amp; goals</p>
-                    <h3>Very few things actually matter.</h3>
-                    <p>Pick the 3 to 5 areas of your life that do. Give each one goal you can finish, and see how many hours it really got this week.</p>
+                    <span class="num">1</span>
+                    <h3>Choose your pillars.</h3>
+                    <p>Very few things actually matter. Name them: your body, your mind, your money, your craft. Everything else is noise, and Intentional treats it that way.</p>
                     <ul>
-                        <li>Physique, Mind, Finances, Skills, or your own</li>
-                        <li>“On track”, “ahead” or “behind” for every goal, without the red</li>
-                        <li>Habits that are part of a goal, not a checklist of their own</li>
+                        <li>3 to 5 pillars, chosen by you</li>
+                        <li>One goal in each, with a deadline you can see coming</li>
+                        <li>“On track”, “ahead” or “behind”, never red</li>
                     </ul>
                 </div>
                 <div class="art"><div class="phone"><img src="/intentional/img/goals.webp" alt="Pillars screen with goals and progress" loading="lazy"></div></div>
@@ -295,12 +405,12 @@
 
             <div class="feature flip">
                 <div class="copy">
-                    <p class="eyebrow">Focus</p>
-                    <h3>Start the hour. Flick burns with you.</h3>
-                    <p>Start a session on a habit or a task. The phone goes quiet, the timer runs, and every minute is counted toward the goal and the pillar it serves.</p>
+                    <span class="num">2</span>
+                    <h3>Give your hours to them.</h3>
+                    <p>Start a session on a habit or a task. Flick burns with you while the hour is protected, and every minute is written to the goal and the pillar it built.</p>
                     <ul>
-                        <li>Timer-only or strict mode</li>
-                        <li>Missed your 7:00? “Do it now” or take a rest day</li>
+                        <li>Block the apps you choose while you work</li>
+                        <li>Missed your 7:00? “Do it now”, or take a rest day</li>
                         <li>Streaks that forgive one skip a week</li>
                     </ul>
                 </div>
@@ -309,13 +419,12 @@
 
             <div class="feature">
                 <div class="copy">
-                    <p class="eyebrow">Sunday</p>
-                    <h3>Your week, on one card.</h3>
-                    <p>Every Sunday evening, a three-minute look back: hours per pillar, habits kept, your best day, your goal’s progress. Then plan the next week.</p>
+                    <span class="num">3</span>
+                    <h3>Face your week.</h3>
+                    <p>Every Sunday evening, three honest minutes: the hours each pillar really got, the habits you kept, your best day. Then decide what next week is for.</p>
                     <ul>
-                        <li>One accountability partner gets your week, by message</li>
-                        <li>A card worth sharing, in light or dark</li>
-                        <li>No feed, no followers, no likes</li>
+                        <li>One accountability partner gets your week</li>
+                        <li>If you go quiet, they ask why</li>
                     </ul>
                 </div>
                 <div class="art"><div class="card-shot"><img src="/intentional/img/week.webp" alt="Weekly card: 15h 20m given to the life I chose, with hours per pillar" loading="lazy"></div></div>
@@ -323,50 +432,73 @@
 
             <div class="feature flip">
                 <div class="copy">
-                    <p class="eyebrow">The long game</p>
-                    <h3>Your life, in hours.</h3>
-                    <p>A ledger that only grows. Every hour you’ve given to the life you chose, month by month and pillar by pillar, with the goals you achieved and what they took.</p>
-                    <ul>
-                        <li>Flick grows from Spark to Sun as your hours add up</li>
-                        <li>Your data stays on your phone</li>
-                    </ul>
+                    <span class="num">4</span>
+                    <h3>Watch your life add up.</h3>
+                    <p>A record that only grows: every hour you’ve ever given to the life you chose, month by month, with the goals you finished and what they took. The flame grows with it, from Spark to Sun.</p>
                 </div>
                 <div class="art"><div class="phone"><img src="/intentional/img/life.webp" alt="Your life in hours: 193 hours, Flick is a Bonfire" loading="lazy"></div></div>
             </div>
         </section>
 
-        <section class="wrap principles" aria-label="Principles">
-            <div class="principle">
-                <div class="ico" aria-hidden="true"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20.8 4.6a5.5 5.5 0 0 0-7.8 0L12 5.7l-1-1.1a5.5 5.5 0 0 0-7.8 7.8l1 1.1L12 21l7.8-7.5 1-1.1a5.5 5.5 0 0 0 0-7.8z"/></svg></div>
-                <h4>No guilt</h4>
-                <p>Missed a habit? Do it now or rest today. Nothing turns red, and nothing tells you that you failed.</p>
+        <!-- 5. What we refuse -->
+        <section class="wrap">
+            <div class="refuse-head">
+                <p class="eyebrow">What we refuse to build</p>
+                <h2>Less app. More life.</h2>
             </div>
-            <div class="principle">
-                <div class="ico" aria-hidden="true"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="8" r="3.5"/><circle cx="17" cy="9" r="2.5"/><path d="M2.5 20c.8-3.4 3.4-5.5 6.5-5.5s5.7 2.1 6.5 5.5"/><path d="M15.5 14.6c2.6-.4 5 1.3 6 4.4"/></svg></div>
-                <h4>One partner, not a feed</h4>
-                <p>One person who sees your week and asks why when you go quiet. That’s the whole social network.</p>
-            </div>
-            <div class="principle">
-                <div class="ico" aria-hidden="true"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="6" y="2.5" width="12" height="19" rx="3"/><path d="M10.5 18.5h3"/></svg></div>
-                <h4>Yours, on your phone</h4>
-                <p>Your hours, goals and notes live on your device. No account needed to start.</p>
+            <div class="refusals">
+                <div class="refusal"><p class="no">XP, badges, leaderboards</p><h4>The reward is the hour.</h4><p>Points make you play the app. Your pillars are the game.</p></div>
+                <div class="refusal"><p class="no">Red marks and guilt</p><h4>Missed it? Begin again.</h4><p>Nothing turns red, and nothing tells you that you failed.</p></div>
+                <div class="refusal"><p class="no">A feed and followers</p><h4>One partner.</h4><p>One person who sees your week. That’s the whole social network.</p></div>
+                <div class="refusal"><p class="no">Selling your attention</p><h4>Yours, on your phone.</h4><p>Your hours, goals and notes live on your device.</p></div>
             </div>
         </section>
 
-        <section class="wrap cta-sec">
-            <div class="cta">
-                <img class="flick" src="/intentional/img/flick.svg" alt="">
-                <h2>Make every hour <span class="hl">count.</span></h2>
-                <p>Intentional is in private testing. Leave your email and you’ll be among the first to get it.</p>
-                <div class="waitlist">
-                    <form data-waitlist>
-                        <label class="hp">Leave this empty <input type="text" name="_honey" tabindex="-1" autocomplete="off"></label>
-                        <input type="email" name="email" required placeholder="you@email.com" aria-label="Your email" autocomplete="email">
-                        <button class="btn" type="submit">Join the waitlist</button>
-                    </form>
-                    <p class="note">One email when it opens. No spam.</p>
-                    <p class="done" role="status">You’re on the list. I’ll write to you when Intentional opens. 🔥</p>
-                    <p class="err" role="alert">That didn’t go through. Try again, or email <a href="mailto:juniorbertrand761@gmail.com?subject=Intentional%20waitlist">juniorbertrand761@gmail.com</a>.</p>
+        <!-- 6. Why -->
+        <section class="narrow founder">
+            <p class="eyebrow">Why I’m building this</p>
+            <blockquote style="margin-top:16px">“I believe very few things actually matter in life. We have pillars, where each of our waking hours should go. <span>All the rest is simply noise.</span>”</blockquote>
+            <div class="by">
+                <img src="/intentional/img/flick.svg" alt="">
+                <div><b>Nembot Jules</b>, building Intentional from Yaoundé · <a href="/blog/2025-wrapped.html">Read where it started</a></div>
+            </div>
+        </section>
+
+        <!-- 7. The pledge -->
+        <section class="wrap pledge-sec">
+            <div class="pledge" id="pledge">
+                <div class="rings" aria-hidden="true"><i style="width:360px;height:360px"></i><i style="width:560px;height:560px"></i><i style="width:760px;height:760px"></i></div>
+                <div class="pledge-inner">
+                    <p class="eyebrow">Day one</p>
+                    <h2>Most people never decide.</h2>
+                    <ol>
+                        <li>I decide to stop drifting through my days.</li>
+                        <li>From today, my hours go to the life I chose.</li>
+                        <li>I will show up every day, even when it’s only for a few minutes.</li>
+                        <li>This is who I am becoming.</li>
+                    </ol>
+                    <div class="sign">
+                        <button class="hold" id="hold" type="button" aria-label="Hold to commit">
+                            <svg width="132" height="132" viewBox="0 0 132 132" aria-hidden="true"><circle class="track" cx="66" cy="66" r="62" fill="none" stroke-width="4"></circle><circle class="fill" id="hold-fill" cx="66" cy="66" r="62" fill="none" stroke-width="4" stroke-linecap="round"></circle></svg>
+                            <img src="/intentional/img/flick.svg" alt="">
+                        </button>
+                        <p class="hint">Hold to commit</p>
+                        <div class="signed" aria-live="polite">
+                            <p class="big">You just made a promise to yourself.</p>
+                            <p class="sub">Now let’s keep it. Be first when Intentional opens.</p>
+                            <div class="waitlist">
+                                <form data-waitlist>
+                                    <label class="hp">Leave this empty <input type="text" name="_honey" tabindex="-1" autocomplete="off"></label>
+                                    <input type="email" name="email" required placeholder="you@email.com" aria-label="Your email" autocomplete="email">
+                                    <button class="btn" type="submit">Join the waitlist</button>
+                                </form>
+                                <p class="note">One email when it opens. No spam.</p>
+                                <p class="done" role="status">You’re on the list. I’ll write to you when Intentional opens. 🔥</p>
+                                <p class="err" role="alert">That didn’t go through. Try again, or email <a href="mailto:juniorbertrand761@gmail.com?subject=Intentional%20waitlist">juniorbertrand761@gmail.com</a>.</p>
+                            </div>
+                        </div>
+                        <button class="skip" type="button" id="skip">Just join the waitlist</button>
+                    </div>
                 </div>
             </div>
         </section>
@@ -382,8 +514,75 @@
     </footer>
 
     <script>
-        // Waitlist: posts to FormSubmit (emails each signup to the address below). The first signup triggers a
-        // one-time activation email from FormSubmit; signups arrive once that link is clicked.
+        // Drift calculator: hours a day × 365 × 40 years ÷ 16 waking hours ÷ 365 = years of waking life.
+        (function () {
+            var range = document.getElementById('drift-hours');
+            var out = document.getElementById('drift-out');
+            var years = document.getElementById('drift-years');
+            var sub = document.getElementById('drift-sub');
+            var flick = document.getElementById('drift-flick');
+            function hoursLabel(h) { return h === 0.5 ? '30 minutes' : (h % 1 ? h.toFixed(1) : h) + (h === 1 ? ' hour' : ' hours'); }
+            function render() {
+                var h = parseFloat(range.value);
+                var y = (h * 40) / 16;
+                out.textContent = hoursLabel(h);
+                years.textContent = (y % 1 ? y.toFixed(1) : y) + (y === 1 ? ' year' : ' years');
+                var perYear = Math.round(h * 365);
+                sub.textContent = 'of your waking life, over the next 40 years. That’s ' + perYear.toLocaleString('en-US') + ' hours this year alone.';
+                var f = (h - 0.5) / 5.5; // 0 → 1
+                flick.style.filter = 'grayscale(' + (f * 0.9).toFixed(2) + ') brightness(' + (1 - f * 0.25).toFixed(2) + ')';
+                flick.style.opacity = (1 - f * 0.6).toFixed(2);
+                flick.style.transform = 'scale(' + (1 - f * 0.35).toFixed(2) + ')';
+            }
+            range.addEventListener('input', render);
+            render();
+        })();
+
+        // Hold to commit (1.6 s), like signing the pledge in the app. Mouse, touch and keyboard (Space / Enter).
+        (function () {
+            var pledge = document.getElementById('pledge');
+            var btn = document.getElementById('hold');
+            var fill = document.getElementById('hold-fill');
+            var LEN = 389.6, DURATION = 1600, start = 0, raf = 0, done = false;
+            function frame(t) {
+                var p = Math.min(1, (t - start) / DURATION);
+                fill.style.strokeDashoffset = (LEN * (1 - p)).toFixed(1);
+                if (p >= 1) return sign();
+                raf = requestAnimationFrame(frame);
+            }
+            function begin(e) {
+                if (done) return;
+                if (e) e.preventDefault();
+                cancelAnimationFrame(raf);
+                start = performance.now();
+                raf = requestAnimationFrame(frame);
+            }
+            function end() {
+                if (done) return;
+                cancelAnimationFrame(raf);
+                fill.style.transition = 'stroke-dashoffset 0.3s ease';
+                fill.style.strokeDashoffset = LEN;
+                setTimeout(function () { fill.style.transition = ''; }, 320);
+            }
+            function sign() {
+                done = true;
+                btn.classList.add('lit');
+                btn.setAttribute('aria-label', 'Committed');
+                if (navigator.vibrate) navigator.vibrate(30);
+                pledge.classList.add('is-signed');
+                var input = pledge.querySelector('input[type=email]');
+                if (input) setTimeout(function () { input.focus({ preventScroll: true }); }, 200);
+            }
+            btn.addEventListener('pointerdown', begin);
+            ['pointerup', 'pointerleave', 'pointercancel'].forEach(function (ev) { btn.addEventListener(ev, end); });
+            btn.addEventListener('keydown', function (e) { if ((e.key === ' ' || e.key === 'Enter') && !e.repeat) begin(e); });
+            btn.addEventListener('keyup', function (e) { if (e.key === ' ' || e.key === 'Enter') end(); });
+            btn.addEventListener('contextmenu', function (e) { e.preventDefault(); });
+            document.getElementById('skip').addEventListener('click', function () { fill.style.strokeDashoffset = 0; sign(); });
+        })();
+
+        // Waitlist: posts to FormSubmit, which emails each signup. The first signup triggers a one-time
+        // activation email from FormSubmit; signups arrive once that link is clicked.
         var ENDPOINT = 'https://formsubmit.co/ajax/juniorbertrand761@gmail.com';
         document.querySelectorAll('form[data-waitlist]').forEach(function (form) {
             var box = form.parentElement;

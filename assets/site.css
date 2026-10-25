@@ -28,10 +28,11 @@ nav a:hover { color: var(--text) !important; }
 
 body { padding-bottom: 0 !important; }
 
+/* Same measure as the reference footer: a 534px row, so the toggle sits close to the time. */
 footer.site-footer {
     position: static;
-    max-width: 680px;
-    margin: 0 auto;
+    max-width: 534px;
+    margin: 0;
     padding: 72px 0 40px;
     border: none;
     background: none;
