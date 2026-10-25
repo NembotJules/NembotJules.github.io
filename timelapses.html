@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" data-theme="dark">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -7,7 +7,44 @@
     <meta name="description" content="Coding timelapses and work sessions by Nembot Jules.">
     <meta property="og:title" content="Timelapses — Nembot Jules">
     <meta property="og:description" content="Coding timelapses and work sessions by Nembot Jules.">
+    <script>
+        // Early theme setting to avoid flash (default to dark for timelapses)
+        (function() {
+            const stored = localStorage.getItem('theme');
+            if (stored) {
+                document.documentElement.setAttribute('data-theme', stored);
+            }
+        })();
+    </script>
     <style>
+        @font-face {
+            font-family: 'Inter';
+            font-style: normal;
+            font-weight: 100 900;
+            font-display: swap;
+            src: url('/fonts/inter-variable.woff2') format('woff2-variations');
+        }
+        
+        :root[data-theme="light"] {
+            --bg: #ffffff;
+            --text: #000000;
+            --text-secondary: #666666;
+            --border: #e5e5e5;
+            --hover-bg: #f5f5f5;
+            --tile-bg: #f9f9f9;
+            --tile-hover: #f0f0f0;
+        }
+        
+        :root[data-theme="dark"] {
+            --bg: #0a0a0a;
+            --text: #f0f0f0;
+            --text-secondary: #a0a0a0;
+            --border: #2a2a2a;
+            --hover-bg: #1a1a1a;
+            --tile-bg: #1a1a1a;
+            --tile-hover: #2a2a2a;
+        }
+        
         * {
             margin: 0;
             padding: 0;
@@ -15,24 +52,24 @@
         }
         
         body {
-            font-family: -apple-system, BlinkMacSystemFont, "SF Mono", Monaco, "Cascadia Code", "Roboto Mono", Consolas, "Courier New", monospace;
-            background-color: #ffffff;
-            color: #000000;
+            font-family: Inter, system-ui, -apple-system, sans-serif;
+            background-color: var(--bg);
+            color: var(--text);
             line-height: 1.6;
-            padding: 40px 20px;
-            max-width: 680px;
+            padding: 40px 20px 80px;
+            max-width: 1200px;
             margin: 0 auto;
+            transition: background-color 0.2s, color 0.2s;
         }
         
         a {
-            color: #000000;
+            color: var(--text);
             text-decoration: none;
-            border-bottom: 1px solid #000000;
             transition: opacity 0.2s ease;
         }
         
         a:hover {
-            opacity: 0.6;
+            opacity: 0.7;
         }
         
         nav {
@@ -42,88 +79,126 @@
         
         nav a {
             margin-right: 20px;
-            border-bottom: none;
         }
         
         nav a:hover {
-            border-bottom: 1px solid #000000;
+            border-bottom: 1px solid var(--text);
         }
         
         h1 {
             font-size: 28px;
             font-weight: 400;
-            margin-bottom: 10px;
+            margin-bottom: 12px;
             letter-spacing: -0.5px;
         }
         
         .subtitle {
             font-size: 15px;
-            color: #666;
+            color: var(--text-secondary);
             margin-bottom: 40px;
         }
         
-        .timelapse-list {
-            list-style: none;
+        .subtitle a {
+            border-bottom: 1px solid var(--text);
         }
         
-        .timelapse-item {
-            margin-bottom: 30px;
-            padding-bottom: 30px;
-            border-bottom: 1px solid #e5e5e5;
-        }
-        
-        .timelapse-item:last-child {
-            border-bottom: none;
-        }
-        
-        .timelapse-header {
-            display: flex;
-            align-items: baseline;
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
             gap: 12px;
-            margin-bottom: 8px;
+            margin-bottom: 40px;
         }
         
-        .timelapse-number {
-            font-size: 18px;
-            font-weight: 600;
+        .tile {
+            aspect-ratio: 1;
+            background: var(--tile-bg);
+            border: 1px solid var(--border);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            position: relative;
         }
         
-        .timelapse-date {
+        .tile:hover {
+            background: var(--tile-hover);
+            transform: translateY(-2px);
+        }
+        
+        .tile-info {
+            position: absolute;
+            bottom: -50px;
+            left: 0;
+            right: 0;
+            background: var(--bg);
+            border: 1px solid var(--border);
+            padding: 8px;
+            font-size: 12px;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.2s;
+            z-index: 10;
+            text-align: center;
+        }
+        
+        .tile:hover .tile-info {
+            opacity: 1;
+        }
+        
+        .tile-date {
+            color: var(--text-secondary);
+            display: block;
+            margin-top: 2px;
+        }
+        
+        footer {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background-color: var(--bg);
+            border-top: 1px solid var(--border);
+            padding: 12px 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
             font-size: 13px;
-            color: #666;
+            transition: background-color 0.2s, border-color 0.2s;
         }
         
-        .timelapse-title {
-            font-size: 15px;
-            margin-bottom: 8px;
+        .theme-toggle {
+            background: none;
+            border: 1px solid var(--border);
+            color: var(--text);
+            padding: 4px 12px;
+            cursor: pointer;
+            border-radius: 4px;
+            font-size: 13px;
+            font-family: Inter, system-ui, -apple-system, sans-serif;
+            transition: background-color 0.2s, border-color 0.2s;
         }
         
-        .timelapse-description {
-            font-size: 14px;
-            color: #333;
-            line-height: 1.5;
+        .theme-toggle:hover {
+            background-color: var(--hover-bg);
         }
         
-        .platform-badge {
-            display: inline-block;
-            font-size: 11px;
-            padding: 2px 6px;
-            background: #000;
-            color: #fff;
-            border-radius: 3px;
-            margin-left: 8px;
-        }
-        
-        .profile-link {
-            font-size: 15px;
-            margin-top: 40px;
-            padding-top: 20px;
-            border-top: 1px solid #e5e5e5;
+        @media (max-width: 768px) {
+            .grid {
+                grid-template-columns: repeat(auto-fill, minmax(80px, 1fr));
+                gap: 10px;
+            }
+            
+            .tile {
+                font-size: 20px;
+            }
         }
         
         @media (max-width: 480px) {
             body {
-                padding: 30px 15px;
+                padding: 30px 15px 80px;
             }
             
             h1 {
@@ -134,9 +209,23 @@
                 margin-right: 15px;
             }
             
-            .timelapse-header {
-                flex-direction: column;
-                gap: 4px;
+            .grid {
+                grid-template-columns: repeat(auto-fill, minmax(70px, 1fr));
+                gap: 8px;
+            }
+            
+            .tile {
+                font-size: 18px;
+            }
+            
+            footer {
+                font-size: 12px;
+                padding: 10px 15px;
+            }
+            
+            .theme-toggle {
+                font-size: 12px;
+                padding: 3px 10px;
             }
         }
     </style>
@@ -149,63 +238,86 @@
     </nav>
     
     <h1>Timelapses</h1>
-    <p class="subtitle">Coding sessions and builds on <a href="https://www.tiktok.com/@jules_clinton">TikTok</a> and <a href="https://x.com/Clinton_ai">X</a></p>
+    <p class="subtitle">coding timelapses on <a href="https://www.tiktok.com/@jules_clinton">TikTok</a> / <a href="https://x.com/Clinton_ai">X</a></p>
     
-    <ul class="timelapse-list" id="timelapses">
-        <!-- Timelapses will be loaded here -->
-    </ul>
-    
-    <div class="profile-link">
-        <p>Watch all timelapses on <a href="https://www.tiktok.com/@jules_clinton">TikTok (@jules_clinton)</a> and <a href="https://x.com/Clinton_ai">X (@Clinton_ai)</a></p>
+    <div class="grid" id="grid">
+        <!-- Tiles will be loaded here -->
     </div>
     
+    <footer>
+        <div id="time">Loading...</div>
+        <button class="theme-toggle" id="theme-toggle">Toggle theme</button>
+    </footer>
+    
     <script>
-        // Load timelapses from JSON
+        // Update time
+        function updateTime() {
+            const now = new Date();
+            const formatter = new Intl.DateTimeFormat('en-US', {
+                timeZone: 'Africa/Douala',
+                hour: '2-digit',
+                minute: '2-digit',
+                second: '2-digit',
+                hour12: true,
+                timeZoneName: 'short'
+            });
+            document.getElementById('time').textContent = formatter.format(now);
+        }
+        updateTime();
+        setInterval(updateTime, 1000);
+        
+        // Theme toggle
+        const toggle = document.getElementById('theme-toggle');
+        toggle.addEventListener('click', () => {
+            const html = document.documentElement;
+            const current = html.getAttribute('data-theme');
+            const next = current === 'light' ? 'dark' : 'light';
+            html.setAttribute('data-theme', next);
+            localStorage.setItem('theme', next);
+        });
+        
+        // Load timelapses
         fetch('/timelapses.json')
             .then(response => response.json())
             .then(timelapses => {
-                const container = document.getElementById('timelapses');
+                const grid = document.getElementById('grid');
                 
                 if (timelapses.length === 0) {
-                    container.innerHTML = '<li>No timelapses yet. Check back soon!</li>';
+                    grid.innerHTML = '<p>No timelapses yet. Check back soon!</p>';
                     return;
                 }
                 
-                // Sort by ID descending (newest first)
-                timelapses.sort((a, b) => b.id - a.id);
+                // Sort by ID ascending (oldest = #1)
+                timelapses.sort((a, b) => a.id - b.id);
                 
                 timelapses.forEach(timelapse => {
-                    const li = document.createElement('li');
-                    li.className = 'timelapse-item';
+                    const tile = document.createElement('a');
+                    tile.className = 'tile';
+                    tile.href = timelapse.url;
+                    tile.target = '_blank';
+                    tile.rel = 'noopener noreferrer';
                     
-                    const platformBadge = timelapse.platform ? 
-                        `<span class="platform-badge">${timelapse.platform.toUpperCase()}</span>` : '';
+                    const date = new Date(timelapse.date).toLocaleDateString('en-US', {
+                        month: 'short',
+                        day: 'numeric',
+                        year: 'numeric'
+                    });
                     
-                    const placeholderNote = timelapse.isPlaceholder ? 
-                        '<em style="color: #999; font-size: 13px;"> (Placeholder - update timelapses.json)</em>' : '';
-                    
-                    li.innerHTML = `
-                        <div class="timelapse-header">
-                            <span class="timelapse-number">#${timelapse.id}</span>
-                            <span class="timelapse-date">${new Date(timelapse.date).toLocaleDateString('en-US', { 
-                                year: 'numeric', 
-                                month: 'short', 
-                                day: 'numeric' 
-                            })}</span>
+                    tile.innerHTML = `
+                        #${timelapse.id}
+                        <div class="tile-info">
+                            ${timelapse.title}
+                            <span class="tile-date">${date}</span>
                         </div>
-                        <div class="timelapse-title">
-                            <a href="${timelapse.url}">${timelapse.title}</a>${platformBadge}${placeholderNote}
-                        </div>
-                        ${timelapse.description ? `<div class="timelapse-description">${timelapse.description}</div>` : ''}
                     `;
                     
-                    container.appendChild(li);
+                    grid.appendChild(tile);
                 });
             })
             .catch(error => {
                 console.error('Error loading timelapses:', error);
-                document.getElementById('timelapses').innerHTML = 
-                    '<li>Error loading timelapses. Please try again later.</li>';
+                document.getElementById('grid').innerHTML = 
+                    '<p>Error loading timelapses. Please try again later.</p>';
             });
     </script>
 </body>

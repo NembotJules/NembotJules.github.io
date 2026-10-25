@@ -1,15 +1,47 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" data-theme="light">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Nembot Jules — Machine Learning Engineer</title>
-    <meta name="description" content="Machine Learning Engineer building ML systems, data pipelines, and competing in Zindi competitions.">
+    <meta name="description" content="Machine Learning Engineer building decision support systems and ML systems.">
     <meta property="og:title" content="Nembot Jules — Machine Learning Engineer">
-    <meta property="og:description" content="Machine Learning Engineer building ML systems, data pipelines, and competing in Zindi competitions.">
+    <meta property="og:description" content="Machine Learning Engineer building decision support systems and ML systems.">
     <meta property="og:type" content="website">
     <meta property="og:url" content="https://nembotjules.github.io">
+    <script>
+        // Early theme setting to avoid flash
+        (function() {
+            const stored = localStorage.getItem('theme');
+            const theme = stored || (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+            document.documentElement.setAttribute('data-theme', theme);
+        })();
+    </script>
     <style>
+        @font-face {
+            font-family: 'Inter';
+            font-style: normal;
+            font-weight: 100 900;
+            font-display: swap;
+            src: url('/fonts/inter-variable.woff2') format('woff2-variations');
+        }
+        
+        :root[data-theme="light"] {
+            --bg: #ffffff;
+            --text: #000000;
+            --text-secondary: #666666;
+            --border: #e5e5e5;
+            --hover-bg: #f5f5f5;
+        }
+        
+        :root[data-theme="dark"] {
+            --bg: #0a0a0a;
+            --text: #f0f0f0;
+            --text-secondary: #a0a0a0;
+            --border: #2a2a2a;
+            --hover-bg: #1a1a1a;
+        }
+        
         * {
             margin: 0;
             padding: 0;
@@ -17,19 +49,20 @@
         }
         
         body {
-            font-family: -apple-system, BlinkMacSystemFont, "SF Mono", Monaco, "Cascadia Code", "Roboto Mono", Consolas, "Courier New", monospace;
-            background-color: #ffffff;
-            color: #000000;
+            font-family: Inter, system-ui, -apple-system, sans-serif;
+            background-color: var(--bg);
+            color: var(--text);
             line-height: 1.6;
-            padding: 40px 20px;
+            padding: 40px 20px 80px;
             max-width: 680px;
             margin: 0 auto;
+            transition: background-color 0.2s, color 0.2s;
         }
         
         a {
-            color: #000000;
+            color: var(--text);
             text-decoration: none;
-            border-bottom: 1px solid #000000;
+            border-bottom: 1px solid var(--text);
             transition: opacity 0.2s ease;
         }
         
@@ -48,25 +81,31 @@
         }
         
         nav a:hover {
-            border-bottom: 1px solid #000000;
+            border-bottom: 1px solid var(--text);
         }
         
         h1 {
             font-size: 28px;
             font-weight: 400;
-            margin-bottom: 40px;
+            margin-bottom: 8px;
             letter-spacing: -0.5px;
+        }
+        
+        .updated {
+            font-size: 14px;
+            color: var(--text-secondary);
+            margin-bottom: 40px;
         }
         
         h2 {
             font-size: 18px;
-            font-weight: 400;
+            font-weight: 500;
             margin-top: 40px;
-            margin-bottom: 20px;
+            margin-bottom: 16px;
         }
         
         p {
-            margin-bottom: 20px;
+            margin-bottom: 16px;
             font-size: 15px;
         }
         
@@ -76,7 +115,7 @@
         }
         
         ul li {
-            margin-bottom: 12px;
+            margin-bottom: 8px;
             font-size: 15px;
         }
         
@@ -84,22 +123,44 @@
             display: inline-block;
         }
         
-        .bio {
+        .intro {
             margin-bottom: 40px;
         }
         
-        .links {
-            margin-top: 40px;
-            font-size: 14px;
+        footer {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background-color: var(--bg);
+            border-top: 1px solid var(--border);
+            padding: 12px 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 13px;
+            transition: background-color 0.2s, border-color 0.2s;
         }
         
-        .links a {
-            margin-right: 15px;
+        .theme-toggle {
+            background: none;
+            border: 1px solid var(--border);
+            color: var(--text);
+            padding: 4px 12px;
+            cursor: pointer;
+            border-radius: 4px;
+            font-size: 13px;
+            font-family: Inter, system-ui, -apple-system, sans-serif;
+            transition: background-color 0.2s, border-color 0.2s;
+        }
+        
+        .theme-toggle:hover {
+            background-color: var(--hover-bg);
         }
         
         @media (max-width: 480px) {
             body {
-                padding: 30px 15px;
+                padding: 30px 15px 80px;
             }
             
             h1 {
@@ -109,6 +170,16 @@
             nav a {
                 margin-right: 15px;
             }
+            
+            footer {
+                font-size: 12px;
+                padding: 10px 15px;
+            }
+            
+            .theme-toggle {
+                font-size: 12px;
+                padding: 3px 10px;
+            }
         }
     </style>
 </head>
@@ -117,21 +188,26 @@
         <a href="/index.html">Home</a>
         <a href="/blog/index.html">Blog</a>
         <a href="/timelapses.html">Timelapses</a>
-        <a href="#projects">Projects</a>
     </nav>
     
     <h1>Nembot Jules</h1>
+    <div class="updated" id="updated">Updated Oct 25, 2026</div>
     
-    <div class="bio">
-        <p>I'm a Machine Learning Engineer passionate about building ML systems that work in production.</p>
+    <div class="intro">
+        <p>I am a Machine Learning Engineer based in Yaounde, Cameroon, building decision support systems (data warehouses) and ML systems.</p>
         
-        <p>I work on everything from data pipelines to MLOps to paper implementations all the way to GPU kernels. I compete in Zindi competitions and enjoy the challenge of turning research into reliable systems.</p>
+        <p>I'm currently a Data Engineer at Afriland First Bank, rebuilding the bank's data warehouse and fighting data quality and slow response time issues. So far I helped the team bring response time from more than 5 minutes to under 10 seconds and reach a data quality score of 74% across the organization as of today.</p>
         
-        <p>Currently building tools for better ML workflows and exploring what makes machine learning systems maintainable at scale.</p>
+        <p>Before that, I worked at Toloka as an AI tutor, creating original mathematics problems and fully worked solutions used to train large language models (LLMs) in step-by-step reasoning.</p>
+        
+        <p>I believe very few things actually matter in life. We have what I call pillars (Physique, Mind, Finances, etc.) where we must dedicate each of our waking hours. All the rest is simply noise. Based on this belief I am building an app named <a href="https://github.com/NembotJules/Intentional">Intentional</a>.</p>
+        
+        <p>You can find me on <a href="https://github.com/NembotJules">GitHub</a>, <a href="https://www.linkedin.com/in/nembotjules/">LinkedIn</a>, <a href="https://x.com/Clinton_ai">X</a>, <a href="https://www.tiktok.com/@jules_clinton">TikTok</a> and <a href="https://substack.com/@julesnembot">Substack</a>, or reach me via <a href="mailto:juniorbertrand761@gmail.com">email</a>.</p>
     </div>
     
-    <h2 id="projects">Projects</h2>
+    <h2>Personal projects</h2>
     <ul>
+        <li><a href="https://github.com/NembotJules/Intentional">Intentional</a> — App for building intentional habits around life pillars</li>
         <li><a href="https://github.com/NembotJules/Cameroon-Air-Quality-Prediction">Cameroon Air Quality Prediction</a> — End-to-end MLOps system with automated data pipeline, model retraining, and deployment</li>
         <li><a href="https://github.com/NembotJules/Deep-Learning-papers">Deep Learning Papers</a> — Implementations of various deep learning papers and algorithms in PyTorch, TensorFlow, and JAX</li>
         <li><a href="https://github.com/NembotJules/minigrad">Minigrad</a> — A small autograd engine for understanding backpropagation</li>
@@ -149,11 +225,53 @@
         <li><a href="https://nembotjules.bearblog.dev/understanding-tensors-dimensions-shapes-sizes-and-axes-in-pytorch/">Understanding Tensors in PyTorch</a></li>
     </ul>
     
-    <div class="links">
-        <a href="https://github.com/NembotJules">GitHub</a>
-        <a href="https://www.linkedin.com/in/nembotjules/">LinkedIn</a>
-        <a href="https://x.com/Clinton_ai">X</a>
-        <a href="mailto:juniorbertrand761@gmail.com">Email</a>
-    </div>
+    <footer>
+        <div id="time">Loading...</div>
+        <button class="theme-toggle" id="theme-toggle">Toggle theme</button>
+    </footer>
+    
+    <script>
+        // Update time
+        function updateTime() {
+            const now = new Date();
+            const formatter = new Intl.DateTimeFormat('en-US', {
+                timeZone: 'Africa/Douala',
+                hour: '2-digit',
+                minute: '2-digit',
+                second: '2-digit',
+                hour12: true,
+                timeZoneName: 'short'
+            });
+            document.getElementById('time').textContent = formatter.format(now);
+        }
+        updateTime();
+        setInterval(updateTime, 1000);
+        
+        // Theme toggle
+        const toggle = document.getElementById('theme-toggle');
+        toggle.addEventListener('click', () => {
+            const html = document.documentElement;
+            const current = html.getAttribute('data-theme');
+            const next = current === 'light' ? 'dark' : 'light';
+            html.setAttribute('data-theme', next);
+            localStorage.setItem('theme', next);
+        });
+        
+        // Fetch last commit date
+        fetch('https://api.github.com/repos/NembotJules/NembotJules.github.io/commits/main')
+            .then(res => res.json())
+            .then(data => {
+                const date = new Date(data.commit.committer.date);
+                const formatted = date.toLocaleDateString('en-US', {
+                    month: 'short',
+                    day: 'numeric',
+                    year: 'numeric'
+                });
+                document.getElementById('updated').textContent = 'Updated ' + formatted;
+            })
+            .catch(() => {
+                // Keep fallback date on error
+            });
+    </script>
 </body>
 </html>
