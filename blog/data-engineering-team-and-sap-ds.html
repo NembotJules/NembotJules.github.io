@@ -572,7 +572,7 @@ if __name__ == "__main__":
                 hour12: true,
                 timeZoneName: 'short'
             });
-            document.getElementById('time').textContent = formatter.format(now);
+            document.getElementById('time').textContent = 'Yaoundé, Cameroon · ' + formatter.format(now);
         }
         updateTime();
         setInterval(updateTime, 1000);
