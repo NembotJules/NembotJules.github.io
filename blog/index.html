@@ -190,6 +190,7 @@
             }
         }
     </style>
+    <link rel="stylesheet" href="/assets/site.css">
 </head>
 <body>
     <nav>
@@ -212,6 +213,33 @@
             </p>
         </article>
         <article class="post-item">
+            <div class="post-date">April 26, 2026</div>
+            <h2 class="post-title">
+                <a href="/blog/the-game-at-work.html">The Game at Work</a>
+            </h2>
+            <p class="post-excerpt">
+                At some point during my first year working, I realized I wasn’t engineering anymore. I was performing. On managers, validation, and keeping your reference internal.
+            </p>
+        </article>
+        <article class="post-item">
+            <div class="post-date">April 26, 2026</div>
+            <h2 class="post-title">
+                <a href="/blog/society-rank-and-inherited-position.html">Society, Rank, and Inherited Position</a>
+            </h2>
+            <p class="post-excerpt">
+                Most of your life was decided before you were born. On nested games, inherited scores, and the honest accounting between pride and victimhood.
+            </p>
+        </article>
+        <article class="post-item">
+            <div class="post-date">January 1, 2026</div>
+            <h2 class="post-title">
+                <a href="/blog/2025-wrapped.html">2025 Wrapped</a>
+            </h2>
+            <p class="post-excerpt">
+                What I learned in 2025: money isn’t scarce, action produces information, very few things actually matter, and the levels of understanding.
+            </p>
+        </article>
+        <article class="post-item">
             <div class="post-date">March 2025</div>
             <h2 class="post-title">
                 <a href="/blog/CNN/CNN.html">Understanding Convolutional Neural Networks From Scratch</a>
@@ -219,37 +247,11 @@
         </article>
     </div>
     
-    <footer>
-        <div id="time">Loading...</div>
-        <button class="theme-toggle" id="theme-toggle">Toggle theme</button>
+    <footer class="site-footer">
+        <p><span id="time" class="tabular-nums" style="visibility:hidden">0:00pm</span> in Yaoundé, Cameroon</p>
+        <button type="button" class="theme-toggle" id="theme-toggle" aria-label="Switch to dark theme"></button>
     </footer>
+    <script src="/assets/site.js"></script>
     
-    <script>
-        // Update time
-        function updateTime() {
-            const now = new Date();
-            const formatter = new Intl.DateTimeFormat('en-US', {
-                timeZone: 'Africa/Douala',
-                hour: '2-digit',
-                minute: '2-digit',
-                second: '2-digit',
-                hour12: true,
-                timeZoneName: 'short'
-            });
-            document.getElementById('time').textContent = 'Yaoundé, Cameroon · ' + formatter.format(now);
-        }
-        updateTime();
-        setInterval(updateTime, 1000);
-        
-        // Theme toggle
-        const toggle = document.getElementById('theme-toggle');
-        toggle.addEventListener('click', () => {
-            const html = document.documentElement;
-            const current = html.getAttribute('data-theme');
-            const next = current === 'light' ? 'dark' : 'light';
-            html.setAttribute('data-theme', next);
-            localStorage.setItem('theme', next);
-        });
-    </script>
-</body>
+    </body>
 </html>

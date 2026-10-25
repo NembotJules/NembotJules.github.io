@@ -191,6 +191,7 @@
             }
         }
     </style>
+    <link rel="stylesheet" href="/assets/site.css">
 </head>
 <body>
     <div class="container">
@@ -1049,37 +1050,11 @@ That's it!
         </p>
     </div>
     
-    <footer style="position: fixed; bottom: 0; left: 0; right: 0; background-color: var(--bg); border-top: 1px solid var(--border); padding: 12px 20px; display: flex; justify-content: space-between; align-items: center; font-size: 13px; transition: background-color 0.2s, border-color 0.2s;">
-        <div id="time">Loading...</div>
-        <button id="theme-toggle" style="background: none; border: 1px solid var(--border); color: var(--text); padding: 4px 12px; cursor: pointer; border-radius: 4px; font-size: 13px; font-family: Inter, system-ui, -apple-system, sans-serif; transition: background-color 0.2s, border-color 0.2s;">Toggle theme</button>
+    <footer class="site-footer">
+        <p><span id="time" class="tabular-nums" style="visibility:hidden">0:00pm</span> in Yaoundé, Cameroon</p>
+        <button type="button" class="theme-toggle" id="theme-toggle" aria-label="Switch to dark theme"></button>
     </footer>
+    <script src="/assets/site.js"></script>
     
-    <script>
-        // Update time
-        function updateTime() {
-            const now = new Date();
-            const formatter = new Intl.DateTimeFormat('en-US', {
-                timeZone: 'Africa/Douala',
-                hour: '2-digit',
-                minute: '2-digit',
-                second: '2-digit',
-                hour12: true,
-                timeZoneName: 'short'
-            });
-            document.getElementById('time').textContent = 'Yaoundé, Cameroon · ' + formatter.format(now);
-        }
-        updateTime();
-        setInterval(updateTime, 1000);
-        
-        // Theme toggle
-        const toggle = document.getElementById('theme-toggle');
-        toggle.addEventListener('click', () => {
-            const html = document.documentElement;
-            const current = html.getAttribute('data-theme');
-            const next = current === 'light' ? 'dark' : 'light';
-            html.setAttribute('data-theme', next);
-            localStorage.setItem('theme', next);
-        });
-    </script>
-</body>
+    </body>
 </html>

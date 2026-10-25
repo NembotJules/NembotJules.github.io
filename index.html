@@ -3,9 +3,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Nembot Jules — Machine Learning Engineer</title>
+    <title>Nembot Jules</title>
     <meta name="description" content="Machine Learning Engineer building decision support systems and ML systems.">
-    <meta property="og:title" content="Nembot Jules — Machine Learning Engineer">
+    <meta property="og:title" content="Nembot Jules">
     <meta property="og:description" content="Machine Learning Engineer building decision support systems and ML systems.">
     <meta property="og:type" content="website">
     <meta property="og:url" content="https://nembotjules.github.io">
@@ -182,6 +182,7 @@
             }
         }
     </style>
+    <link rel="stylesheet" href="/assets/site.css">
 </head>
 <body>
     <nav>
@@ -200,14 +201,14 @@
         
         <p>Before that, I worked at Toloka as an AI tutor, creating original mathematics problems and fully worked solutions used to train large language models (LLMs) in step-by-step reasoning.</p>
         
-        <p>I believe very few things actually matter in life. We have what I call pillars (Physique, Mind, Finances, etc.) where we must dedicate each of our waking hours. All the rest is simply noise. Based on this belief I am building an app named <a href="https://github.com/NembotJules/Intentional">Intentional</a>.</p>
+        <p>I believe very few things actually matter in life. We have what I call pillars (Physique, Mind, Finances, etc.) where we must dedicate each of our waking hours. All the rest is simply noise. Based on this belief I am building an app named <a href="/intentional/">Intentional</a> (<a href="/intentional/#waitlist">Join the waitlist!</a>).</p>
         
         <p>You can find me on <a href="https://github.com/NembotJules">GitHub</a>, <a href="https://www.linkedin.com/in/nembotjules/">LinkedIn</a>, <a href="https://x.com/Clinton_ai">X</a>, <a href="https://www.tiktok.com/@jules_clinton">TikTok</a> and <a href="https://substack.com/@julesnembot">Substack</a>, or reach me via <a href="mailto:juniorbertrand761@gmail.com">email</a>.</p>
     </div>
     
     <h2>Personal projects</h2>
     <ul>
-        <li><a href="https://github.com/NembotJules/Intentional">Intentional</a> — A focus and goal-tracking app: every hour you spend should trace back to something you care about</li>
+        <li><a href="/intentional/">Intentional</a> — A focus and goal-tracking app: every hour you spend should trace back to something you care about</li>
         <li><a href="https://github.com/NembotJules/Cameroon-Air-Quality-Prediction">Cameroon Air Quality Prediction</a> — End-to-end MLOps system with automated data pipeline, model retraining, and deployment</li>
         <li><a href="https://github.com/NembotJules/Deep-Learning-papers">Deep Learning Papers</a> — Implementations of various deep learning papers and algorithms in PyTorch, TensorFlow, and JAX</li>
         <li><a href="https://github.com/NembotJules/minigrad">Minigrad</a> — A small autograd engine for understanding backpropagation</li>
@@ -218,6 +219,9 @@
     <h2>Writing</h2>
     <ul>
         <li><a href="/blog/data-engineering-team-and-sap-ds.html">How to build a top data engineering team</a> — Team building and SAP Data Services design patterns</li>
+        <li><a href="/blog/the-game-at-work.html">The Game at Work</a> — Why I stopped performing for my manager</li>
+        <li><a href="/blog/society-rank-and-inherited-position.html">Society, Rank, and Inherited Position</a> — Most of your life was decided before you were born</li>
+        <li><a href="/blog/2025-wrapped.html">2025 Wrapped</a> — What I learned this year</li>
         <li><a href="/blog/CNN/CNN.html">Understanding Convolutional Neural Networks From Scratch</a></li>
         <li><a href="https://medium.com/@juniorbertrand761/a-comprehensive-guide-to-ml-monitoring-in-production-e202fe1da3d0">A Comprehensive Guide to ML Monitoring in Production</a></li>
         <li><a href="https://medium.com/@juniorbertrand761/decision-trees-demystified-a-step-by-step-guide-d7ac08d6f6a1">Decision Trees Demystified: A Step-by-Step Guide</a></li>
@@ -225,37 +229,13 @@
         <li><a href="https://nembotjules.bearblog.dev/understanding-tensors-dimensions-shapes-sizes-and-axes-in-pytorch/">Understanding Tensors in PyTorch</a></li>
     </ul>
     
-    <footer>
-        <div id="time">Loading...</div>
-        <button class="theme-toggle" id="theme-toggle">Toggle theme</button>
+    <footer class="site-footer">
+        <p><span id="time" class="tabular-nums" style="visibility:hidden">0:00pm</span> in Yaoundé, Cameroon</p>
+        <button type="button" class="theme-toggle" id="theme-toggle" aria-label="Switch to dark theme"></button>
     </footer>
+    <script src="/assets/site.js"></script>
     
     <script>
-        // Update time
-        function updateTime() {
-            const now = new Date();
-            const formatter = new Intl.DateTimeFormat('en-US', {
-                timeZone: 'Africa/Douala',
-                hour: '2-digit',
-                minute: '2-digit',
-                second: '2-digit',
-                hour12: true,
-                timeZoneName: 'short'
-            });
-            document.getElementById('time').textContent = 'Yaoundé, Cameroon · ' + formatter.format(now);
-        }
-        updateTime();
-        setInterval(updateTime, 1000);
-        
-        // Theme toggle
-        const toggle = document.getElementById('theme-toggle');
-        toggle.addEventListener('click', () => {
-            const html = document.documentElement;
-            const current = html.getAttribute('data-theme');
-            const next = current === 'light' ? 'dark' : 'light';
-            html.setAttribute('data-theme', next);
-            localStorage.setItem('theme', next);
-        });
         
         // Fetch last commit date
         fetch('https://api.github.com/repos/NembotJules/NembotJules.github.io/commits/main')

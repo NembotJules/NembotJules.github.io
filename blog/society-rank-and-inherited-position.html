@@ -1,0 +1,322 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Society, Rank, and Inherited Position — Nembot Jules</title>
+    <meta name="description" content="Most of your life was decided before you were born. On nested games, inherited scores, and the honest accounting between pride and victimhood.">
+    <meta property="og:title" content="Society, Rank, and Inherited Position">
+    <meta property="og:description" content="Most of your life was decided before you were born. On nested games, inherited scores, and the honest accounting between pride and victimhood.">
+    <meta property="og:image" content="https://nembotjules.github.io/blog/covers/society-rank-and-inherited-position.jpg">
+    <meta property="og:type" content="article">
+    <meta name="author" content="Nembot Jules">
+    <script>
+        // Early theme setting to avoid flash
+        (function() {
+            const stored = localStorage.getItem('theme');
+            const theme = stored || (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+            document.documentElement.setAttribute('data-theme', theme);
+        })();
+    </script>
+    <style>
+        @font-face {
+            font-family: 'Inter';
+            font-style: normal;
+            font-weight: 100 900;
+            font-display: swap;
+            src: url('/fonts/inter-variable.woff2') format('woff2-variations');
+        }
+        
+        :root[data-theme="light"] {
+            --bg: #ffffff;
+            --text: #000000;
+            --text-secondary: #666666;
+            --border: #e5e5e5;
+            --code-bg: #f5f5f5;
+            --checklist-bg: #fafafa;
+        }
+        
+        :root[data-theme="dark"] {
+            --bg: #0a0a0a;
+            --text: #f0f0f0;
+            --text-secondary: #a0a0a0;
+            --border: #2a2a2a;
+            --code-bg: #1a1a1a;
+            --checklist-bg: #141414;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: Inter, system-ui, -apple-system, sans-serif;
+            background-color: var(--bg);
+            color: var(--text);
+            line-height: 1.7;
+            padding: 60px 20px 80px;
+            max-width: 680px;
+            margin: 0 auto;
+            transition: background-color 0.2s, color 0.2s;
+        }
+        
+        a {
+            color: var(--text);
+            text-decoration: none;
+            border-bottom: 1px solid var(--text);
+            transition: opacity 0.2s ease;
+        }
+        
+        a:hover {
+            opacity: 0.6;
+        }
+        
+        nav {
+            margin-bottom: 60px;
+            font-size: 14px;
+        }
+        
+        nav a {
+            margin-right: 20px;
+            border-bottom: none;
+        }
+        
+        nav a:hover {
+            border-bottom: 1px solid var(--text);
+        }
+        
+        article {
+            margin-bottom: 80px;
+        }
+        
+        h1 {
+            font-size: 42px;
+            font-weight: 700;
+            margin-bottom: 20px;
+            letter-spacing: -1.5px;
+            line-height: 1.2;
+        }
+        
+        .byline {
+            font-size: 15px;
+            color: var(--text-secondary);
+            margin-bottom: 40px;
+            padding-bottom: 30px;
+            border-bottom: 1px solid var(--border);
+        }
+        
+        h2 {
+            font-size: 28px;
+            font-weight: 600;
+            margin-top: 48px;
+            margin-bottom: 20px;
+            letter-spacing: -0.5px;
+        }
+        
+        h3 {
+            font-size: 20px;
+            font-weight: 600;
+            margin-top: 32px;
+            margin-bottom: 16px;
+        }
+        
+        p {
+            margin-bottom: 24px;
+            font-size: 17px;
+            line-height: 1.7;
+        }
+        
+        ul, ol {
+            margin-bottom: 24px;
+            padding-left: 24px;
+        }
+        
+        li {
+            margin-bottom: 12px;
+            font-size: 17px;
+            line-height: 1.7;
+        }
+        
+        code {
+            font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+            font-size: 15px;
+            background: var(--code-bg);
+            padding: 2px 6px;
+            border-radius: 3px;
+        }
+        
+        pre {
+            background: var(--code-bg);
+            padding: 20px;
+            border-radius: 6px;
+            overflow-x: auto;
+            margin-bottom: 24px;
+            border-left: 3px solid var(--text);
+        }
+        
+        pre code {
+            background: none;
+            padding: 0;
+        }
+        
+        blockquote {
+            border-left: 3px solid var(--text);
+            padding-left: 20px;
+            margin: 24px 0;
+            font-style: italic;
+            color: var(--text-secondary);
+        }
+        
+        .checklist {
+            background: var(--checklist-bg);
+            padding: 24px;
+            border-radius: 6px;
+            margin: 32px 0;
+            border: 1px solid var(--border);
+        }
+        
+        .checklist h4 {
+            font-size: 18px;
+            font-weight: 600;
+            margin-bottom: 16px;
+        }
+        
+        .checklist ul {
+            list-style: none;
+            padding-left: 0;
+        }
+        
+        .checklist li::before {
+            content: "☐ ";
+            margin-right: 8px;
+            font-size: 16px;
+        }
+        
+        footer {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background-color: var(--bg);
+            border-top: 1px solid var(--border);
+            padding: 12px 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 13px;
+            transition: background-color 0.2s, border-color 0.2s;
+        }
+        
+        .theme-toggle {
+            background: none;
+            border: 1px solid var(--border);
+            color: var(--text);
+            padding: 4px 12px;
+            cursor: pointer;
+            border-radius: 4px;
+            font-size: 13px;
+            font-family: Inter, system-ui, -apple-system, sans-serif;
+            transition: background-color 0.2s, border-color 0.2s;
+        }
+        
+        .theme-toggle:hover {
+            background-color: var(--code-bg);
+        }
+        
+        @media (max-width: 480px) {
+            body {
+                padding: 40px 15px 80px;
+            }
+            
+            h1 {
+                font-size: 32px;
+            }
+            
+            h2 {
+                font-size: 24px;
+            }
+            
+            p, li {
+                font-size: 16px;
+            }
+            
+            footer {
+                font-size: 12px;
+                padding: 10px 15px;
+            }
+            
+            .theme-toggle {
+                font-size: 12px;
+                padding: 3px 10px;
+            }
+        }
+
+        .cover { margin: 0 0 40px; }
+        .cover img { width: 100%; height: auto; display: block; border-radius: 8px; }
+        .pull { font-size: 21px; line-height: 1.5; font-weight: 600; letter-spacing: -0.2px; margin: 36px 0; }
+        h2 { font-size: 24px; line-height: 1.3; }
+        h3 { line-height: 1.4; }
+        blockquote p { margin-bottom: 8px; }
+        blockquote cite { display: block; font-style: normal; font-size: 15px; }
+        blockquote cite::before { content: "— "; }
+        .signoff { font-weight: 600; }
+        .also { margin-top: 56px; padding-top: 24px; border-top: 1px solid var(--border); font-size: 15px; color: var(--text-secondary); }
+        .also p { font-size: 15px; margin-bottom: 8px; }
+    </style>
+    <link rel="stylesheet" href="/assets/site.css">
+</head>
+<body>
+    <nav>
+        <a href="/index.html">Home</a>
+        <a href="/blog/index.html">Blog</a>
+        <a href="/timelapses.html">Timelapses</a>
+    </nav>
+
+    <article>
+        <h1>Society, Rank, and Inherited Position</h1>
+        <div class="byline">
+            By Nembot Jules · April 26, 2026 · 2 min read
+        </div>
+
+        <figure class="cover"><img src="/blog/covers/society-rank-and-inherited-position.jpg" alt="A figure standing in a stone labyrinth" width="1400" loading="eager"></figure>
+
+<p class="pull">Most of your life was decided before you were born.</p>
+<p>Not all of it. But more than you’re comfortable admitting.</p>
+<p>The school you attended. The education you got, the way you learned to speak, to think, to perceive what’s possible and what isn’t. The doors that were already open when you arrived, and the ones that were already shut. You didn’t choose any of that.</p>
+<p>You inherited it.</p>
+<p>We’ve built an entire story around the idea that none of this matters. What separates the successful from the unsuccessful is <strong>work ethic, discipline, and sacrifice</strong>: the sleepless nights, early mornings, relentless grind. And we repeat this story with religious conviction because it’s clean, it’s motivating, and it justifies our position.</p>
+<p>Don’t get me wrong, the hard work part is real, and I’m not dismissing it.</p>
+<p>But consider two people. One grows up in a home where university is assumed, where his father tells him every morning that he is capable of great things, where failure doesn’t mean hitting rock bottom, where it’s not fatal. The other grows up where survival comes first, where ambition feels like arrogance, where no one in the family has ever climbed that particular ladder. Both work hard. Both are disciplined. Both want more.</p>
+<p>One of them begins where the other is still trying to reach.</p>
+<p>This is because society is an endless game-generating machine. Each game is nested within the others, each one feeding into the next. Primary school feeds you into high school, which feeds you into university, which feeds you into a job, a network, certain rooms, and so on. Try to step out of one, and you pay a penalty in all the others. Try to quit school because you understand <em>“it was created to produce employees,”</em> and you’ll have a hard time finding a job.</p>
+<p>Society also keeps a history of the past winners.</p>
+<p>Every new player enters the system carrying the accumulated score of the players before them. <strong>Your parents’ victories and defeats. Your grandparents’ position.</strong> The neighborhood, the language, the network, the inner voice that either says <em>you belong here</em> or <em>who do you think you are</em>. You didn’t earn any of that. It was handed to you before you were old enough to understand what you were receiving.</p>
+<p class="pull">Your rank today is a function of games played long before you were even born.</p>
+<p>Some people hear this and feel guilt. They’ve won, and now the winning feels illegitimate. So they either dismiss the idea entirely to protect their self-image, or they perform humility without actually changing how they see themselves or others.</p>
+<p>Others hear this and feel resentment. The game was rigged, so why play? They use inherited disadvantage as a permanent explanation, which slowly becomes a permanent identity.</p>
+<p>Both responses are ways of avoiding the same thing.</p>
+<p>Truth.</p>
+<p>The real move is neither gratitude nor resentment. It’s honest accounting.</p>
+<p>You worked hard. That’s true.</p>
+<p>You also started somewhere specific, with advantages you didn’t earn and perhaps disadvantages you didn’t deserve. Both things are true simultaneously, and holding both without collapsing into either pride or victimhood is the harder, more honest work.</p>
+<p>And most people never do it.</p>
+<p>Hope this helps someone.</p>
+<p class="signoff">Jules Nembot</p>
+
+        <div class="also">
+            <p>More writing</p>
+            <p><a href="/blog/the-game-at-work.html">The Game at Work</a></p>
+            <p><a href="/blog/2025-wrapped.html">2025 Wrapped</a></p>
+            <p>First published on <a href="https://substack.com/@julesnembot">Substack</a>.</p>
+        </div>
+    </article>
+
+    <footer class="site-footer">
+        <p><span id="time" class="tabular-nums" style="visibility:hidden">0:00pm</span> in Yaoundé, Cameroon</p>
+        <button type="button" class="theme-toggle" id="theme-toggle" aria-label="Switch to dark theme"></button>
+    </footer>
+    <script src="/assets/site.js"></script>
+</body>
+</html>

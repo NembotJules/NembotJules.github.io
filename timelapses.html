@@ -229,6 +229,7 @@
             }
         }
     </style>
+    <link rel="stylesheet" href="/assets/site.css">
 </head>
 <body>
     <nav>
@@ -244,37 +245,13 @@
         <!-- Tiles will be loaded here -->
     </div>
     
-    <footer>
-        <div id="time">Loading...</div>
-        <button class="theme-toggle" id="theme-toggle">Toggle theme</button>
+    <footer class="site-footer">
+        <p><span id="time" class="tabular-nums" style="visibility:hidden">0:00pm</span> in Yaoundé, Cameroon</p>
+        <button type="button" class="theme-toggle" id="theme-toggle" aria-label="Switch to dark theme"></button>
     </footer>
+    <script src="/assets/site.js"></script>
     
     <script>
-        // Update time
-        function updateTime() {
-            const now = new Date();
-            const formatter = new Intl.DateTimeFormat('en-US', {
-                timeZone: 'Africa/Douala',
-                hour: '2-digit',
-                minute: '2-digit',
-                second: '2-digit',
-                hour12: true,
-                timeZoneName: 'short'
-            });
-            document.getElementById('time').textContent = 'Yaoundé, Cameroon · ' + formatter.format(now);
-        }
-        updateTime();
-        setInterval(updateTime, 1000);
-        
-        // Theme toggle
-        const toggle = document.getElementById('theme-toggle');
-        toggle.addEventListener('click', () => {
-            const html = document.documentElement;
-            const current = html.getAttribute('data-theme');
-            const next = current === 'light' ? 'dark' : 'light';
-            html.setAttribute('data-theme', next);
-            localStorage.setItem('theme', next);
-        });
         
         // Load timelapses
         fetch('/timelapses.json')

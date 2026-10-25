@@ -1,0 +1,414 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Intentional · Every hour, on purpose</title>
+    <meta name="description" content="Intentional is a focus and goal-tracking app: every hour you spend traces back to something you care about. Join the waitlist.">
+    <meta property="og:title" content="Intentional · Every hour, on purpose">
+    <meta property="og:description" content="A focus and goal-tracking app: every hour you spend traces back to something you care about. Join the waitlist.">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://nembotjules.github.io/intentional/">
+    <meta property="og:image" content="https://nembotjules.github.io/intentional/img/week.webp">
+    <meta name="theme-color" content="#FFFCF7">
+    <link rel="icon" href="/intentional/img/flick.svg" type="image/svg+xml">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Source+Sans+3:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --canvas: #FFFCF7;
+            --surface: #FFFFFF;
+            --raised: #F4F0E8;
+            --ink: #171411;
+            --soft: #6B625A;
+            --faint: #A69685;
+            --rule: rgba(23, 20, 17, 0.08);
+            --orange: #F27B2E;
+            --orange-soft: #FDEBDD;
+            --orange-ink: #9A4210;
+            --blue: #3E6BFF;
+            --green: #22A35A;
+            color-scheme: light;
+        }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        html { scroll-behavior: smooth; }
+        body {
+            font-family: 'Source Sans 3', system-ui, -apple-system, sans-serif;
+            background: var(--canvas);
+            color: var(--ink);
+            -webkit-font-smoothing: antialiased;
+            text-rendering: optimizeLegibility;
+            line-height: 1.5;
+        }
+        a { color: inherit; }
+        img { display: block; max-width: 100%; }
+        main { overflow-x: clip; }
+        .wrap { max-width: 1120px; margin: 0 auto; padding: 0 16px; }
+        @media (min-width: 640px) { .wrap { padding: 0 24px; } }
+
+        /* Header */
+        header.top {
+            position: sticky; top: 0; z-index: 50;
+            background: rgba(255, 252, 247, 0.8);
+            backdrop-filter: saturate(1.4) blur(18px);
+            -webkit-backdrop-filter: saturate(1.4) blur(18px);
+            border-bottom: 1px solid var(--rule);
+        }
+        header.top .wrap { height: 68px; display: flex; align-items: center; justify-content: space-between; }
+        .brand { display: flex; align-items: center; gap: 8px; text-decoration: none; font-weight: 800; font-size: 20px; letter-spacing: -0.4px; }
+        .brand img { width: 36px; height: 36px; }
+
+        .btn {
+            display: inline-flex; align-items: center; justify-content: center; gap: 6px;
+            border: none; border-radius: 999px; cursor: pointer; text-decoration: none;
+            font: inherit; font-weight: 700; font-size: 15px;
+            padding: 10px 18px; background: var(--ink); color: #fff;
+            transition: transform 0.15s ease, background 0.2s ease;
+        }
+        .btn:active { transform: scale(0.97); }
+        .btn .chev { transition: transform 0.2s ease; }
+        .btn:hover .chev { transform: translateX(2px); }
+        .btn.light { background: var(--surface); color: var(--ink); box-shadow: inset 0 0 0 1px var(--rule); }
+        .btn.light:hover { background: var(--raised); }
+
+        /* Hero */
+        .hero { position: relative; isolation: isolate; text-align: center; }
+        .hero-bg { position: absolute; inset: 0; z-index: -1; overflow: hidden; pointer-events: none; }
+        .hero-glow {
+            position: absolute; top: 0; left: 50%; width: 1500px; height: 1000px; transform: translateX(-50%);
+            filter: blur(40px);
+            background:
+                radial-gradient(26% 24% at 50% 26%, rgba(242, 123, 46, 0.26), transparent 70%),
+                radial-gradient(26% 26% at 62% 18%, rgba(255, 196, 92, 0.30), transparent 70%),
+                radial-gradient(20% 20% at 78% 40%, rgba(255, 160, 140, 0.22), transparent 70%),
+                radial-gradient(26% 28% at 30% 50%, rgba(62, 107, 255, 0.16), transparent 70%),
+                radial-gradient(22% 26% at 22% 72%, rgba(255, 210, 120, 0.22), transparent 70%);
+        }
+        .hero-grid {
+            position: absolute; top: 0; left: 50%; width: 2400px; height: 100%; transform: translateX(-50%);
+            background-image:
+                linear-gradient(90deg, rgba(154, 66, 16, 0.07) 1px, transparent 1px),
+                linear-gradient(rgba(154, 66, 16, 0.07) 1px, transparent 1px);
+            background-size: 40px 40px;
+            -webkit-mask-image: linear-gradient(transparent, #000 64px, #000 62%, transparent);
+            mask-image: linear-gradient(transparent, #000 64px, #000 62%, transparent);
+        }
+        .hero-grid span { position: absolute; width: 39px; height: 39px; background: rgba(242, 123, 46, 0.09); display: none; }
+        @media (min-width: 1024px) { .hero-grid span { display: block; } }
+
+        .badge {
+            display: inline-flex; align-items: center; gap: 8px;
+            margin-top: 56px; padding: 4px 4px 4px 16px;
+            border-radius: 999px; border: 1px solid rgba(242, 123, 46, 0.22); background: var(--orange-soft);
+            color: var(--orange-ink); font-size: 13px; font-weight: 700; text-decoration: none;
+        }
+        .badge b { background: var(--orange); color: #fff; border-radius: 999px; padding: 4px 12px; font-weight: 700; }
+        @media (min-width: 640px) { .badge { margin-top: 88px; } }
+
+        h1 {
+            max-width: 900px; margin: 28px auto 0;
+            font-size: 44px; line-height: 1.02; font-weight: 800; letter-spacing: -0.035em;
+        }
+        @media (min-width: 640px) { h1 { font-size: 72px; } }
+        @media (min-width: 1024px) { h1 { font-size: 88px; } }
+        .hl {
+            display: inline-block; background: var(--orange); color: #fff;
+            border-radius: 0.16em; padding: 0 0.18em 0.06em; line-height: 1.05;
+        }
+        .lede { max-width: 580px; margin: 24px auto 0; font-size: 19px; line-height: 1.55; color: var(--soft); }
+        @media (min-width: 640px) { .lede { font-size: 21px; } }
+
+        /* Waitlist form */
+        .waitlist { max-width: 460px; margin: 36px auto 0; }
+        .waitlist form { display: flex; gap: 8px; padding: 6px; border-radius: 999px; background: var(--surface); box-shadow: 0 0 0 1px var(--rule), 0 10px 30px -12px rgba(58, 42, 20, 0.25); }
+        .waitlist input[type=email] {
+            flex: 1; min-width: 0; border: none; outline: none; background: transparent;
+            font: inherit; font-size: 16px; padding: 0 8px 0 16px; color: var(--ink);
+        }
+        .waitlist input::placeholder { color: var(--faint); }
+        .waitlist .btn { padding: 12px 20px; font-size: 16px; white-space: nowrap; }
+        .waitlist .note { margin-top: 12px; font-size: 14px; color: var(--faint); }
+        .waitlist .done { display: none; padding: 16px 20px; border-radius: 20px; background: var(--surface); box-shadow: 0 0 0 1px var(--rule); font-weight: 600; }
+        .waitlist.ok form, .waitlist.ok .note { display: none; }
+        .waitlist.ok .done { display: block; }
+        .waitlist .err { display: none; margin-top: 10px; font-size: 14px; color: var(--orange-ink); }
+        .waitlist.fail .err { display: block; }
+        .hp { position: absolute; left: -9999px; }
+        @media (max-width: 420px) {
+            .waitlist form { flex-direction: column; border-radius: 24px; padding: 8px; }
+            .waitlist input[type=email] { height: 48px; padding: 0 12px; text-align: center; }
+        }
+
+        /* Phones */
+        .phone {
+            position: relative; border-radius: 44px;
+            padding: 10px; background: #1D1A17;
+            box-shadow: inset 0 0 0 2px #3A3530, 0 40px 80px -30px rgba(40, 20, 0, 0.45);
+        }
+        .phone img { width: 100%; height: auto; aspect-ratio: 390 / 844; border-radius: 35px; background: var(--canvas); }
+        .stage { position: relative; height: 640px; max-width: 1000px; margin: 56px auto 0; }
+        .stage .phone { position: absolute; left: 50%; }
+        .stage .center { top: 0; width: 290px; transform: translateX(-50%); z-index: 2; }
+        .stage .left, .stage .right { display: none; top: 96px; width: 248px; }
+        .stage .left { transform: translateX(-150%) rotate(-9deg); }
+        .stage .right { transform: translateX(50%) rotate(9deg); }
+        .stage .fade { position: absolute; left: 0; right: 0; bottom: 0; height: 160px; z-index: 3; background: linear-gradient(rgba(255, 252, 247, 0), var(--canvas)); }
+        @media (min-width: 640px) { .stage { height: 680px; overflow: hidden; } .stage .center { width: 310px; } }
+        @media (min-width: 860px) { .stage .left, .stage .right { display: block; } }
+
+        /* Chain */
+        .chain-sec { padding: 72px 0 24px; text-align: center; }
+        .eyebrow { font-size: 13px; font-weight: 800; letter-spacing: 0.14em; text-transform: uppercase; color: var(--orange-ink); }
+        h2 { font-size: 34px; line-height: 1.08; font-weight: 800; letter-spacing: -0.03em; margin-top: 12px; }
+        @media (min-width: 640px) { h2 { font-size: 52px; } }
+        .chain { display: flex; flex-wrap: wrap; justify-content: center; align-items: center; gap: 10px; margin: 36px auto 0; max-width: 760px; }
+        .chip { display: inline-flex; align-items: center; gap: 8px; padding: 10px 18px; border-radius: 999px; background: var(--surface); box-shadow: 0 0 0 1px var(--rule); font-weight: 700; font-size: 17px; }
+        .chip i { width: 10px; height: 10px; border-radius: 50%; display: inline-block; }
+        .arrow { color: var(--faint); font-weight: 700; font-size: 18px; }
+        .chain-sec p.sub { max-width: 560px; margin: 24px auto 0; color: var(--soft); font-size: 18px; }
+
+        /* Features */
+        .feature { display: grid; gap: 32px; align-items: center; padding: 72px 0; border-top: 1px solid var(--rule); }
+        .feature:first-of-type { border-top: none; }
+        .feature .copy { max-width: 470px; }
+        .feature h3 { font-size: 32px; line-height: 1.1; font-weight: 800; letter-spacing: -0.025em; margin-top: 10px; }
+        @media (min-width: 640px) { .feature h3 { font-size: 40px; } }
+        .feature p { margin-top: 16px; font-size: 18px; line-height: 1.6; color: var(--soft); }
+        .feature ul { list-style: none; margin-top: 20px; display: grid; gap: 10px; }
+        .feature li { display: flex; gap: 10px; font-size: 17px; font-weight: 600; }
+        .feature li::before { content: ""; flex: none; width: 8px; height: 8px; margin-top: 9px; border-radius: 50%; background: var(--orange); }
+        .feature .art { display: flex; justify-content: center; }
+        .feature .art .phone { width: 280px; }
+        .card-shot { width: 300px; border-radius: 22px; overflow: hidden; box-shadow: 0 0 0 1px var(--rule), 0 40px 80px -30px rgba(40, 20, 0, 0.4); transform: rotate(2deg); }
+        @media (min-width: 860px) {
+            .feature { grid-template-columns: 1fr 1fr; gap: 64px; padding: 96px 0; }
+            .feature.flip .art { order: -1; }
+            .feature .art .phone { width: 300px; }
+            .card-shot { width: 330px; }
+        }
+
+        /* Principles */
+        .principles { display: grid; gap: 14px; padding: 24px 0 96px; }
+        @media (min-width: 860px) { .principles { grid-template-columns: repeat(3, 1fr); } }
+        .principle { background: var(--surface); border-radius: 24px; padding: 28px; box-shadow: 0 0 0 1px var(--rule); }
+        .principle .ico { width: 44px; height: 44px; border-radius: 14px; display: flex; align-items: center; justify-content: center; background: var(--orange-soft); color: var(--orange-ink); }
+        .principle h4 { margin-top: 18px; font-size: 21px; font-weight: 800; letter-spacing: -0.01em; }
+        .principle p { margin-top: 8px; color: var(--soft); font-size: 16.5px; line-height: 1.55; }
+
+        /* Final CTA */
+        .cta-sec { padding: 0 0 96px; }
+        .cta {
+            position: relative; isolation: isolate; overflow: hidden;
+            border-radius: 40px; background: #1F1C1A; color: #fff; text-align: center;
+            padding: 80px 20px;
+        }
+        .cta::before { content: ""; position: absolute; z-index: -1; top: -240px; left: 50%; width: 640px; height: 640px; transform: translateX(-50%); border-radius: 50%; background: rgba(242, 123, 46, 0.28); filter: blur(120px); }
+        .cta img.flick { width: 96px; height: 96px; margin: 0 auto 8px; }
+        .cta h2 { color: #fff; }
+        .cta p { max-width: 520px; margin: 18px auto 0; color: rgba(255, 255, 255, 0.7); font-size: 18px; }
+        .cta .waitlist form { background: rgba(255, 255, 255, 0.08); box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.14); }
+        .cta .waitlist input[type=email] { color: #fff; }
+        .cta .waitlist input::placeholder { color: rgba(255, 255, 255, 0.45); }
+        .cta .waitlist .btn { background: var(--orange); }
+        .cta .waitlist .note { color: rgba(255, 255, 255, 0.45); }
+        .cta .waitlist .done { background: rgba(255, 255, 255, 0.08); box-shadow: none; color: #fff; }
+        .cta .waitlist .err { color: #FFB38A; }
+        @media (min-width: 640px) { .cta { padding: 96px 64px; } }
+
+        footer.foot { padding: 0 0 40px; }
+        footer.foot .wrap { display: flex; flex-wrap: wrap; gap: 8px 20px; justify-content: center; font-size: 14px; color: var(--faint); }
+        footer.foot a { text-decoration: none; }
+        footer.foot a:hover { color: var(--ink); }
+
+        @keyframes rise { from { opacity: 0; transform: translateY(24px); } to { opacity: 1; transform: none; } }
+        .rise { animation: rise 0.8s cubic-bezier(0.22, 1, 0.36, 1) both; }
+        @media (prefers-reduced-motion: reduce) { .rise { animation: none; } html { scroll-behavior: auto; } }
+    </style>
+</head>
+<body>
+    <header class="top">
+        <div class="wrap">
+            <a class="brand" href="/intentional/"><img src="/intentional/img/flick.svg" alt="" width="36" height="36">Intentional</a>
+            <a class="btn" href="#waitlist">Join the waitlist <span class="chev">›</span></a>
+        </div>
+    </header>
+
+    <main>
+        <section class="hero">
+            <div class="hero-bg" aria-hidden="true">
+                <div class="hero-glow"></div>
+                <div class="hero-grid">
+                    <span style="left:961px;top:81px"></span><span style="left:641px;top:201px"></span><span style="left:1561px;top:241px"></span>
+                    <span style="left:761px;top:441px"></span><span style="left:1681px;top:561px"></span><span style="left:561px;top:721px"></span>
+                </div>
+            </div>
+            <div class="wrap">
+                <a class="badge rise" href="#waitlist" style="animation-delay:0ms"><span>Coming to iPhone &amp; Android</span><b>Join →</b></a>
+                <h1 class="rise" style="animation-delay:80ms">Every hour, <span class="hl">on purpose.</span></h1>
+                <p class="lede rise" style="animation-delay:160ms">Intentional is a focus and goal-tracking app. Every hour you spend traces back to something you care about: your body, your mind, your money, your craft.</p>
+                <div class="waitlist rise" id="waitlist" style="animation-delay:240ms">
+                    <form data-waitlist>
+                        <label class="hp">Leave this empty <input type="text" name="_honey" tabindex="-1" autocomplete="off"></label>
+                        <input type="email" name="email" required placeholder="you@email.com" aria-label="Your email" autocomplete="email">
+                        <button class="btn" type="submit">Join the waitlist</button>
+                    </form>
+                    <p class="note">One email when it opens. No spam.</p>
+                    <p class="done" role="status">You’re on the list. I’ll write to you when Intentional opens. 🔥</p>
+                    <p class="err" role="alert">That didn’t go through. Try again, or email <a href="mailto:juniorbertrand761@gmail.com?subject=Intentional%20waitlist">juniorbertrand761@gmail.com</a>.</p>
+                </div>
+            </div>
+            <div class="stage rise" style="animation-delay:320ms">
+                <div class="phone left"><img src="/intentional/img/goals.webp" alt="Your pillars: Physique, Finances, Mind, each with its goal and the hours given this week" loading="lazy"></div>
+                <div class="phone center"><img src="/intentional/img/today.webp" alt="Today: 55 minutes given to your pillars, and 'Your week is ready' on Sunday evening"></div>
+                <div class="phone right"><img src="/intentional/img/focus.webp" alt="A focus session on Gym: a 60 minute timer with Flick, the flame" loading="lazy"></div>
+                <div class="fade"></div>
+            </div>
+        </section>
+
+        <section class="chain-sec wrap">
+            <p class="eyebrow">How it works</p>
+            <h2>Nothing you do is loose.</h2>
+            <div class="chain" aria-label="Session, then habit or task, then goal, then pillar">
+                <span class="chip">⏱ Session</span><span class="arrow">→</span>
+                <span class="chip">Habit or task</span><span class="arrow">→</span>
+                <span class="chip"><i style="background:var(--blue)"></i>Goal</span><span class="arrow">→</span>
+                <span class="chip"><i style="background:var(--orange)"></i>Pillar</span>
+            </div>
+            <p class="sub">Every focus session lands on a habit or a task, which moves a goal, which serves a pillar of your life. At the end of the week you can see exactly where your life went.</p>
+        </section>
+
+        <section class="wrap">
+            <div class="feature">
+                <div class="copy">
+                    <p class="eyebrow">Pillars &amp; goals</p>
+                    <h3>Very few things actually matter.</h3>
+                    <p>Pick the 3 to 5 areas of your life that do. Give each one goal you can finish, and see how many hours it really got this week.</p>
+                    <ul>
+                        <li>Physique, Mind, Finances, Skills, or your own</li>
+                        <li>“On track”, “ahead” or “behind” for every goal, without the red</li>
+                        <li>Habits that are part of a goal, not a checklist of their own</li>
+                    </ul>
+                </div>
+                <div class="art"><div class="phone"><img src="/intentional/img/goals.webp" alt="Pillars screen with goals and progress" loading="lazy"></div></div>
+            </div>
+
+            <div class="feature flip">
+                <div class="copy">
+                    <p class="eyebrow">Focus</p>
+                    <h3>Start the hour. Flick burns with you.</h3>
+                    <p>Start a session on a habit or a task. The phone goes quiet, the timer runs, and every minute is counted toward the goal and the pillar it serves.</p>
+                    <ul>
+                        <li>Timer-only or strict mode</li>
+                        <li>Missed your 7:00? “Do it now” or take a rest day</li>
+                        <li>Streaks that forgive one skip a week</li>
+                    </ul>
+                </div>
+                <div class="art"><div class="phone"><img src="/intentional/img/focus.webp" alt="Focus session screen" loading="lazy"></div></div>
+            </div>
+
+            <div class="feature">
+                <div class="copy">
+                    <p class="eyebrow">Sunday</p>
+                    <h3>Your week, on one card.</h3>
+                    <p>Every Sunday evening, a three-minute look back: hours per pillar, habits kept, your best day, your goal’s progress. Then plan the next week.</p>
+                    <ul>
+                        <li>One accountability partner gets your week, by message</li>
+                        <li>A card worth sharing, in light or dark</li>
+                        <li>No feed, no followers, no likes</li>
+                    </ul>
+                </div>
+                <div class="art"><div class="card-shot"><img src="/intentional/img/week.webp" alt="Weekly card: 15h 20m given to the life I chose, with hours per pillar" loading="lazy"></div></div>
+            </div>
+
+            <div class="feature flip">
+                <div class="copy">
+                    <p class="eyebrow">The long game</p>
+                    <h3>Your life, in hours.</h3>
+                    <p>A ledger that only grows. Every hour you’ve given to the life you chose, month by month and pillar by pillar, with the goals you achieved and what they took.</p>
+                    <ul>
+                        <li>Flick grows from Spark to Sun as your hours add up</li>
+                        <li>Your data stays on your phone</li>
+                    </ul>
+                </div>
+                <div class="art"><div class="phone"><img src="/intentional/img/life.webp" alt="Your life in hours: 193 hours, Flick is a Bonfire" loading="lazy"></div></div>
+            </div>
+        </section>
+
+        <section class="wrap principles" aria-label="Principles">
+            <div class="principle">
+                <div class="ico" aria-hidden="true"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20.8 4.6a5.5 5.5 0 0 0-7.8 0L12 5.7l-1-1.1a5.5 5.5 0 0 0-7.8 7.8l1 1.1L12 21l7.8-7.5 1-1.1a5.5 5.5 0 0 0 0-7.8z"/></svg></div>
+                <h4>No guilt</h4>
+                <p>Missed a habit? Do it now or rest today. Nothing turns red, and nothing tells you that you failed.</p>
+            </div>
+            <div class="principle">
+                <div class="ico" aria-hidden="true"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="8" r="3.5"/><circle cx="17" cy="9" r="2.5"/><path d="M2.5 20c.8-3.4 3.4-5.5 6.5-5.5s5.7 2.1 6.5 5.5"/><path d="M15.5 14.6c2.6-.4 5 1.3 6 4.4"/></svg></div>
+                <h4>One partner, not a feed</h4>
+                <p>One person who sees your week and asks why when you go quiet. That’s the whole social network.</p>
+            </div>
+            <div class="principle">
+                <div class="ico" aria-hidden="true"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="6" y="2.5" width="12" height="19" rx="3"/><path d="M10.5 18.5h3"/></svg></div>
+                <h4>Yours, on your phone</h4>
+                <p>Your hours, goals and notes live on your device. No account needed to start.</p>
+            </div>
+        </section>
+
+        <section class="wrap cta-sec">
+            <div class="cta">
+                <img class="flick" src="/intentional/img/flick.svg" alt="">
+                <h2>Make every hour <span class="hl">count.</span></h2>
+                <p>Intentional is in private testing. Leave your email and you’ll be among the first to get it.</p>
+                <div class="waitlist">
+                    <form data-waitlist>
+                        <label class="hp">Leave this empty <input type="text" name="_honey" tabindex="-1" autocomplete="off"></label>
+                        <input type="email" name="email" required placeholder="you@email.com" aria-label="Your email" autocomplete="email">
+                        <button class="btn" type="submit">Join the waitlist</button>
+                    </form>
+                    <p class="note">One email when it opens. No spam.</p>
+                    <p class="done" role="status">You’re on the list. I’ll write to you when Intentional opens. 🔥</p>
+                    <p class="err" role="alert">That didn’t go through. Try again, or email <a href="mailto:juniorbertrand761@gmail.com?subject=Intentional%20waitlist">juniorbertrand761@gmail.com</a>.</p>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer class="foot">
+        <div class="wrap">
+            <span>© 2026 Intentional</span>
+            <span>Made in Yaoundé by <a href="/">Nembot Jules</a></span>
+            <a href="https://www.tiktok.com/@jules_clinton">TikTok</a>
+            <a href="https://x.com/Clinton_ai">X</a>
+        </div>
+    </footer>
+
+    <script>
+        // Waitlist: posts to FormSubmit (emails each signup to the address below). The first signup triggers a
+        // one-time activation email from FormSubmit; signups arrive once that link is clicked.
+        var ENDPOINT = 'https://formsubmit.co/ajax/juniorbertrand761@gmail.com';
+        document.querySelectorAll('form[data-waitlist]').forEach(function (form) {
+            var box = form.parentElement;
+            form.addEventListener('submit', function (e) {
+                e.preventDefault();
+                if (form.querySelector('[name=_honey]').value) return;
+                var email = form.querySelector('[name=email]').value.trim();
+                var btn = form.querySelector('button');
+                btn.disabled = true; btn.textContent = 'Joining…';
+                box.classList.remove('fail');
+                fetch(ENDPOINT, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
+                    body: JSON.stringify({ email: email, _subject: 'Intentional waitlist: ' + email, _template: 'table', _captcha: 'false', source: location.href })
+                })
+                    .then(function (r) { return r.ok ? r.json() : Promise.reject(r.status); })
+                    .then(function (d) {
+                        if (d && (d.success === true || d.success === 'true')) {
+                            document.querySelectorAll('.waitlist').forEach(function (w) { w.classList.add('ok'); });
+                        } else { return Promise.reject(d); }
+                    })
+                    .catch(function () { box.classList.add('fail'); })
+                    .then(function () { btn.disabled = false; btn.textContent = 'Join the waitlist'; });
+            });
+        });
+    </script>
+</body>
+</html>

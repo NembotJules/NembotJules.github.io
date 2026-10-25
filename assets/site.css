@@ -1,0 +1,66 @@
+/* Shared across every page, loaded after each page's own <style> so these rules win.
+   Footer + links follow the minimal style: muted footer, local time + city, icon theme toggle,
+   and soft hairline underlines that darken on hover. */
+
+:root[data-theme="light"] { --muted: rgba(0, 0, 0, 0.45); --hairline: rgba(17, 17, 17, 0.18); --hairline-hover: rgba(17, 17, 17, 0.6); }
+:root[data-theme="dark"]  { --muted: rgba(255, 255, 255, 0.45); --hairline: rgba(237, 237, 237, 0.22); --hairline-hover: rgba(237, 237, 237, 0.65); }
+
+/* Links: thin, faint underline; darker on hover. No opacity fade, no thick border. */
+a {
+    border-bottom: none !important;
+    text-decoration-line: underline;
+    text-decoration-thickness: 1px;
+    text-underline-offset: 0.28em;
+    text-decoration-color: var(--hairline);
+    transition: text-decoration-color 0.2s ease, color 0.2s ease;
+}
+a:hover {
+    opacity: 1 !important;
+    text-decoration-line: underline;
+    text-decoration-color: var(--hairline-hover);
+}
+
+/* Navigation and list titles stay clean: muted → ink on hover, no underline. */
+nav a, .post-title a, .tile, .no-underline { text-decoration: none !important; }
+nav a { color: var(--muted) !important; transition: color 0.2s ease; }
+nav a:hover { color: var(--text) !important; }
+.post-title a:hover { text-decoration: underline !important; text-decoration-color: var(--hairline-hover) !important; }
+
+body { padding-bottom: 0 !important; }
+
+footer.site-footer {
+    position: static;
+    max-width: 680px;
+    margin: 0 auto;
+    padding: 72px 0 40px;
+    border: none;
+    background: none;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 8px;
+    font-size: 13px;
+    color: var(--muted);
+}
+footer.site-footer p { margin: 0; font-size: 13px; }
+.tabular-nums { font-variant-numeric: tabular-nums; }
+
+footer.site-footer .theme-toggle {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    background: none;
+    border: none;
+    color: var(--muted);
+    cursor: pointer;
+    padding: 6px;
+    margin: -6px;
+    border-radius: 6px;
+    transition: color 0.2s ease;
+}
+footer.site-footer .theme-toggle:hover { color: var(--text); background: none; }
+
+@media (max-width: 480px) {
+    footer.site-footer { font-size: 12px; padding: 56px 0 32px; }
+    footer.site-footer .theme-toggle { padding: 6px; font-size: inherit; }
+}
