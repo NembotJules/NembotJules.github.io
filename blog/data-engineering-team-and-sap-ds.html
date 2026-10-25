@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" data-theme="light">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -9,7 +9,41 @@
     <meta property="og:description" content="Team building and data pipeline design patterns that make data engineering teams trusted by the business.">
     <meta property="og:type" content="article">
     <meta name="author" content="Nembot Jules">
+    <script>
+        // Early theme setting to avoid flash
+        (function() {
+            const stored = localStorage.getItem('theme');
+            const theme = stored || (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+            document.documentElement.setAttribute('data-theme', theme);
+        })();
+    </script>
     <style>
+        @font-face {
+            font-family: 'Inter';
+            font-style: normal;
+            font-weight: 100 900;
+            font-display: swap;
+            src: url('/fonts/inter-variable.woff2') format('woff2-variations');
+        }
+        
+        :root[data-theme="light"] {
+            --bg: #ffffff;
+            --text: #000000;
+            --text-secondary: #666666;
+            --border: #e5e5e5;
+            --code-bg: #f5f5f5;
+            --checklist-bg: #fafafa;
+        }
+        
+        :root[data-theme="dark"] {
+            --bg: #0a0a0a;
+            --text: #f0f0f0;
+            --text-secondary: #a0a0a0;
+            --border: #2a2a2a;
+            --code-bg: #1a1a1a;
+            --checklist-bg: #141414;
+        }
+        
         * {
             margin: 0;
             padding: 0;
@@ -17,19 +51,20 @@
         }
         
         body {
-            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
-            background-color: #ffffff;
-            color: #000000;
+            font-family: Inter, system-ui, -apple-system, sans-serif;
+            background-color: var(--bg);
+            color: var(--text);
             line-height: 1.7;
-            padding: 60px 20px;
+            padding: 60px 20px 80px;
             max-width: 680px;
             margin: 0 auto;
+            transition: background-color 0.2s, color 0.2s;
         }
         
         a {
-            color: #000000;
+            color: var(--text);
             text-decoration: none;
-            border-bottom: 1px solid #000000;
+            border-bottom: 1px solid var(--text);
             transition: opacity 0.2s ease;
         }
         
@@ -48,7 +83,7 @@
         }
         
         nav a:hover {
-            border-bottom: 1px solid #000000;
+            border-bottom: 1px solid var(--text);
         }
         
         article {
@@ -65,10 +100,10 @@
         
         .byline {
             font-size: 15px;
-            color: #666;
+            color: var(--text-secondary);
             margin-bottom: 40px;
             padding-bottom: 30px;
-            border-bottom: 1px solid #e5e5e5;
+            border-bottom: 1px solid var(--border);
         }
         
         h2 {
@@ -104,20 +139,20 @@
         }
         
         code {
-            font-family: "SF Mono", Monaco, "Cascadia Code", "Roboto Mono", Consolas, "Courier New", monospace;
+            font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
             font-size: 15px;
-            background: #f5f5f5;
+            background: var(--code-bg);
             padding: 2px 6px;
             border-radius: 3px;
         }
         
         pre {
-            background: #f5f5f5;
+            background: var(--code-bg);
             padding: 20px;
             border-radius: 6px;
             overflow-x: auto;
             margin-bottom: 24px;
-            border-left: 3px solid #000;
+            border-left: 3px solid var(--text);
         }
         
         pre code {
@@ -126,19 +161,19 @@
         }
         
         blockquote {
-            border-left: 3px solid #000;
+            border-left: 3px solid var(--text);
             padding-left: 20px;
             margin: 24px 0;
             font-style: italic;
-            color: #333;
+            color: var(--text-secondary);
         }
         
         .checklist {
-            background: #fafafa;
+            background: var(--checklist-bg);
             padding: 24px;
             border-radius: 6px;
             margin: 32px 0;
-            border: 1px solid #e5e5e5;
+            border: 1px solid var(--border);
         }
         
         .checklist h4 {
@@ -158,9 +193,40 @@
             font-size: 16px;
         }
         
+        footer {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background-color: var(--bg);
+            border-top: 1px solid var(--border);
+            padding: 12px 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 13px;
+            transition: background-color 0.2s, border-color 0.2s;
+        }
+        
+        .theme-toggle {
+            background: none;
+            border: 1px solid var(--border);
+            color: var(--text);
+            padding: 4px 12px;
+            cursor: pointer;
+            border-radius: 4px;
+            font-size: 13px;
+            font-family: Inter, system-ui, -apple-system, sans-serif;
+            transition: background-color 0.2s, border-color 0.2s;
+        }
+        
+        .theme-toggle:hover {
+            background-color: var(--code-bg);
+        }
+        
         @media (max-width: 480px) {
             body {
-                padding: 40px 15px;
+                padding: 40px 15px 80px;
             }
             
             h1 {
@@ -173,6 +239,16 @@
             
             p, li {
                 font-size: 16px;
+            }
+            
+            footer {
+                font-size: 12px;
+                padding: 10px 15px;
+            }
+            
+            .theme-toggle {
+                font-size: 12px;
+                padding: 3px 10px;
             }
         }
     </style>
@@ -474,9 +550,42 @@ if __name__ == "__main__":
         <p>That's the goal.</p>
     </article>
     
-    <nav style="margin-top: 60px; padding-top: 30px; border-top: 1px solid #e5e5e5;">
+    <nav style="margin-top: 60px; padding-top: 30px; border-top: 1px solid var(--border);">
         <a href="/blog/index.html">← Back to Blog</a>
         <a href="/index.html">Home</a>
     </nav>
+    
+    <footer>
+        <div id="time">Loading...</div>
+        <button class="theme-toggle" id="theme-toggle">Toggle theme</button>
+    </footer>
+    
+    <script>
+        // Update time
+        function updateTime() {
+            const now = new Date();
+            const formatter = new Intl.DateTimeFormat('en-US', {
+                timeZone: 'Africa/Douala',
+                hour: '2-digit',
+                minute: '2-digit',
+                second: '2-digit',
+                hour12: true,
+                timeZoneName: 'short'
+            });
+            document.getElementById('time').textContent = formatter.format(now);
+        }
+        updateTime();
+        setInterval(updateTime, 1000);
+        
+        // Theme toggle
+        const toggle = document.getElementById('theme-toggle');
+        toggle.addEventListener('click', () => {
+            const html = document.documentElement;
+            const current = html.getAttribute('data-theme');
+            const next = current === 'light' ? 'dark' : 'light';
+            html.setAttribute('data-theme', next);
+            localStorage.setItem('theme', next);
+        });
+    </script>
 </body>
 </html>

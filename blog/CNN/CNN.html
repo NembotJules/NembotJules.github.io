@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" data-theme="dark">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -7,17 +7,55 @@
     <script type="text/javascript" async
   src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js">
     </script>
+    <script>
+        // Early theme setting to avoid flash
+        (function() {
+            const stored = localStorage.getItem('theme');
+            if (stored) {
+                document.documentElement.setAttribute('data-theme', stored);
+            }
+        })();
+    </script>
 
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600&display=swap');
+        @font-face {
+            font-family: 'Inter';
+            font-style: normal;
+            font-weight: 100 900;
+            font-display: swap;
+            src: url('/fonts/inter-variable.woff2') format('woff2-variations');
+        }
+        
+        :root[data-theme="light"] {
+            --bg: #ffffff;
+            --text: #000000;
+            --text-secondary: #666666;
+            --border: #e5e5e5;
+            --code-bg: #f5f5f5;
+            --highlight-bg: #f0f8ff;
+            --accent: #0066cc;
+            --accent-secondary: #0088ff;
+        }
+        
+        :root[data-theme="dark"] {
+            --bg: #000000;
+            --text: #ffffff;
+            --text-secondary: #cccccc;
+            --border: #333333;
+            --code-bg: #1a1a1a;
+            --highlight-bg: #113344;
+            --accent: #00ffcc;
+            --accent-secondary: #33ccff;
+        }
         
         body {
-            font-family: 'Inter', sans-serif;
-            background-color: #000000;
-            color: #ffffff;
+            font-family: Inter, system-ui, -apple-system, sans-serif;
+            background-color: var(--bg);
+            color: var(--text);
             margin: 0;
-            padding: 0;
+            padding: 0 0 80px;
             line-height: 1.6;
+            transition: background-color 0.2s, color 0.2s;
         }
         
         .container {
@@ -29,13 +67,13 @@
         header {
             text-align: center;
             padding: 60px 0;
-            border-bottom: 1px solid #333;
+            border-bottom: 1px solid var(--border);
         }
         
         h1 {
             font-size: 2.8rem;
             margin-bottom: 20px;
-            background: linear-gradient(90deg, #00ffcc, #33ccff);
+            background: linear-gradient(90deg, var(--accent), var(--accent-secondary));
             -webkit-background-clip: text;
             background-clip: text;
             color: transparent;
@@ -45,13 +83,13 @@
             font-size: 2rem;
             margin-top: 50px;
             margin-bottom: 20px;
-            color: #00ffcc;
+            color: var(--accent);
         }
         
         h3 {
             font-size: 1.5rem;
             margin-top: 30px;
-            color: #33ccff;
+            color: var(--accent-secondary);
         }
         
         p {
@@ -60,26 +98,26 @@
         }
         
         a {
-            color: #00ffcc;
+            color: var(--accent);
             text-decoration: none;
             transition: all 0.3s ease;
         }
         
         a:hover {
             text-decoration: underline;
-            color: #33ccff;
+            color: var(--accent-secondary);
         }
         
         .highlight {
-            background-color: #113344;
+            background-color: var(--highlight-bg);
             padding: 20px;
             border-radius: 8px;
             margin: 20px 0;
         }
         
         .code {
-            font-family: 'Courier New', monospace;
-            background-color: #112233;
+            font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+            background-color: var(--code-bg);
             padding: 15px;
             border-radius: 5px;
             overflow-x: auto;
@@ -1006,9 +1044,42 @@ That's it!
 
         <p> That's all from me! I hope you enjoyed the blog and learned something new. If you have any questions, feel free to reach out to me on <a href="https://x.com/Clinton_ai">Twitter / X</a></p>
 
-        <footer>
-            <p>© 2025 CNN from Scratch. By Nembot Jules.</p>
-        </footer>
+        <p style="text-align: center; margin: 40px 0 20px; padding-top: 40px; border-top: 1px solid var(--border);">
+            © 2025 CNN from Scratch. By Nembot Jules.
+        </p>
     </div>
+    
+    <footer style="position: fixed; bottom: 0; left: 0; right: 0; background-color: var(--bg); border-top: 1px solid var(--border); padding: 12px 20px; display: flex; justify-content: space-between; align-items: center; font-size: 13px; transition: background-color 0.2s, border-color 0.2s;">
+        <div id="time">Loading...</div>
+        <button id="theme-toggle" style="background: none; border: 1px solid var(--border); color: var(--text); padding: 4px 12px; cursor: pointer; border-radius: 4px; font-size: 13px; font-family: Inter, system-ui, -apple-system, sans-serif; transition: background-color 0.2s, border-color 0.2s;">Toggle theme</button>
+    </footer>
+    
+    <script>
+        // Update time
+        function updateTime() {
+            const now = new Date();
+            const formatter = new Intl.DateTimeFormat('en-US', {
+                timeZone: 'Africa/Douala',
+                hour: '2-digit',
+                minute: '2-digit',
+                second: '2-digit',
+                hour12: true,
+                timeZoneName: 'short'
+            });
+            document.getElementById('time').textContent = formatter.format(now);
+        }
+        updateTime();
+        setInterval(updateTime, 1000);
+        
+        // Theme toggle
+        const toggle = document.getElementById('theme-toggle');
+        toggle.addEventListener('click', () => {
+            const html = document.documentElement;
+            const current = html.getAttribute('data-theme');
+            const next = current === 'light' ? 'dark' : 'light';
+            html.setAttribute('data-theme', next);
+            localStorage.setItem('theme', next);
+        });
+    </script>
 </body>
 </html>
