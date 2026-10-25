@@ -1,0 +1,322 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>How to build a top data engineering team — Nembot Jules</title>
+    <meta name="description" content="What does a top engineer look like for our team, and what culture do we need to support one? Attitude, business knowledge, ownership, excellence, mission and speed.">
+    <meta property="og:title" content="How to build a top data engineering team">
+    <meta property="og:description" content="What does a top engineer look like for our team, and what culture do we need to support one? Attitude, business knowledge, ownership, excellence, mission and speed.">
+    <meta property="og:type" content="article">
+    <meta name="author" content="Nembot Jules">
+    <script>
+        // Early theme setting to avoid flash
+        (function() {
+            const stored = localStorage.getItem('theme');
+            const theme = stored || (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+            document.documentElement.setAttribute('data-theme', theme);
+        })();
+    </script>
+    <style>
+        @font-face {
+            font-family: 'Inter';
+            font-style: normal;
+            font-weight: 100 900;
+            font-display: swap;
+            src: url('/fonts/inter-variable.woff2') format('woff2-variations');
+        }
+        
+        :root[data-theme="light"] {
+            --bg: #ffffff;
+            --text: #000000;
+            --text-secondary: #666666;
+            --border: #e5e5e5;
+            --code-bg: #f5f5f5;
+            --checklist-bg: #fafafa;
+        }
+        
+        :root[data-theme="dark"] {
+            --bg: #0a0a0a;
+            --text: #f0f0f0;
+            --text-secondary: #a0a0a0;
+            --border: #2a2a2a;
+            --code-bg: #1a1a1a;
+            --checklist-bg: #141414;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: Inter, system-ui, -apple-system, sans-serif;
+            background-color: var(--bg);
+            color: var(--text);
+            line-height: 1.7;
+            padding: 60px 20px 80px;
+            max-width: 680px;
+            margin: 0 auto;
+            transition: background-color 0.2s, color 0.2s;
+        }
+        
+        a {
+            color: var(--text);
+            text-decoration: none;
+            border-bottom: 1px solid var(--text);
+            transition: opacity 0.2s ease;
+        }
+        
+        a:hover {
+            opacity: 0.6;
+        }
+        
+        nav {
+            margin-bottom: 60px;
+            font-size: 14px;
+        }
+        
+        nav a {
+            margin-right: 20px;
+            border-bottom: none;
+        }
+        
+        nav a:hover {
+            border-bottom: 1px solid var(--text);
+        }
+        
+        article {
+            margin-bottom: 80px;
+        }
+        
+        h1 {
+            font-size: 42px;
+            font-weight: 700;
+            margin-bottom: 20px;
+            letter-spacing: -1.5px;
+            line-height: 1.2;
+        }
+        
+        .byline {
+            font-size: 15px;
+            color: var(--text-secondary);
+            margin-bottom: 40px;
+            padding-bottom: 30px;
+            border-bottom: 1px solid var(--border);
+        }
+        
+        h2 {
+            font-size: 28px;
+            font-weight: 600;
+            margin-top: 48px;
+            margin-bottom: 20px;
+            letter-spacing: -0.5px;
+        }
+        
+        h3 {
+            font-size: 20px;
+            font-weight: 600;
+            margin-top: 32px;
+            margin-bottom: 16px;
+        }
+        
+        p {
+            margin-bottom: 24px;
+            font-size: 17px;
+            line-height: 1.7;
+        }
+        
+        ul, ol {
+            margin-bottom: 24px;
+            padding-left: 24px;
+        }
+        
+        li {
+            margin-bottom: 12px;
+            font-size: 17px;
+            line-height: 1.7;
+        }
+        
+        code {
+            font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+            font-size: 15px;
+            background: var(--code-bg);
+            padding: 2px 6px;
+            border-radius: 3px;
+        }
+        
+        pre {
+            background: var(--code-bg);
+            padding: 20px;
+            border-radius: 6px;
+            overflow-x: auto;
+            margin-bottom: 24px;
+            border-left: 3px solid var(--text);
+        }
+        
+        pre code {
+            background: none;
+            padding: 0;
+        }
+        
+        blockquote {
+            border-left: 3px solid var(--text);
+            padding-left: 20px;
+            margin: 24px 0;
+            font-style: italic;
+            color: var(--text-secondary);
+        }
+        
+        .checklist {
+            background: var(--checklist-bg);
+            padding: 24px;
+            border-radius: 6px;
+            margin: 32px 0;
+            border: 1px solid var(--border);
+        }
+        
+        .checklist h4 {
+            font-size: 18px;
+            font-weight: 600;
+            margin-bottom: 16px;
+        }
+        
+        .checklist ul {
+            list-style: none;
+            padding-left: 0;
+        }
+        
+        .checklist li::before {
+            content: "☐ ";
+            margin-right: 8px;
+            font-size: 16px;
+        }
+        
+        footer {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background-color: var(--bg);
+            border-top: 1px solid var(--border);
+            padding: 12px 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 13px;
+            transition: background-color 0.2s, border-color 0.2s;
+        }
+        
+        .theme-toggle {
+            background: none;
+            border: 1px solid var(--border);
+            color: var(--text);
+            padding: 4px 12px;
+            cursor: pointer;
+            border-radius: 4px;
+            font-size: 13px;
+            font-family: Inter, system-ui, -apple-system, sans-serif;
+            transition: background-color 0.2s, border-color 0.2s;
+        }
+        
+        .theme-toggle:hover {
+            background-color: var(--code-bg);
+        }
+        
+        @media (max-width: 480px) {
+            body {
+                padding: 40px 15px 80px;
+            }
+            
+            h1 {
+                font-size: 32px;
+            }
+            
+            h2 {
+                font-size: 24px;
+            }
+            
+            p, li {
+                font-size: 16px;
+            }
+            
+            footer {
+                font-size: 12px;
+                padding: 10px 15px;
+            }
+            
+            .theme-toggle {
+                font-size: 12px;
+                padding: 3px 10px;
+            }
+        }
+
+        .cover { margin: 0 0 40px; }
+        .cover img { width: 100%; height: auto; display: block; border-radius: 8px; }
+        .pull { font-size: 21px; line-height: 1.5; font-weight: 600; letter-spacing: -0.2px; margin: 36px 0; }
+        h2 { font-size: 24px; line-height: 1.3; }
+        h3 { line-height: 1.4; }
+        blockquote p { margin-bottom: 8px; }
+        blockquote cite { display: block; font-style: normal; font-size: 15px; }
+        blockquote cite::before { content: "— "; }
+        .signoff { font-weight: 600; }
+        .also { margin-top: 56px; padding-top: 24px; border-top: 1px solid var(--border); font-size: 15px; color: var(--text-secondary); }
+        .also p { font-size: 15px; margin-bottom: 8px; }
+    </style>
+    <link rel="stylesheet" href="/assets/site.css">
+</head>
+<body>
+    <nav>
+        <a href="/index.html">Home</a>
+        <a href="/blog/index.html">Blog</a>
+        <a href="/timelapses.html">Timelapses</a>
+    </nav>
+
+    <article>
+        <h1>How to build a top data engineering team</h1>
+        <div class="byline">
+            By Nembot Jules · October 25, 2026 · 3 min read
+        </div>
+<p>I remember listening to a podcast where Marc Andreessen said that working at SpaceX is like being drowned in a zone of shocking competence. Everybody is just insanely good at what they do. For some reason, after that podcast, I became really interested in the idea of assembling a team of excellent engineers and building the culture to support them. Naturally, I started looking at my own team at work and evaluating us. On a scale of 1 to 10, how good a team are we? How good are the people on it? How good is our culture? The answers were not great. So I started asking myself why, and how we could close the gap. This led me to a few questions: What does a top engineer look like for our team? What does a perfect team look like? And what is the culture inside such a team?</p>
+<h2>1) What a top engineer looks like for our team</h2>
+<p>I have identified four areas in which an engineer on our team should excel to become a top data engineer:</p>
+<ul>
+<li>Attitude</li>
+<li>Business knowledge</li>
+<li>Data engineering concepts</li>
+<li>Mastery of the tools</li>
+</ul>
+<p>Let&rsquo;s dive into each of them:</p>
+<ul>
+<li><strong>Attitude:</strong> An engineer should have a mindset of adding value and contributing. He should always ask himself: How can I help the team? How can I contribute? How can I make things better? He should have the desire and the agency to solve problems on his own initiative. He should not wait for tasks to be given to him, and he should not optimize for doing the least amount of work possible. He should feel responsible for his work: he should do his best to solve the issue at hand, even if it doesn&rsquo;t directly depend on him. He must hold high standards for himself and for the work he does.</li>
+<li><strong>Business knowledge:</strong> For data engineers, the business is at the core of everything we do. A top data engineer should have an excellent understanding of the business.</li>
+<li><strong>Data engineering concepts:</strong> He must master the concepts and best practices of data engineering: data warehousing, data modeling, data pipeline design and debugging, SQL, data visualization, and communication.</li>
+<li><strong>Mastery of the tools:</strong> He must master the tools he uses every day (SAP Data Services, SAP BI, Tableau, etc.).</li>
+</ul>
+<p>I believe that when each of these elements is maxed out, we have a top engineer. And if everybody on the team is like that, we will produce more, and our work will be of higher quality.</p>
+<h2>2) Culture</h2>
+<p>Culture inside a company is the shared set of values, beliefs, attitudes, and unwritten rules that shape how people think, interact, and work within an organization. It&rsquo;s the social operating system that dictates what is encouraged, tolerated, or discouraged.</p>
+<p>If we want to get the best out of people, we need to create a culture that helps us do so. Here is what we can improve in ours:</p>
+<ul>
+<li>Taking initiative is not rewarded. If showing initiative only gets you more work and no recognition, and a mistake gets you blamed, then doing the minimum is the rational choice. This leads to situations where nobody wants to propose anything, for fear that it will only bring more work. We need to reward initiative from our engineers.</li>
+<li>Excellence must become the norm. The more we tolerate mediocrity and bad attitudes, the more they become the standard at which the entire team operates. And the more we are surrounded by excellent people doing excellent work, the more we are forced to raise our own standards. This creates a snowball effect where things just keep getting better.</li>
+<li>Engineers must own problems. Not tasks. Not building the pipeline, not building the dashboard, but the whole problem.</li>
+<li>People must be aligned behind a mission. We spend a considerable part of our lives at work. If people feel that what they do doesn&rsquo;t really matter, and they can&rsquo;t wait to go home because work feels like it is stealing their time, then somewhere we have failed to convey the mission behind everything we do.</li>
+<li>Speed is absolutely essential. The faster we move, the sooner we get feedback; the more often we update based on that feedback, the faster we learn. We can learn in one month what used to take us five.</li>
+</ul>
+<p class="signoff">Jules Nembot</p>
+        <div class="also">
+            <p>More writing</p>
+            <p><a href="/blog/the-game-at-work.html">The Game at Work</a></p>
+            <p><a href="/blog/society-rank-and-inherited-position.html">Society, Rank, and Inherited Position</a></p>
+        </div>
+    </article>
+
+    <footer class="site-footer">
+        <p><span id="time" class="tabular-nums" style="visibility:hidden">0:00pm</span> in Yaoundé, Cameroon</p>
+        <button type="button" class="theme-toggle" id="theme-toggle" aria-label="Switch to dark theme"></button>
+    </footer>
+    <script src="/assets/site.js"></script>
+</body>
+</html>

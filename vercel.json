@@ -4,5 +4,12 @@
   "buildCommand": "",
   "outputDirectory": ".",
   "cleanUrls": false,
-  "trailingSlash": false
+  "trailingSlash": false,
+  "redirects": [
+    {
+      "source": "/blog/data-engineering-team-and-sap-ds.html",
+      "destination": "/blog/how-to-build-a-top-data-engineering-team.html",
+      "permanent": true
+    }
+  ]
 }
