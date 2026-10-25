@@ -2,36 +2,36 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
     <title>Nembot Jules Blog</title>
-    <link>https://nembotjules.github.io/blog</link>
+    <link>https://nembotjules.vercel.app/blog</link>
     <description>Writings on machine learning, data engineering, and building production systems by Nembot Jules</description>
     <language>en-us</language>
-    <atom:link href="https://nembotjules.github.io/blog/rss.xml" rel="self" type="application/rss+xml"/>
+    <atom:link href="https://nembotjules.vercel.app/blog/rss.xml" rel="self" type="application/rss+xml"/>
     
     <item>
       <title>How to build a top data engineering team</title>
-      <link>https://nembotjules.github.io/blog/data-engineering-team-and-sap-ds.html</link>
-      <guid>https://nembotjules.github.io/blog/data-engineering-team-and-sap-ds.html</guid>
+      <link>https://nembotjules.vercel.app/blog/data-engineering-team-and-sap-ds.html</link>
+      <guid>https://nembotjules.vercel.app/blog/data-engineering-team-and-sap-ds.html</guid>
       <pubDate>Thu, 24 Oct 2026 00:00:00 GMT</pubDate>
       <description>Building a data engineering team that the business trusts requires more than technical skills. Here's what I've learned about team structure, hiring bar, ownership models, and the design patterns that make data pipelines reliable—including a deep dive into SAP Data Services architecture and automation.</description>
     </item>
     <item>
       <title>The Game at Work</title>
-      <link>https://nembotjules.github.io/blog/the-game-at-work.html</link>
-      <guid>https://nembotjules.github.io/blog/the-game-at-work.html</guid>
+      <link>https://nembotjules.vercel.app/blog/the-game-at-work.html</link>
+      <guid>https://nembotjules.vercel.app/blog/the-game-at-work.html</guid>
       <pubDate>Sun, 26 Apr 2026 00:00:00 GMT</pubDate>
       <description>At some point during my first year working, I realized I wasn’t engineering anymore. I was performing. On managers, validation, and keeping your reference internal.</description>
     </item>
     <item>
       <title>Society, Rank, and Inherited Position</title>
-      <link>https://nembotjules.github.io/blog/society-rank-and-inherited-position.html</link>
-      <guid>https://nembotjules.github.io/blog/society-rank-and-inherited-position.html</guid>
+      <link>https://nembotjules.vercel.app/blog/society-rank-and-inherited-position.html</link>
+      <guid>https://nembotjules.vercel.app/blog/society-rank-and-inherited-position.html</guid>
       <pubDate>Sun, 26 Apr 2026 00:00:00 GMT</pubDate>
       <description>Most of your life was decided before you were born. On nested games, inherited scores, and the honest accounting between pride and victimhood.</description>
     </item>
     <item>
       <title>2025 Wrapped</title>
-      <link>https://nembotjules.github.io/blog/2025-wrapped.html</link>
-      <guid>https://nembotjules.github.io/blog/2025-wrapped.html</guid>
+      <link>https://nembotjules.vercel.app/blog/2025-wrapped.html</link>
+      <guid>https://nembotjules.vercel.app/blog/2025-wrapped.html</guid>
       <pubDate>Thu, 01 Jan 2026 00:00:00 GMT</pubDate>
       <description>What I learned in 2025: money isn’t scarce, action produces information, very few things actually matter, and the levels of understanding.</description>
     </item>
