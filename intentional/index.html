@@ -229,16 +229,6 @@
             .card-shot { width: 330px; }
         }
 
-        /* Refusals */
-        .refuse-head { padding: 40px 0 0; text-align: center; }
-        .refusals { display: grid; gap: 14px; padding: 40px 0 0; }
-        @media (min-width: 720px) { .refusals { grid-template-columns: repeat(2, 1fr); } }
-        @media (min-width: 1024px) { .refusals { grid-template-columns: repeat(4, 1fr); } }
-        .refusal { background: var(--surface); border-radius: 24px; padding: 26px; box-shadow: 0 0 0 1px var(--rule); }
-        .refusal .no { font-size: 15px; font-weight: 700; color: var(--faint); text-decoration: line-through; text-decoration-color: var(--orange); text-decoration-thickness: 2px; }
-        .refusal h4 { margin-top: 10px; font-size: 21px; line-height: 1.2; font-weight: 800; letter-spacing: -0.01em; }
-        .refusal p { margin-top: 8px; color: var(--soft); font-size: 16px; line-height: 1.55; }
-
         /* Founder */
         .founder { padding: 104px 0; }
         .founder blockquote { font-size: 26px; line-height: 1.35; font-weight: 700; letter-spacing: -0.015em; }
@@ -322,7 +312,7 @@
             <div class="wrap">
                 <a class="badge rise" href="#waitlist"><span>Coming to iPhone &amp; Android</span><b>Join →</b></a>
                 <h1 class="rise" style="animation-delay:80ms">Give every hour <span class="hl">a job.</span></h1>
-                <p class="lede rise" style="animation-delay:160ms">Intentional is the ledger of your life. Choose the few things that truly matter, give your hours to them, and see, honestly, how much of your life went where you meant it to.</p>
+                <p class="lede rise" style="animation-delay:160ms">Intentional is the ledger of your life. Choose the few things that truly matter, give your hours to them, block distractions, and see, honestly, how much of your life went where you meant it to.</p>
                 <div class="waitlist rise" id="waitlist" style="animation-delay:240ms">
                     <form data-waitlist>
                         <label class="hp">Leave this empty <input type="text" name="_honey" tabindex="-1" autocomplete="off"></label>
@@ -440,21 +430,8 @@
             </div>
         </section>
 
-        <!-- 5. What we refuse -->
-        <section class="wrap">
-            <div class="refuse-head">
-                <p class="eyebrow">What we refuse to build</p>
-                <h2>Less app. More life.</h2>
-            </div>
-            <div class="refusals">
-                <div class="refusal"><p class="no">XP, badges, leaderboards</p><h4>The reward is the hour.</h4><p>Points make you play the app. Your pillars are the game.</p></div>
-                <div class="refusal"><p class="no">Red marks and guilt</p><h4>Missed it? Begin again.</h4><p>Nothing turns red, and nothing tells you that you failed.</p></div>
-                <div class="refusal"><p class="no">A feed and followers</p><h4>One partner.</h4><p>One person who sees your week. That’s the whole social network.</p></div>
-                <div class="refusal"><p class="no">Selling your attention</p><h4>Yours, on your phone.</h4><p>Your hours, goals and notes live on your device.</p></div>
-            </div>
-        </section>
 
-        <!-- 6. Why -->
+        <!-- 5. Why -->
         <section class="narrow founder">
             <p class="eyebrow">Why I’m building this</p>
             <blockquote style="margin-top:16px">“I believe very few things actually matter in life. We have pillars, where each of our waking hours should go. <span>All the rest is simply noise.</span>”</blockquote>
@@ -464,7 +441,7 @@
             </div>
         </section>
 
-        <!-- 7. The pledge -->
+        <!-- 6. The pledge -->
         <section class="wrap pledge-sec">
             <div class="pledge" id="pledge">
                 <div class="rings" aria-hidden="true"><i style="width:360px;height:360px"></i><i style="width:560px;height:560px"></i><i style="width:760px;height:760px"></i></div>
