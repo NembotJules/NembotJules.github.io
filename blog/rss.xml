@@ -12,7 +12,7 @@
       <link>https://nembotjules.vercel.app/blog/introduction-to-data-warehousing.html</link>
       <guid>https://nembotjules.vercel.app/blog/introduction-to-data-warehousing.html</guid>
       <pubDate>Mon, 26 Oct 2026 00:00:00 GMT</pubDate>
-      <description>What a data warehouse is, why it was invented, and how the main architectures (Inmon, Kimball, Data Vault, Medallion) actually differ. The foundation post of our data engineering concepts series.</description>
+      <description>From one database for everything to separate operational and analytical systems: what a data warehouse is, why it exists, and how Inmon, Kimball, Data Vault and Medallion differ.</description>
     </item>
     <item>
       <title>How to build a top data engineering team</title>
