@@ -1,0 +1,514 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Introduction to Data Warehousing — Nembot Jules</title>
+    <meta name="description" content="What a data warehouse is, why it was invented, and how the main architectures (Inmon, Kimball, Data Vault, Medallion) actually differ. The foundation post of our data engineering concepts series.">
+    <meta property="og:title" content="Introduction to Data Warehousing">
+    <meta property="og:description" content="What a data warehouse is, why it was invented, and how the main architectures (Inmon, Kimball, Data Vault, Medallion) actually differ. The foundation post of our data engineering concepts series.">
+    <meta property="og:type" content="article">
+    <meta property="og:url" content="https://nembotjules.vercel.app/blog/introduction-to-data-warehousing.html">
+    <link rel="canonical" href="https://nembotjules.vercel.app/blog/introduction-to-data-warehousing.html">
+    <meta name="author" content="Nembot Jules">
+    <script>
+        // Early theme setting to avoid flash
+        (function() {
+            const stored = localStorage.getItem('theme');
+            const theme = stored || (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+            document.documentElement.setAttribute('data-theme', theme);
+        })();
+    </script>
+    <style>
+        @font-face {
+            font-family: 'Inter';
+            font-style: normal;
+            font-weight: 100 900;
+            font-display: swap;
+            src: url('/fonts/inter-variable.woff2') format('woff2-variations');
+        }
+        
+        :root[data-theme="light"] {
+            --bg: #ffffff;
+            --text: #000000;
+            --text-secondary: #666666;
+            --border: #e5e5e5;
+            --code-bg: #f5f5f5;
+            --checklist-bg: #fafafa;
+        }
+        
+        :root[data-theme="dark"] {
+            --bg: #0a0a0a;
+            --text: #f0f0f0;
+            --text-secondary: #a0a0a0;
+            --border: #2a2a2a;
+            --code-bg: #1a1a1a;
+            --checklist-bg: #141414;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: Inter, system-ui, -apple-system, sans-serif;
+            background-color: var(--bg);
+            color: var(--text);
+            line-height: 1.7;
+            padding: 60px 20px 80px;
+            max-width: 680px;
+            margin: 0 auto;
+            transition: background-color 0.2s, color 0.2s;
+        }
+        
+        a {
+            color: var(--text);
+            text-decoration: none;
+            border-bottom: 1px solid var(--text);
+            transition: opacity 0.2s ease;
+        }
+        
+        a:hover {
+            opacity: 0.6;
+        }
+        
+        nav {
+            margin-bottom: 60px;
+            font-size: 14px;
+        }
+        
+        nav a {
+            margin-right: 20px;
+            border-bottom: none;
+        }
+        
+        nav a:hover {
+            border-bottom: 1px solid var(--text);
+        }
+        
+        article {
+            margin-bottom: 80px;
+        }
+        
+        h1 {
+            font-size: 42px;
+            font-weight: 700;
+            margin-bottom: 20px;
+            letter-spacing: -1.5px;
+            line-height: 1.2;
+        }
+        
+        .byline {
+            font-size: 15px;
+            color: var(--text-secondary);
+            margin-bottom: 40px;
+            padding-bottom: 30px;
+            border-bottom: 1px solid var(--border);
+        }
+        
+        h2 {
+            font-size: 28px;
+            font-weight: 600;
+            margin-top: 48px;
+            margin-bottom: 20px;
+            letter-spacing: -0.5px;
+        }
+        
+        h3 {
+            font-size: 20px;
+            font-weight: 600;
+            margin-top: 32px;
+            margin-bottom: 16px;
+        }
+        
+        p {
+            margin-bottom: 24px;
+            font-size: 17px;
+            line-height: 1.7;
+        }
+        
+        ul, ol {
+            margin-bottom: 24px;
+            padding-left: 24px;
+        }
+        
+        li {
+            margin-bottom: 12px;
+            font-size: 17px;
+            line-height: 1.7;
+        }
+        
+        code {
+            font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+            font-size: 15px;
+            background: var(--code-bg);
+            padding: 2px 6px;
+            border-radius: 3px;
+        }
+        
+        pre {
+            background: var(--code-bg);
+            padding: 20px;
+            border-radius: 6px;
+            overflow-x: auto;
+            margin-bottom: 24px;
+            border-left: 3px solid var(--text);
+        }
+        
+        pre code {
+            background: none;
+            padding: 0;
+        }
+        
+        blockquote {
+            border-left: 3px solid var(--text);
+            padding-left: 20px;
+            margin: 24px 0;
+            font-style: italic;
+            color: var(--text-secondary);
+        }
+        
+        .checklist {
+            background: var(--checklist-bg);
+            padding: 24px;
+            border-radius: 6px;
+            margin: 32px 0;
+            border: 1px solid var(--border);
+        }
+        
+        .checklist h4 {
+            font-size: 18px;
+            font-weight: 600;
+            margin-bottom: 16px;
+        }
+        
+        .checklist ul {
+            list-style: none;
+            padding-left: 0;
+        }
+        
+        .checklist li::before {
+            content: "☐ ";
+            margin-right: 8px;
+            font-size: 16px;
+        }
+        
+        footer {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background-color: var(--bg);
+            border-top: 1px solid var(--border);
+            padding: 12px 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 13px;
+            transition: background-color 0.2s, border-color 0.2s;
+        }
+        
+        .theme-toggle {
+            background: none;
+            border: 1px solid var(--border);
+            color: var(--text);
+            padding: 4px 12px;
+            cursor: pointer;
+            border-radius: 4px;
+            font-size: 13px;
+            font-family: Inter, system-ui, -apple-system, sans-serif;
+            transition: background-color 0.2s, border-color 0.2s;
+        }
+        
+        .theme-toggle:hover {
+            background-color: var(--code-bg);
+        }
+        
+        @media (max-width: 480px) {
+            body {
+                padding: 40px 15px 80px;
+            }
+            
+            h1 {
+                font-size: 32px;
+            }
+            
+            h2 {
+                font-size: 24px;
+            }
+            
+            p, li {
+                font-size: 16px;
+            }
+            
+            footer {
+                font-size: 12px;
+                padding: 10px 15px;
+            }
+            
+            .theme-toggle {
+                font-size: 12px;
+                padding: 3px 10px;
+            }
+        }
+
+        .cover { margin: 0 0 40px; }
+        .cover img { width: 100%; height: auto; display: block; border-radius: 8px; }
+        .pull { font-size: 21px; line-height: 1.5; font-weight: 600; letter-spacing: -0.2px; margin: 36px 0; }
+        h2 { font-size: 24px; line-height: 1.3; }
+        h3 { line-height: 1.4; }
+        blockquote p { margin-bottom: 8px; }
+        blockquote cite { display: block; font-style: normal; font-size: 15px; }
+        blockquote cite::before { content: "— "; }
+        .signoff { font-weight: 600; }
+        .also { margin-top: 56px; padding-top: 24px; border-top: 1px solid var(--border); font-size: 15px; color: var(--text-secondary); }
+        .also p { font-size: 15px; margin-bottom: 8px; }
+        table { width: 100%; border-collapse: collapse; margin: 0 0 24px; font-size: 15px; }
+        th, td { text-align: left; vertical-align: top; padding: 8px 10px; border-bottom: 1px solid var(--border); }
+        th { font-weight: 600; border-bottom: 1px solid var(--text); }
+        .table-wrap { overflow-x: auto; margin-bottom: 24px; }
+        pre.diagram { font-size: 13px; line-height: 1.45; }
+    </style>
+    <link rel="stylesheet" href="/assets/site.css">
+</head>
+<body>
+    <nav>
+        <a href="/index.html">Home</a>
+        <a href="/blog/index.html">Blog</a>
+        <a href="/timelapses.html">Timelapses</a>
+    </nav>
+
+    <article>
+        <h1>Introduction to Data Warehousing</h1>
+        <div class="byline">
+            By Nembot Jules · October 26, 2026 · 12 min read
+        </div>
+<p class="pull">A data warehouse is not a big database. It is a separate system, designed for analysis, that integrates data from many sources and keeps its history, so that everybody in the company answers questions from the same numbers.</p>
+<h2>TL;DR</h2>
+<ul>
+<li><strong>What it is:</strong> a subject-oriented, integrated, time-variant, non-volatile collection of data built to support decisions (Bill Inmon&rsquo;s definition, still the best one).</li>
+<li><strong>What it was built for:</strong> to take analytics off the operational systems, and to give the business one consistent, historical view of itself.</li>
+<li><strong>The main architectures:</strong> Inmon (normalized enterprise warehouse first, marts after), Kimball (star schemas tied together by conformed dimensions), Data Vault (hubs, links, satellites for auditable integration), and Medallion (bronze/silver/gold layers in a lakehouse). Medallion is a way to organize layers, not a modelling method: you still need to choose how you model the gold layer.</li>
+</ul>
+<h2>Why this post</h2>
+<p>In our daily work we use the words database, warehouse, data mart, data lake and lakehouse almost interchangeably. They are not the same thing, and the confusion has real consequences: we build reports directly on source tables, we duplicate logic in every dashboard, and we end up with three people giving three different numbers for the same indicator. This post is the first of a series on data engineering concepts. The goal is simple: at the end, every one of us should be able to explain, without hesitation, what a data warehouse is, why it exists, and how the main architectures differ.</p>
+
+<h2>1) Before the warehouse: how companies managed data</h2>
+<p>To understand why the data warehouse was invented, look at what came before it. Most companies still use some of these approaches today.</p>
+<ul>
+<li><strong>Flat files and batch reports.</strong> Applications wrote files; programs read them and printed reports. Every new question meant a new program.</li>
+<li><strong>Operational (OLTP) databases.</strong> Relational databases made applications reliable: they record transactions quickly and safely, one row at a time. They are excellent at <em>running</em> the business.</li>
+<li><strong>Reporting directly on production.</strong> The obvious next step: point the reports at the operational database. It works until it doesn&rsquo;t.</li>
+<li><strong>Extracts and spreadsheets.</strong> Someone extracts data, cleans it in a spreadsheet, and sends it around. Then someone extracts the extract.</li>
+<li><strong>Isolated data marts and point-to-point extracts.</strong> Each department builds its own small reporting database, fed by its own extraction from the sources it cares about.</li>
+</ul>
+<p>These approaches broke for the same few reasons:</p>
+<ul>
+<li><strong>Performance contention.</strong> A heavy analytical query scanning millions of rows competes with the transactions the business depends on. Operations slow down, or reports get forbidden during business hours.</li>
+<li><strong>No history.</strong> Operational systems keep the <em>current</em> state. When a customer moves or a product changes category, the old value is overwritten, and you can no longer answer &ldquo;what did this look like last year?&rdquo;</li>
+<li><strong>No integration.</strong> The customer exists in the billing system, the CRM and the support tool, with different identifiers and different spellings. Nobody can see the whole customer.</li>
+<li><strong>Inconsistent definitions.</strong> Each extract applies its own filters and rules. This is the famous &ldquo;five versions of revenue&rdquo; problem: every number is defensible, none of them match, and meetings are spent reconciling instead of deciding.</li>
+<li><strong>Spaghetti.</strong> With N sources and M consumers, point-to-point extracts grow toward N &times; M interfaces, each one a thing that can break.</li>
+</ul>
+<pre class="diagram"><code>Before: point-to-point                 After: a warehouse in the middle
+
+ CRM ─────┬──► Sales report             CRM ──────┐
+          ├──► Finance xls              Billing ──┼──► WAREHOUSE ──► every report
+ Billing ─┼──► Marketing mart           Support ──┘    (integrated,
+          └──► Finance xls (v2)                         historical)
+ Support ─────► Ops report</code></pre>
+
+<h2>2) The origin of the data warehouse</h2>
+<p>The idea emerged in the 1980s, as companies accumulated operational systems and realized they could not get a coherent picture out of them.</p>
+<ul>
+<li><strong>1988, IBM.</strong> Barry Devlin and Paul Murphy published &ldquo;An architecture for a business and information system&rdquo; in the IBM Systems Journal. It described a &ldquo;business data warehouse&rdquo;: a single integrated store of business data, separate from operational systems, built for reporting and analysis.</li>
+<li><strong>1990s, Bill Inmon.</strong> Often called the father of the data warehouse, Inmon popularized the concept with <em>Building the Data Warehouse</em> (first edition 1992). His definition is the one to remember: a data warehouse is a <strong>subject-oriented, integrated, time-variant and non-volatile</strong> collection of data in support of management&rsquo;s decision-making process.</li>
+<li><strong>1996, Ralph Kimball.</strong> <em>The Data Warehouse Toolkit</em> introduced dimensional modelling to a wide audience: star schemas, facts and dimensions, designed so business users can understand and query the data.</li>
+</ul>
+<p>Inmon&rsquo;s four words are worth unpacking, because each one answers one of the failures above:</p>
+<ul>
+<li><strong>Subject-oriented:</strong> organized around business subjects (customer, product, sale), not around applications (the billing system, the CRM).</li>
+<li><strong>Integrated:</strong> data from different sources is reconciled into consistent keys, formats and definitions. One customer, one definition of revenue.</li>
+<li><strong>Time-variant:</strong> data is stored with time, so you can look at any point in the past and see trends.</li>
+<li><strong>Non-volatile:</strong> once loaded, data is not updated in place by transactions; it is added to. The past stays the past, which makes reports reproducible.</li>
+</ul>
+<p>So, what was it built for? <strong>Decision support.</strong> The warehouse separates <em>running</em> the business (operational systems) from <em>understanding</em> the business (analytics). That separation is the whole idea.</p>
+
+<h2>3) OLTP vs OLAP</h2>
+<p>The two families of systems are optimized for opposite workloads:</p>
+<div class="table-wrap"><table>
+<thead><tr><th></th><th>OLTP (operational)</th><th>OLAP (analytical / warehouse)</th></tr></thead>
+<tbody>
+<tr><td>Purpose</td><td>Run the business</td><td>Understand the business</td></tr>
+<tr><td>Typical query</td><td>Read or write one record: &ldquo;update this order&rdquo;</td><td>Aggregate millions of rows: &ldquo;sales by region by month&rdquo;</td></tr>
+<tr><td>Data</td><td>Current state</td><td>History, integrated from many sources</td></tr>
+<tr><td>Design</td><td>Normalized, to avoid update anomalies</td><td>Often denormalized (star schemas), to make reads simple and fast</td></tr>
+<tr><td>Writes</td><td>Many small, concurrent transactions</td><td>Periodic or streaming bulk loads</td></tr>
+<tr><td>Users</td><td>Applications, front-line staff</td><td>Analysts, data scientists, managers, dashboards</td></tr>
+<tr><td>Storage</td><td>Usually row-oriented</td><td>Usually column-oriented in modern platforms</td></tr>
+</tbody></table></div>
+
+<h2>4) Anatomy of a data warehouse</h2>
+<p>Whatever the architecture, a warehouse platform is made of the same building blocks:</p>
+<pre class="diagram"><code> SOURCES        INGESTION       STAGING      CORE / INTEGRATED     MARTS        CONSUMPTION
+ apps, DBs  ──► ETL or ELT ──► raw copy ──► cleaned, conformed ──► per subject ──► semantic layer
+ files, APIs    (batch/stream)  of source    keys & history          area           BI, ML, SQL
+
+ ────────────── metadata · data quality tests · orchestration · security ──────────────</code></pre>
+<ul>
+<li><strong>Sources:</strong> operational databases, applications, files, APIs, events.</li>
+<li><strong>Ingestion, ETL vs ELT:</strong> ETL (extract, transform, load) transforms data before loading it into the warehouse, historically because warehouse compute was expensive. ELT loads raw data first and transforms it inside the warehouse, which became common with cheap, scalable cloud warehouses. Both are valid; what matters is where the logic lives and whether it is versioned and tested.</li>
+<li><strong>Staging:</strong> a landing zone holding source data as close to the original as possible. It lets you reprocess without re-extracting.</li>
+<li><strong>Core / integrated layer:</strong> where integration happens: consistent keys, cleaned values, history. Depending on the architecture, this is a 3NF model, a Data Vault, or conformed dimensions and facts.</li>
+<li><strong>Data marts:</strong> subsets organized for a subject area or department (sales, finance), usually as star schemas.</li>
+<li><strong>Semantic / BI layer:</strong> business names, metric definitions and relationships, so that &ldquo;revenue&rdquo; is defined once and reused by every dashboard.</li>
+<li><strong>Cross-cutting concerns:</strong> metadata and lineage (where does this number come from?), data quality tests, orchestration (what runs when, in which order), and security.</li>
+</ul>
+
+<h2>5) The architectures</h2>
+<h3>Inmon: the Corporate Information Factory (top-down)</h3>
+<p>Inmon&rsquo;s approach starts with an <strong>enterprise data warehouse</strong> modelled in third normal form (3NF), integrated across the whole company. Data marts are then built <em>from</em> the warehouse: they are <strong>dependent data marts</strong>. The wider framework he described is called the Corporate Information Factory (CIF).</p>
+<pre class="diagram"><code>sources ──► ETL ──► ENTERPRISE DWH (3NF, integrated) ──► dependent marts ──► BI</code></pre>
+<ul>
+<li><strong>Strengths:</strong> one integrated, non-redundant source of truth; resilient to change in business processes; strong for consistency and audit.</li>
+<li><strong>Weaknesses:</strong> large upfront modelling effort, long time before the first business value, 3NF models are hard for business users to query directly.</li>
+</ul>
+<h3>Kimball: dimensional modelling and the bus architecture (bottom-up)</h3>
+<p>Kimball starts from the <strong>business process</strong> (taking an order, shipping, invoicing) and models each one as a <strong>star schema</strong>: a central <strong>fact table</strong> of measurements, surrounded by <strong>dimension tables</strong> that give context (who, what, where, when). The warehouse is the sum of these stars, tied together by <strong>conformed dimensions</strong>: dimensions such as Date, Customer or Product that mean exactly the same thing in every star. The plan that lists which processes share which dimensions is the <strong>bus matrix</strong>.</p>
+<pre class="diagram"><code>              dim_date
+                  │
+ dim_customer ── fact_sales ── dim_product
+                  │
+              dim_store</code></pre>
+<p>The concepts you must master:</p>
+<ul>
+<li><strong>Grain:</strong> what exactly one row of the fact table represents (&ldquo;one product line on one receipt&rdquo;). Declaring the grain is the first and most important design decision.</li>
+<li><strong>Facts:</strong> numeric measurements at that grain (quantity, amount). Additive facts can be summed across all dimensions; semi-additive ones (balances) cannot be summed over time; non-additive ones (ratios) should be computed from their components.</li>
+<li><strong>Dimensions:</strong> descriptive attributes used to filter and group. Use surrogate keys, not source system keys.</li>
+<li><strong>Slowly Changing Dimensions (SCD):</strong> how to handle attribute changes. <strong>Type 1</strong> overwrites the old value (no history). <strong>Type 2</strong> adds a new row with validity dates, keeping full history. <strong>Type 3</strong> keeps the previous value in an extra column (limited history).</li>
+</ul>
+<ul>
+<li><strong>Strengths:</strong> fast time to value, one process at a time; intuitive for business users; excellent query performance.</li>
+<li><strong>Weaknesses:</strong> without discipline on conformed dimensions, it degenerates into isolated marts, exactly the silos the warehouse was supposed to remove.</li>
+</ul>
+<h3>Data Vault: auditable integration</h3>
+<p>Data Vault, created by Dan Linstedt, models the integrated layer with three types of tables: <strong>hubs</strong> (unique business keys, e.g. a customer number), <strong>links</strong> (relationships between business keys) and <strong>satellites</strong> (descriptive attributes with their history and load timestamps). It is insert-only and records where and when every piece of data arrived.</p>
+<ul>
+<li><strong>Strengths:</strong> very auditable, easy to add new sources without remodelling, parallel loading, well suited to automation.</li>
+<li><strong>Weaknesses:</strong> many tables and joins; not meant to be queried by business users. You almost always build star schemas (marts) on top of it.</li>
+</ul>
+<h3>One Big Table (OBT)</h3>
+<p>A fully denormalized wide table, with facts and all dimension attributes on every row. Columnar engines make this practical. It is great for a specific dashboard or ML feature set, but it duplicates logic, makes history and changes painful, and is best treated as a final output built <em>from</em> a dimensional model, not as a replacement for one.</p>
+<h3>Data lake, lakehouse and Medallion</h3>
+<p>A <strong>data lake</strong> stores raw data of any format (files, JSON, logs, images) cheaply in object storage, without imposing a schema upfront (&ldquo;schema on read&rdquo;). It solved scale and variety, but without governance, many lakes became &ldquo;data swamps&rdquo;: lots of data, little trust.</p>
+<p>The <strong>lakehouse</strong> adds warehouse features (ACID transactions, schemas, time travel, SQL performance) on top of open file formats in the lake, using table formats such as Delta Lake, Apache Iceberg or Apache Hudi. The term was popularized by Databricks.</p>
+<p>The <strong>Medallion architecture</strong>, also popularized by Databricks, organizes lakehouse data in three layers:</p>
+<pre class="diagram"><code> BRONZE (raw, as ingested) ──► SILVER (cleaned, conformed, deduplicated) ──► GOLD (business-ready aggregates / models)</code></pre>
+<p>Be precise about what Medallion is: it is a <strong>data layout and quality-progression pattern</strong>, not a modelling methodology. It tells you how refined the data is at each layer, but not how to model it. Bronze looks a lot like staging; silver plays the role of the integrated layer; and the gold layer is very often&hellip; Kimball star schemas. Medallion does not replace Inmon or Kimball. It gives them a home.</p>
+
+<h2>6) Comparison and how to choose</h2>
+<div class="table-wrap"><table>
+<thead><tr><th></th><th>Inmon</th><th>Kimball</th><th>Data Vault</th><th>Medallion</th></tr></thead>
+<tbody>
+<tr><td>What it is</td><td>Architecture + 3NF model</td><td>Architecture + dimensional model</td><td>Modelling method for the integration layer</td><td>Layering pattern in a lakehouse</td></tr>
+<tr><td>Direction</td><td>Top-down</td><td>Bottom-up, by business process</td><td>Source/business-key driven</td><td>Raw to refined</td></tr>
+<tr><td>Core structure</td><td>Normalized enterprise DWH</td><td>Star schemas + conformed dimensions</td><td>Hubs, links, satellites</td><td>Bronze, silver, gold</td></tr>
+<tr><td>Time to first value</td><td>Slow</td><td>Fast</td><td>Medium (needs marts on top)</td><td>Fast for raw, depends on gold model</td></tr>
+<tr><td>Business readability</td><td>Low</td><td>High</td><td>Low</td><td>Depends on gold model</td></tr>
+<tr><td>Auditability, change</td><td>Good</td><td>Medium</td><td>Excellent</td><td>Good (raw kept in bronze)</td></tr>
+</tbody></table></div>
+<p>How to choose, in practice:</p>
+<ul>
+<li><strong>Small team, need results quickly, stable sources:</strong> Kimball. Start with one business process, one star, conformed dimensions from day one.</li>
+<li><strong>Many volatile sources, strong audit or regulatory needs:</strong> a Data Vault (or a 3NF integrated layer) in the core, with Kimball marts on top.</li>
+<li><strong>Lots of semi-structured data, ML workloads, lakehouse platform:</strong> Medallion layers, with a dimensional gold layer for BI.</li>
+<li><strong>Almost always:</strong> users should query star schemas. The debate is mostly about what sits <em>underneath</em>.</li>
+</ul>
+
+<h2>7) Common mistakes</h2>
+<ul>
+<li><strong>Not declaring the grain.</strong> If you can&rsquo;t say in one sentence what a row means, the table is wrong.</li>
+<li><strong>Mixing grains in one fact table.</strong> Order headers and order lines in the same table guarantees double counting.</li>
+<li><strong>No conformed dimensions.</strong> Two &ldquo;customer&rdquo; dimensions with different rules is the five-versions-of-revenue problem, rebuilt inside the warehouse.</li>
+<li><strong>Treating the warehouse as a dump.</strong> Copying source tables into the warehouse is not integration. A warehouse without modelling is just a slower data lake.</li>
+<li><strong>Ignoring SCDs.</strong> Overwriting every attribute silently rewrites history, and last year&rsquo;s report no longer matches last year.</li>
+<li><strong>Business logic in dashboards.</strong> If revenue is computed in ten reports, you have ten definitions. Put it in the model or the semantic layer, once.</li>
+<li><strong>No tests.</strong> Uniqueness of keys, non-null foreign keys, row counts reconciled with the source. Data that is not tested is not trusted.</li>
+</ul>
+
+<h2>8) A small worked example</h2>
+<p>Take a generic retail business. The business process is selling; the grain is <strong>one product line on one receipt</strong>. The dimensions are date, store, product and customer. The customer dimension is SCD type 2, so we keep the customer&rsquo;s city at the time of each sale.</p>
+<pre><code>-- Dimension with SCD type 2
+CREATE TABLE dim_customer (
+  customer_key   INT PRIMARY KEY,     -- surrogate key
+  customer_id    VARCHAR(20),         -- business key from the source
+  customer_name  VARCHAR(100),
+  city           VARCHAR(50),
+  valid_from     DATE,
+  valid_to       DATE,                -- '9999-12-31' for the current row
+  is_current     BOOLEAN
+);
+
+-- Fact table, grain: one product line on one receipt
+CREATE TABLE fact_sales (
+  date_key       INT REFERENCES dim_date(date_key),
+  store_key      INT REFERENCES dim_store(store_key),
+  product_key    INT REFERENCES dim_product(product_key),
+  customer_key   INT REFERENCES dim_customer(customer_key),
+  receipt_number VARCHAR(20),         -- degenerate dimension
+  quantity       INT,                 -- additive
+  sales_amount   DECIMAL(12,2)        -- additive
+);
+
+-- Sales by month and product category, for the customer's city at sale time
+SELECT d.year_month,
+       p.category,
+       c.city,
+       SUM(f.sales_amount) AS revenue
+FROM fact_sales f
+JOIN dim_date d     ON f.date_key = d.date_key
+JOIN dim_product p  ON f.product_key = p.product_key
+JOIN dim_customer c ON f.customer_key = c.customer_key
+GROUP BY d.year_month, p.category, c.city
+ORDER BY d.year_month, revenue DESC;</code></pre>
+<p>Notice how readable the query is: join the fact to its dimensions, filter, group, sum. That simplicity is the whole point of dimensional modelling. And because the fact points to the customer row that was valid at the time of the sale, a customer who moved last month does not rewrite last year&rsquo;s sales by city.</p>
+
+<h2>9) Glossary</h2>
+<ul>
+<li><strong>Data warehouse:</strong> integrated, historical store of data built for analysis and decision support.</li>
+<li><strong>Data mart:</strong> subset of the warehouse for one subject area or department.</li>
+<li><strong>OLTP / OLAP:</strong> transaction processing vs analytical processing.</li>
+<li><strong>ETL / ELT:</strong> transform before loading vs load then transform in the warehouse.</li>
+<li><strong>Fact / dimension:</strong> measurements of a business process / their descriptive context.</li>
+<li><strong>Grain:</strong> the meaning of one row in a fact table.</li>
+<li><strong>Conformed dimension:</strong> a dimension shared, with identical meaning, across fact tables.</li>
+<li><strong>Surrogate key:</strong> a warehouse-generated key, independent of source system keys.</li>
+<li><strong>SCD:</strong> slowly changing dimension; type 1 overwrite, type 2 new row, type 3 previous-value column.</li>
+<li><strong>Data lake / lakehouse:</strong> raw storage of any format / lake with warehouse capabilities via table formats.</li>
+<li><strong>Medallion:</strong> bronze, silver, gold layering of lakehouse data by level of refinement.</li>
+</ul>
+
+<h2>What to read next</h2>
+<ul>
+<li>Ralph Kimball and Margy Ross, <em>The Data Warehouse Toolkit: The Definitive Guide to Dimensional Modeling</em> (3rd edition, 2013). If you read one book, read this one.</li>
+<li>W. H. Inmon, <em>Building the Data Warehouse</em>.</li>
+<li>Dan Linstedt and Michael Olschimke, <em>Building a Scalable Data Warehouse with Data Vault 2.0</em> (2015).</li>
+</ul>
+<p><strong>Next in this series:</strong> dimensional modelling in depth (grain, fact table types, the bus matrix), ETL vs ELT in practice, and slowly changing dimensions with real loading patterns.</p>
+<p class="signoff">Jules Nembot</p>
+        <div class="also">
+            <p>More writing</p>
+            <p><a href="/blog/how-to-build-a-top-data-engineering-team.html">How to build a top data engineering team</a></p>
+            <p><a href="/blog/the-game-at-work.html">The Game at Work</a></p>
+        </div>
+    </article>
+
+    <footer class="site-footer">
+        <p><span id="time" class="tabular-nums" style="visibility:hidden">0:00pm</span> in Yaoundé, Cameroon</p>
+        <button type="button" class="theme-toggle" id="theme-toggle" aria-label="Switch to dark theme"></button>
+    </footer>
+    <script src="/assets/site.js"></script>
+</body>
+</html>
