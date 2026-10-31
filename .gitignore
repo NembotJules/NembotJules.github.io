@@ -4,3 +4,4 @@ take-screenshots.js
 validate-site.js
 screenshots/
 !.github/pr-screenshots/
+.vercel
